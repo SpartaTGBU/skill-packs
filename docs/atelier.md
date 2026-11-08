@@ -8,7 +8,7 @@ Visual design and creative production: web/UI, motion, images and AI video, 3D a
 - Only the router, `atelier:using-atelier`, is visible by default. It says which skill fits a task and how much process to apply.
 - Each skill is a working method (brief first, build, then look at the render), not a reference dump.
 - Skills pair up: `frontend-design` with `visual-design` and `motion-design`; any render or edit step with `visual-qa`.
-- Run `skl list atelier` to see all 26 with their descriptions.
+- Run `skl list atelier` to see all 41 with their descriptions.
 
 ## Skills
 
@@ -25,6 +25,10 @@ Visual design and creative production: web/UI, motion, images and AI video, 3D a
 | `atelier:prototype` | Throwaway code that answers one design question: clickable HTML demo, 3-5 variants behind a keyboard picker, or feasibility spikes; records the verdict. | Comparing directions or asking "is this even possible" before committing. | "Mock up four different layouts for the onboarding screen so I can flip between them." |
 | `atelier:playground` | Single-file interactive HTML explorer with controls, live preview and a copyable prompt to paste back. | A choice is easier to make by dragging sliders than by describing it. | "Make a playground where I tune the card shadow, radius and spacing, then copy the result as a prompt." |
 | `atelier:visual-qa` | Checks rendered output by looking: frame extraction, contact sheets, black-frame/freeze/loudness detection, screenshot diffs, severity report. | After any render, edit or UI change, before delivery. | "QA this exported promo.mp4: contact sheet, black frames, loudness, and any text errors." |
+| `atelier:ui-ux-intelligence` | Turns product type, audience and platform into a justified style, palette, type and layout choice, recorded as a DESIGN.md-style brief with a measurable pre-delivery checklist. | Starting a page or app and you need a defensible design direction, not a guess. | "Pick a style, palette and typography for a fintech dashboard for freelancers, write the brief, and gate delivery with a checklist." |
+| `atelier:unslop-ui` | Detects AI-looking UI tells with a selector-level audit, then repairs shell, content blocks and hero, proven by a before/after render. | A vibecoded screen that looks templated. | "This generated pricing page looks obviously AI-made. Audit it and fix it, with before/after screenshots." |
+| `atelier:ui-engineering-polish` | Design-engineer fixes organised by symptom (focus, screen reader, scroll jank, viewport jumps, stacking), each with a test. | Cleaning up a component or reviewing a diff for craft and accessibility. | "I can't tab to the menu and the modal janks on scroll. Fix both in components/Nav.tsx and show the tests." |
+| `atelier:html-design-artifacts` | Single self-contained HTML mockups, prototypes, wireframes, one-page decks and design boards built from real context, ready to open and hand on. | A reviewable design deliverable in one file rather than a repo. | "Make a single-file HTML mockup of the checkout flow with three artboards I can send to my cofounder." |
 
 ### Motion, animation and video
 
@@ -35,6 +39,16 @@ Visual design and creative production: web/UI, motion, images and AI video, 3D a
 | `atelier:video-composition` | Programmatic video from HTML/CSS/JS or Remotion: spec, beat-synced motion, captions, deterministic capture, ffmpeg encode, contact-sheet review. | Promo, explainer, caption video or title card generated from code. | "Make a 15-second product promo MP4 with animated captions from this script and audio track." |
 | `atelier:video-editing` | Headless ffmpeg editing: probe, stream-copy, trim, concat, crop, grade, captions, loudness, delivery presets in batch. | Cutting, converting or prepping existing footage. | "Trim the first 12 seconds, burn in captions, normalize loudness and export 1080p for YouTube." |
 | `atelier:ai-video` | Shot list, shot-grammar prompts, image-to-video from locked keyframes, model routing (Veo, Kling, Seedance, Runway, Wan...), cost check, consent and continuity. | Generating clips, ads or b-roll with an AI video model. | "Turn this 6-shot storyboard into AI video clips for a sneaker ad, and tell me the cost first." |
+| `atelier:art-motion` | Art-style animation in code: pick a look (ukiyo-e, Bauhaus, ink wash, pixel) and animate one picture, or lock one look across a clip. | A designed, stylised motion piece rather than generic UI animation. | "Animate this logo in the style of ukiyo-e woodblock prints, 6 seconds, as an HTML canvas." |
+| `atelier:svg-character-animation` | Brings a drawn SVG character or scene to life: blinks, pupils, breathing, acting, idle motion for plants, cloth, fire and icons. | An SVG mascot or illustration that sits stiff. | "Make my SVG fox blink, breathe and wave when hovered, with a reduced-motion fallback." |
+| `atelier:animation-reverse-engineering` | Measures an existing animation (site, recording, Lottie), rebuilds it in your stack and proves the copy matches with numbers. | Cloning or porting a hero, loader or marquee you like. | "Replicate the hero animation from this URL in our React app and show the timing matches." |
+| `atelier:video-direction` | Directs short code-rendered videos: idea, hook, beat timeline, pacing, continuity and sound plan, verified with stills and measurements. | Before or while building a short HTML/Remotion video. | "Plan and direct a 15-second video for my app, with a beat timeline, and verify it from frames." |
+| `atelier:shot-recipes` | Cinematic Remotion product promos: real page captures, one motion idea per shot, energy curve, beat-synced cuts, frame QA, re-editable output. | A promo that should feel edited, not slideshow-like. | "Make a 20-second cinematic promo of our dashboard in Remotion from real page captures, synced to this track." |
+| `atelier:launch-film` | Directs a code-rendered product launch film from one line: real material, three key-frame directions, treatment, one HTML composition, score, export and share kit. | A launch video for a product with real assets. | "Make a launch film for our app from this one-line brief, show me three directions first." |
+| `atelier:one-line-video` | Runs a studio loop from a one-line intent to a finished short film: brief, script, storyboard, look, voice, music, edit and a review room for timestamped notes. | Ad, launch or music video from a single sentence with revision rounds. | "One line: a 30-second ad for a trail-running shoe. Run the full loop and let me leave timestamped notes." |
+| `atelier:product-demo-video` | Turns a scripted Playwright flow into a product demo with voiceover: scene manifest, human-paced cursor, zoom, overlays and cheap re-takes. | Recording or re-recording a demo after the UI changes. | "Record a demo of our signup flow with Playwright, add voiceover, and make it easy to re-take." |
+| `atelier:explainer-video` | Narrated explainers: script, synthesized voice, word-level timing, drawings cued to spoken words, captions, frame-based verification. | A how-it-works or tutorial video with a voiceover. | "Make a 60-second narrated explainer of how our API auth works, with captions." |
+| `atelier:audio-review` | Judges sound without hearing it: loudness, true peak, noise floor, event timing against picture cues, A/B mix checks, sparse sound palettes. | Checking or choosing audio for a film or UI. | "Check this promo's loudness and peak, list the sound events with times and see if they hit the picture cues." |
 
 ### Images and generative
 
@@ -45,6 +59,7 @@ Visual design and creative production: web/UI, motion, images and AI video, 3D a
 | `atelier:asset-pipeline` | Delivery prep: formats (AVIF, WebP, SVG), srcset sizes, compression budgets, color spaces, naming, provenance and license manifest. | Slow or blurry images, an image build step, or tracking asset licenses. | "Optimize everything in /assets for the web with responsive sizes and a license manifest." |
 | `atelier:generative-art` | Algorithmic art: philosophy first, then a self-contained p5.js or shader viewer with seeds, sliders and PNG export; ASCII and procedural video. | Flow fields, particles, shader pieces, seeded series. | "Make a p5.js flow-field piece with a seed picker, sliders and PNG export." |
 | `atelier:illustration-and-icons` | Vector icons and illustration systems: 24px grids, stroke rules, SVG hygiene (viewBox, currentColor, svgo), code-composed posters. | Building or cleaning an icon set, or composing a poster in code. | "Draw a 12-icon set on a 24px grid with consistent stroke, and clean up the SVGs." |
+| `atelier:logo-design` | Brief to production SVG: mark type, concept culling, geometric construction, optical fixes, lockups, small-size and one-colour tests, delivery files. | A new logo or a mark that fails at small sizes. | "Design a logo for a bike-repair app and deliver SVGs that survive 16px and one colour." |
 
 ### 3D, CAD and rendering
 

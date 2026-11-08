@@ -1,87 +1,124 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" width="960" height="440" role="img" aria-labelledby="t d">
   <title id="t">How the skill packs flow</title>
-  <desc id="d">A request is sized, then goes through thorough planning, lean ponytail implementation, thorough review and verification. Skills are loaded on demand with skl load at each stage.</desc>
+  <desc id="d">A request is sized, then goes through thorough planning, lean ponytail implementation and thorough review. Review findings loop back to implementation until the work is done. Skills load on demand with skl load.</desc>
   <style>
+    :root{--out:cubic-bezier(.23,1,.32,1);--io:cubic-bezier(.77,0,.175,1)}
     text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;fill:#e6edf3}
     .bg{fill:#0d1117}
     .node{fill:#161b22;stroke:#30363d;stroke-width:1.5}
-    .plan{stroke:#58a6ff}.impl{stroke:#3fb950}.rev{stroke:#d29922}.size{stroke:#bc8cff}
     .h{font-size:15px;font-weight:700}
-    .s{font-size:11.5px;fill:#8b949e}
-    .tag{font-size:11px;font-weight:700;letter-spacing:.08em}
-    .wire{fill:none;stroke:#30363d;stroke-width:2;stroke-dasharray:5 5}
-    .ld{fill:none;stroke:#8b949e;stroke-width:1.2;stroke-dasharray:3 4}
-    .pill{fill:#0d1117;stroke:#30363d}
-    .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;fill:#79c0ff}
-    .glow{animation:glow 12s infinite}
-    .g1{animation-delay:0s}.g2{animation-delay:2s}.g3{animation-delay:4s}.g4{animation-delay:6s}.g5{animation-delay:8s}
-    @keyframes glow{0%,14%{filter:drop-shadow(0 0 7px currentColor);opacity:1}18%,100%{filter:none;opacity:.78}}
-    .flow{stroke-dashoffset:0;animation:dash 1.2s linear infinite}
-    @keyframes dash{to{stroke-dashoffset:-20}}
-    .blink{animation:blink 2.4s ease-in-out infinite}
-    @keyframes blink{50%{opacity:.25}}
-    @media (prefers-reduced-motion:reduce){.glow,.flow,.blink{animation:none}}
+    .s{font-size:12.5px;fill:#9da7b3}
+    .s2{font-size:13px;fill:#9da7b3}
+    .tag{font-size:12.5px;font-weight:700;letter-spacing:.08em}
+    .wire{fill:none;stroke:#3a424c;stroke-width:2;stroke-dasharray:5 5}
+    .track{fill:none;stroke:#21262d;stroke-width:2}
+    .ld{fill:none;stroke:#48505a;stroke-width:1.2;stroke-dasharray:3 4}
+    .cn{fill:none;stroke-width:2;opacity:0}
+    .pill{fill:#0d1117;stroke:#3a424c}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;fill:#79c0ff}
+    .hl{fill-opacity:.12;stroke-width:2;opacity:0}
+
+    /* beat sheet, played once (ms): 0 title | 60 subtitle | 120 wire | 180 request | 240 size | 300 plan | 360 impl | 420 review | 480 done | 540 loop + lane */
+    .in{opacity:0;animation:rise .45s var(--out) both;animation-delay:calc(var(--i)*1ms)}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+    /* state pulse: one 12s pass after the build-in, then it rests on the finished state.
+       hop 6% (0.7s), hold 6% (0.7s) at each stage. */
+    .run{animation-duration:12s;animation-delay:1.4s;animation-iteration-count:1;animation-fill-mode:forwards;animation-timing-function:var(--io)}
+    #pulse{opacity:0;animation-name:walk}
+    @keyframes walk{
+      0%{transform:translate(93px,240px);opacity:0}
+      2%{transform:translate(93px,240px);opacity:1}
+      8%{transform:translate(247px,240px)}   14%{transform:translate(247px,240px)}
+      20%{transform:translate(420px,240px)}  26%{transform:translate(420px,240px)}
+      32%{transform:translate(608px,240px)}  38%{transform:translate(608px,240px)}
+      44%{transform:translate(786px,240px)}  52%{transform:translate(786px,240px)}
+      54%{transform:translate(786px,262px)}
+      60%{transform:translate(608px,262px)}
+      62%{transform:translate(608px,240px)}  68%{transform:translate(608px,240px)}
+      74%{transform:translate(786px,240px)}  80%{transform:translate(786px,240px)}
+      86%{transform:translate(906px,240px);opacity:1}
+      98%{transform:translate(906px,240px);opacity:1}
+      100%{transform:translate(906px,240px);opacity:0}}
+    #h-size{animation-name:l-size} #h-plan{animation-name:l-plan} #h-impl{animation-name:l-impl}
+    #h-rev{animation-name:l-rev}   #h-done{animation-name:l-done} #loop{animation-name:l-loop}
+    #c-plan{animation-name:l-plan} #c-impl{animation-name:l-impl}
+    @keyframes l-size{0%,6%{opacity:0;animation-timing-function:linear}8%,14%{opacity:1;animation-timing-function:linear}16%,100%{opacity:0}}
+    @keyframes l-plan{0%,18%{opacity:0;animation-timing-function:linear}20%,26%{opacity:1;animation-timing-function:linear}28%,100%{opacity:0}}
+    @keyframes l-impl{0%,30%{opacity:0;animation-timing-function:linear}32%,38%{opacity:1;animation-timing-function:linear}40%,60%{opacity:0;animation-timing-function:linear}62%,68%{opacity:1;animation-timing-function:linear}70%,100%{opacity:0}}
+    @keyframes l-rev{0%,42%{opacity:0;animation-timing-function:linear}44%,52%{opacity:1;animation-timing-function:linear}54%,72%{opacity:0;animation-timing-function:linear}74%,80%{opacity:1;animation-timing-function:linear}82%,100%{opacity:0}}
+    @keyframes l-done{0%,84%{opacity:0;animation-timing-function:linear}86%,100%{opacity:1}}
+    @keyframes l-loop{0%,52%{opacity:0;animation-timing-function:linear}54%,60%{opacity:1;animation-timing-function:linear}62%,100%{opacity:0}}
+    #check{transform-box:fill-box;transform-origin:center;animation-name:pop;opacity:.35}
+    @keyframes pop{0%,84%{transform:scale(.88);opacity:.35}88%{transform:scale(1.06);opacity:1}90%,100%{transform:scale(1);opacity:1}}
+
+    @media (prefers-reduced-motion:reduce){
+      .in{animation:none;opacity:1}
+      #pulse,#h-size,#h-plan,#h-impl,#h-rev,#h-done,#loop,#c-plan,#c-impl,#check{animation:none!important}
+      #pulse,.hl,#loop,.cn{display:none}
+      #check{opacity:1;transform:none}
+    }
   </style>
+
   <rect class="bg" width="960" height="440" rx="14"/>
-  <text x="32" y="40" class="h" style="font-size:18px">Plan thoroughly. Build lean. Review hard.</text>
-  <text x="32" y="60" class="s">Process scales with the task. Skills load only when the work needs them.</text>
 
-  <!-- main wire -->
-  <path id="main" class="wire flow" d="M110 190 H850"/>
+  <g class="in" style="--i:0"><text x="32" y="40" class="h" style="font-size:18px">Plan thoroughly. Build lean. Review hard.</text></g>
+  <g class="in" style="--i:60"><text x="32" y="60" class="s2">Process scales with the task. Skills load only when the work needs them.</text></g>
 
-  <!-- request -->
-  <g><rect class="node" x="32" y="150" width="130" height="80" rx="10"/>
-  <text x="97" y="184" class="h" text-anchor="middle">Request</text>
-  <text x="97" y="204" class="s" text-anchor="middle">"add X", "fix Y"</text></g>
+  <g class="in" style="--i:120"><path class="wire" d="M93 190 H906"/><path class="track" d="M93 240 H906"/></g>
 
-  <!-- size -->
-  <g class="glow g1" style="color:#bc8cff"><rect class="node size" x="200" y="150" width="130" height="80" rx="10"/>
-  <text x="265" y="184" class="h" text-anchor="middle">Size it</text>
-  <text x="265" y="204" class="s" text-anchor="middle">trivial / small /</text>
-  <text x="265" y="218" class="s" text-anchor="middle">medium / large</text></g>
+  <g class="in" style="--i:180"><rect class="node" x="32" y="150" width="122" height="80" rx="10"/>
+    <text x="93" y="184" class="h" text-anchor="middle">Request</text>
+    <text x="93" y="205" class="s" text-anchor="middle">"add X", "fix Y"</text></g>
 
-  <!-- plan -->
-  <g class="glow g2" style="color:#58a6ff"><rect class="node plan" x="368" y="150" width="140" height="80" rx="10"/>
-  <text x="438" y="178" class="tag" text-anchor="middle" style="fill:#58a6ff">PLAN</text>
-  <text x="438" y="198" class="h" text-anchor="middle">Thorough</text>
-  <text x="438" y="216" class="s" text-anchor="middle">brainstorm, spec, plan</text></g>
+  <g class="in" style="--i:240"><rect class="node" x="182" y="150" width="130" height="80" rx="10" style="stroke:#4b3a6e"/>
+    <rect id="h-size" class="hl run" x="182" y="150" width="130" height="80" rx="10" style="stroke:#bc8cff;fill:#bc8cff"/>
+    <text x="247" y="182" class="h" text-anchor="middle">Size it</text>
+    <text x="247" y="202" class="s" text-anchor="middle">trivial / small /</text>
+    <text x="247" y="218" class="s" text-anchor="middle">medium / large</text></g>
 
-  <!-- implement -->
-  <g class="glow g3" style="color:#3fb950"><rect class="node impl" x="546" y="150" width="140" height="80" rx="10"/>
-  <text x="616" y="178" class="tag" text-anchor="middle" style="fill:#3fb950">IMPLEMENT</text>
-  <text x="616" y="198" class="h" text-anchor="middle">Lean</text>
-  <text x="616" y="216" class="s" text-anchor="middle">ponytail, tdd, debug</text></g>
+  <g class="in" style="--i:300"><rect class="node" x="340" y="150" width="160" height="80" rx="10" style="stroke:#2d4f7c"/>
+    <rect id="h-plan" class="hl run" x="340" y="150" width="160" height="80" rx="10" style="stroke:#58a6ff;fill:#58a6ff"/>
+    <text x="420" y="177" class="tag" text-anchor="middle" style="fill:#58a6ff">PLAN</text>
+    <text x="420" y="198" class="h" text-anchor="middle">Thorough</text>
+    <text x="420" y="217" class="s" text-anchor="middle">brainstorm, spec, plan</text></g>
 
-  <!-- review -->
-  <g class="glow g4" style="color:#d29922"><rect class="node rev" x="724" y="150" width="130" height="80" rx="10"/>
-  <text x="789" y="178" class="tag" text-anchor="middle" style="fill:#d29922">REVIEW</text>
-  <text x="789" y="198" class="h" text-anchor="middle">Thorough</text>
-  <text x="789" y="216" class="s" text-anchor="middle">parallel reviewers</text></g>
+  <g class="in" style="--i:360"><rect class="node" x="528" y="150" width="160" height="80" rx="10" style="stroke:#26573a"/>
+    <rect id="h-impl" class="hl run" x="528" y="150" width="160" height="80" rx="10" style="stroke:#3fb950;fill:#3fb950"/>
+    <text x="608" y="177" class="tag" text-anchor="middle" style="fill:#3fb950">IMPLEMENT</text>
+    <text x="608" y="198" class="h" text-anchor="middle">Lean</text>
+    <text x="608" y="217" class="s" text-anchor="middle">ponytail, tdd, debug</text></g>
 
-  <!-- done -->
-  <g class="glow g5" style="color:#3fb950"><rect class="node" x="892" y="150" width="48" height="80" rx="10" style="stroke:#3fb950"/>
-  <text x="916" y="196" class="h" text-anchor="middle" style="fill:#3fb950;font-size:22px">&#10003;</text></g>
+  <g class="in" style="--i:420"><rect class="node" x="716" y="150" width="140" height="80" rx="10" style="stroke:#6b4f13"/>
+    <rect id="h-rev" class="hl run" x="716" y="150" width="140" height="80" rx="10" style="stroke:#d29922;fill:#d29922"/>
+    <text x="786" y="177" class="tag" text-anchor="middle" style="fill:#d29922">REVIEW</text>
+    <text x="786" y="198" class="h" text-anchor="middle">Thorough</text>
+    <text x="786" y="217" class="s" text-anchor="middle">parallel reviewers</text></g>
 
-  <!-- traveling pulse -->
-  <circle r="7" fill="#f0f6fc">
-    <animateMotion dur="12s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" path="M80 190 H916"/>
-  </circle>
+  <g class="in" style="--i:480"><title>Done</title>
+    <rect class="node" x="884" y="150" width="44" height="80" rx="10" style="stroke:#26573a"/>
+    <rect id="h-done" class="hl run" x="884" y="150" width="44" height="80" rx="10" style="stroke:#3fb950;fill:#3fb950"/>
+    <text id="check" x="906" y="199" class="h run" text-anchor="middle" style="fill:#3fb950;font-size:22px">&#10003;</text></g>
 
-  <!-- review -> implement loop -->
-  <path class="ld flow" d="M789 232 V262 H616 V232"/>
-  <rect class="pill" x="640" y="250" width="124" height="22" rx="11"/>
-  <text x="702" y="265" class="s" text-anchor="middle">fix findings, re-review</text>
+  <g class="in" style="--i:540">
+    <path class="ld" d="M786 232 V262 H608 V232"/>
+    <rect class="pill" x="635" y="272" width="124" height="24" rx="12"/>
+    <text x="697" y="288" class="s" text-anchor="middle" style="font-size:12px">fix findings, re-review</text>
+    <rect id="loop" class="run" x="635" y="272" width="124" height="24" rx="12" style="fill:none;stroke:#d29922;stroke-width:1.5;opacity:0"/>
 
-  <!-- skl load lane -->
-  <g>
-    <rect class="node" x="32" y="318" width="896" height="92" rx="10"/>
+    <path class="ld" d="M420 240 V318 M608 262 V318"/>
+    <path id="c-plan" class="cn run" d="M420 240 V318" style="stroke:#58a6ff"/>
+    <path id="c-impl" class="cn run" d="M608 262 V318" style="stroke:#3fb950"/>
+    <rect class="node" x="32" y="318" width="896" height="100" rx="10"/>
     <text x="52" y="344" class="tag" style="fill:#79c0ff">ON-DEMAND LOADING</text>
-    <text x="52" y="366" class="code">skl search "rust async"</text>
-    <text x="52" y="386" class="code">skl load forge:rust forge:debugging</text>
-    <text x="360" y="366" class="s">Pack skills stay out of context until needed. Load one or two per stage,</text>
-    <text x="360" y="384" class="s">follow them, and re-load after compaction.</text>
-    <text x="360" y="402" class="s">ponytail is injected automatically into every session and subagent.</text>
-    <circle cx="334" cy="360" r="4" fill="#79c0ff" class="blink"/>
+    <text x="52" y="368" class="code">skl search "rust async"</text>
+    <text x="52" y="390" class="code">skl load forge:rust forge:debugging</text>
+    <text x="400" y="364" class="s2">Pack skills stay out of context until needed. Load one or two per stage,</text>
+    <text x="400" y="383" class="s2">follow them, and re-load after compaction.</text>
+    <text x="400" y="402" class="s2">ponytail is injected automatically into every session and subagent.</text>
   </g>
-  <path class="ld" d="M438 232 V318 M616 262 V318 M789 232 V250"/>
+
+  <g id="pulse" class="run">
+    <circle cx="0" cy="0" r="6" fill="#0d1117" stroke="#f0f6fc" stroke-width="2"/>
+  </g>
 </svg>

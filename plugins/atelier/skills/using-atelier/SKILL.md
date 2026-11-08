@@ -54,12 +54,19 @@ before building. Reuse the project's tokens, components and pipelines.
 - Type, color, spacing, layout, hierarchy numbers → `atelier:visual-design`
 - Tokens, DESIGN.md, brand look as a reusable spec → `atelier:design-systems`
 - Audit an existing UI (a11y, polish, anti-slop) → `atelier:ui-review`
+- Open direction: which style, palette, fonts fit this product (before building) → `atelier:ui-ux-intelligence`
+- UI looks AI-generated or vibecoded; repair it → `atelier:unslop-ui`
+- Fix UI code by symptom (focus, screen reader, jank, viewport) → `atelier:ui-engineering-polish`
+- Mockup, clickable prototype, wireframes or HTML deck as one file → `atelier:html-design-artifacts`
 - Throwaway build to answer a design question → `atelier:prototype`
 - Interactive single-file explorer or tweakable demo → `atelier:playground`
 - iOS / Android / React Native / Flutter UI → `atelier:mobile-native`
 
 **Motion and 2D**
 - UI transitions, micro-interactions, scroll effects → `atelier:motion-design`
+- Animate in a named art style (Van Gogh, ukiyo-e, pixel) or explainer grammar → `atelier:art-motion`
+- Bring a drawn SVG character or mascot alive (blinks, idle, acting) → `atelier:svg-character-animation`
+- Clone or measure an existing animation, match it with numbers → `atelier:animation-reverse-engineering`
 - Frame-by-frame, rigged 2D, sprites, Lottie/Rive → `atelier:2d-animation`
 - p5.js, shaders, ASCII, procedural visuals → `atelier:generative-art`
 - Explainer math or technical animation (Manim) → `atelier:math-animation`
@@ -69,11 +76,19 @@ before building. Reuse the project's tokens, components and pipelines.
 - Cut, color, audio, captions, encode (ffmpeg, NLEs) → `atelier:video-editing`
 - Text/image-to-video (Higgsfield, Kling, Veo, Runway and others) → `atelier:ai-video`
 - Check frames and renders for defects before delivery → `atelier:visual-qa`
+- Whole film from one line, with review room → `atelier:one-line-video`
+- Launch film or product promo from real product material → `atelier:launch-film`
+- Direct, storyboard or fix any coded video (hook, beats, pacing) → `atelier:video-direction`
+- Remotion promo shot list, beat-synced cuts, SFX → `atelier:shot-recipes`
+- Scripted browser flow (Playwright) to demo video → `atelier:product-demo-video`
+- Narrated how-it-works explainer with synthesized voice → `atelier:explainer-video`
+- Loudness, mix and sound-choice QA without listening → `atelier:audio-review`
 
 **Images**
 - Prompting and choosing image models → `atelier:image-generation`
 - Node workflows, ControlNet, LoRA, batch via API → `atelier:comfyui`
 - Icons, illustrations, SVG, vector style systems → `atelier:illustration-and-icons`
+- Logo, wordmark, monogram, app-icon mark → `atelier:logo-design`
 - Formats, sizes, compression, naming, provenance → `atelier:asset-pipeline`
 
 **3D**

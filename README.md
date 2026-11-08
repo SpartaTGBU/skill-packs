@@ -2,7 +2,7 @@
 
 # skill-packs
 
-**165 skills and 15 agents for Claude Code, in three packs.**
+**181 skills and 15 agents for Claude Code, in three packs.**
 Plan thoroughly. Build lean. Review hard.
 
 <img src="docs/assets/flow.svg" alt="Animated flow: request, size it, plan, implement, review, done, with on-demand skill loading" width="860">
@@ -13,9 +13,9 @@ Plan thoroughly. Build lean. Review hard.
 
 | Pack | Skills | Use it for |
 |------|:------:|------------|
-| [**forge**](docs/forge.md) | 97 | Planning, lean implementation, code review, language stacks (Rust, Go, Python), DevOps generators and validators, research, agent and MCP work |
+| [**forge**](docs/forge.md) | 98 | Planning, lean implementation, code review, language stacks (Rust, Go, Python), DevOps generators and validators, research, agent and MCP work |
 | [**atrium**](docs/atrium.md) | 42 | Business work: Word/Excel/PowerPoint/PDF, brand and copy, SEO, growth, sales, CRM, finance, strategy, contracts |
-| [**atelier**](docs/atelier.md) | 26 | Visual work: web UI, design systems, motion, images, AI video, Blender and 3D, CAD, diagrams |
+| [**atelier**](docs/atelier.md) | 41 | Visual work: web UI, design systems, motion, launch and demo films, images, AI video, logos, Blender and 3D, CAD, diagrams |
 
 Each pack has a router skill (`forge:using-forge`, `atrium:using-atrium`, `atelier:using-atelier`) that says which skill to load for the job at hand.
 

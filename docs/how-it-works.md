@@ -18,7 +18,7 @@ Pick the size before anything else, because it decides how much process to run. 
 
 ## On-demand loading with `skl`
 
-Claude Code lists every available skill in each turn's context. With 165 skills that would be wasteful, so pack skills are marked `disable-model-invocation: true` and stay out of that list. `skl` fills the gap:
+Claude Code lists every available skill in each turn's context. With 181 skills that would be wasteful, so pack skills are marked `disable-model-invocation: true` and stay out of that list. `skl` fills the gap:
 
 | Command | Does |
 |---------|------|
