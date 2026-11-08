@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+"""skl - on-demand loader for the forge/atrium/atelier skill packs.
+
+Pack skills carry `disable-model-invocation: true  # skl: on-demand pack skill`, so Claude Code keeps
+them out of the per-turn skill listing (users can still type /forge:rust). Agents find and load them here:
+
+  skl search <words>     rank pack skills by name/description match
+  skl list [pack]        every pack skill with a one-line description
+  skl load <name>...     print SKILL.md (forge:rust, forge-rust or rust) plus its directory listing
+  skl hide               mark (and YAML-quote) any pack skill missing the marker (run after adding skills)
+  skl hook-track         PostToolUse hook: remember which skills this session loaded
+  skl hook-recall        print skills loaded before compaction (used by the SessionStart hook)
+"""
+import json, os, re, sys
+from pathlib import Path
+
+PLUGINS = Path(os.environ.get("SKL_PLUGINS", Path(__file__).resolve().parents[2]))
+PACKS = ("forge", "atrium", "atelier")
+MARK = "disable-model-invocation: true  # skl: on-demand pack skill"
+STATE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state")) / "skl"
+
+
+def skills():
+    for pack in PACKS:
+        for f in sorted((PLUGINS / pack / "skills").glob("*/SKILL.md")):
+            head = f.read_text(errors="replace").split("\n---", 1)[0]
+            m = re.search(r"^description:[ \t]*(.*)\n((?:[ \t]+.*\n?)*)", head + "\n", re.M)
+            desc = ""
+            if m:
+                desc = m.group(1).strip()
+                if desc[:1] in (">", "|") or not desc:
+                    desc = " ".join(m.group(2).split())
+                desc = desc.strip("'\"")
+            user_only = "disable-model-invocation" in head and MARK not in head
+            yield f"{pack}:{f.parent.name}", desc, f, user_only
+
+
+def resolve(name):
+    name = name.strip().lstrip("/")
+    allsk = {n: f for n, _, f, _ in skills()}
+    if name in allsk:
+        return name, allsk[name]
+    pack, _, rest = name.replace("-", ":", 1).partition(":") if "-" in name and name.split("-")[0] in PACKS \
+        else ("", "", name)
+    if pack and f"{pack}:{rest}" in allsk:
+        return f"{pack}:{rest}", allsk[f"{pack}:{rest}"]
+    hits = [n for n in allsk if n.split(":")[1] == name]
+    if len(hits) == 1:
+        return hits[0], allsk[hits[0]]
+    return None, hits
+
+
+def cmd_load(names):
+    rc = 0
+    for raw in names:
+        name, f = resolve(raw)
+        if name and next(u for n, _, _, u in skills() if n == name):
+            print(f"skl: {name} is user-initiated only; the user runs it as /{name}", file=sys.stderr)
+            rc = 1
+            continue
+        if not name:
+            print(f"skl: no pack skill '{raw}'" + (f" (ambiguous: {', '.join(f)})" if f else
+                  "; try `skl search <words>`"), file=sys.stderr)
+            rc = 1
+            continue
+        d = f.parent
+        files = sorted(str(p.relative_to(d)) for p in d.rglob("*") if p.is_file() and p.name != "SKILL.md")
+        print(f'<skill name="{name}" dir="{d}">')
+        print(f"Relative paths below are under {d}/ (read them only when the step needs them).")
+        if files:
+            shown = files[:60]
+            print("Files: " + ", ".join(shown) + (f" ... (+{len(files) - 60} more)" if len(files) > 60 else ""))
+        print()
+        print(f.read_text(errors="replace").replace(MARK + "\n", "", 1).rstrip())
+        print("</skill>")
+    return rc
+
+
+def cmd_list(pack=None):
+    for n, desc, _, user_only in skills():
+        if pack and not n.startswith(pack + ":"):
+            continue
+        print(f"{n}{' (user-initiated only)' if user_only else ''} - {desc[:150]}")
+
+
+def cmd_search(words):
+    words = [w.lower() for w in words]
+    scored = []
+    for n, desc, _, user_only in skills():
+        name, text = n.lower(), desc.lower()
+        s = sum(5 * (w == name.split(":")[1]) + 3 * (w in name) + text.count(w) for w in words)
+        if s:
+            scored.append((-s, n, desc, user_only))
+    for _, n, desc, user_only in sorted(scored)[:12]:
+        print(f"{n}{' (user-initiated only)' if user_only else ''} - {desc[:200]}")
+    if not scored:
+        print("no match; `skl list` shows everything", file=sys.stderr)
+        return 1
+
+
+def cmd_hide():
+    changed = 0
+    for n, _, f, _ in skills():
+        if n.split(":")[1].startswith("using-"):
+            continue
+        t = old = f.read_text()
+        # An unquoted `description: a: b` is invalid YAML; Claude Code then parses leniently and drops the marker.
+        t = re.sub(r"^(description:[ \t]*)([^'\"|>\s].*(?:: | #).*)$",
+                   lambda m: m.group(1) + json.dumps(m.group(2), ensure_ascii=False), t, count=1, flags=re.M)
+        if "disable-model-invocation" not in t.split("\n---", 1)[0]:
+            t = t.replace("---\n", f"---\n{MARK}\n", 1)
+        if t != old:
+            f.write_text(t)
+            changed += 1
+            print(f"fixed {n}")
+    print(f"{changed} skill(s) marked")
+
+
+def cmd_hook_track():
+    ev = json.load(sys.stdin)
+    cmd = (ev.get("tool_input") or {}).get("command", "")
+    sid = re.sub(r"[^A-Za-z0-9_-]", "", ev.get("session_id", ""))
+    if not sid or "skl" not in cmd:
+        return
+    names = []
+    for m in re.finditer(r"\bskl\s+load\s+([^|;&>\n]+)", cmd):
+        names += [w for w in m.group(1).split() if not w.startswith("-")]
+    names = [n for n in (resolve(w)[0] for w in names) if n]
+    if names:
+        STATE.mkdir(parents=True, exist_ok=True)
+        f = STATE / sid
+        old = f.read_text().split() if f.exists() else []
+        f.write_text("\n".join(dict.fromkeys(old + names)) + "\n")
+
+
+def cmd_hook_recall(sid):
+    f = STATE / re.sub(r"[^A-Za-z0-9_-]", "", sid)
+    if sid and f.exists() and f.read_text().split():
+        print("Pack skills this session loaded before compaction (their text was compacted away): "
+              + ", ".join(f.read_text().split())
+              + ". If the current work still needs one, re-run `skl load <name>` before continuing.")
+
+
+def main(a):
+    if not a or a[0] in ("-h", "--help", "help"):
+        print(__doc__.strip())
+        return 0
+    c, rest = a[0], a[1:]
+    if c == "load" and rest:
+        return cmd_load(rest)
+    if c == "list":
+        return cmd_list(rest[0] if rest else None)
+    if c == "search" and rest:
+        return cmd_search(rest)
+    if c == "hide":
+        return cmd_hide()
+    if c == "hook-track":
+        return cmd_hook_track()
+    if c == "hook-recall":
+        return cmd_hook_recall(rest[0] if rest else "")
+    print(__doc__.strip(), file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]) or 0)

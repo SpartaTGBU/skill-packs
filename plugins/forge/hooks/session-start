@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# One hook for three events. SessionStart: inject the forge router (plus, after compaction, the pack skills this
+# session had loaded via `skl hook-recall`). SubagentStart: inject forge:ponytail unless the agent is a planner,
+# architect or Plan. UserPromptSubmit: inject ponytail once per session on the first prompt outside plan mode
+# (SessionStart input has no permission_mode, so plan mode is only visible here); compact/clear re-arm it.
+# FORGE_PONYTAIL=off disables ponytail everywhere. Bash builtins only on SessionStart: PATH may be broken at startup.
+set -euo pipefail
+root="${CLAUDE_PLUGIN_ROOT:-${0%/hooks/*}}"
+ev=""; [ -t 0 ] || ev="$(cat 2>/dev/null || true)"
+q='[[:space:]]*:[[:space:]]*"'
+name=SessionStart
+[[ $ev =~ \"hook_event_name\"${q}(SubagentStart|UserPromptSubmit)\" ]] && name=${BASH_REMATCH[1]}
+sid=""; [[ $ev =~ \"session_id\"${q}([A-Za-z0-9_-]+)\" ]] && sid=${BASH_REMATCH[1]}
+mark="${XDG_STATE_HOME:-$HOME/.local/state}/skl/ponytail-$sid"
+s=""
+if [ $name = SessionStart ]; then
+  f="$root/skills/using-forge/SKILL.md"
+  [ -r "$f" ] && s="<forge>"$'\n'"$(<"$f")"
+  if [[ $ev =~ \"source\"${q}(compact|clear)\" ]]; then
+    [ -e "$mark" ] && { rm -f "$mark" 2>/dev/null || true; }
+    if [ "${BASH_REMATCH[1]}" = compact ] && [ -n "$sid" ]; then
+      r="$("$root/bin/skl" hook-recall "$sid" 2>/dev/null || true)"
+      [ -n "$r" ] && s+=$'\n\n'"$r"
+    fi
+  fi
+  [ -n "$s" ] && s+=$'\n'"</forge>"
+else
+  p="$root/skills/ponytail/SKILL.md"
+  [ "${FORGE_PONYTAIL:-on}" != off ] && [ -r "$p" ] || exit 0
+  if [ $name = SubagentStart ]; then
+    [[ $ev =~ \"agent_type\"${q}([A-Za-z0-9_:-]*)(planner|architect|Plan)\" ]] && exit 0
+  else
+    [[ $ev =~ \"permission_mode\"${q}plan\" ]] && exit 0
+    [ -n "$sid" ] && ! [ -e "$mark" ] || exit 0
+    mkdir -p "${mark%/*}" && : > "$mark"
+  fi
+  b="$(<"$p")"; b="${b#---*$'\n'---$'\n'}"
+  s="<ponytail>"$'\n'"Active now (injected, no need to load it; does not apply while in plan mode)."$'\n'"$b"$'\n'"</ponytail>"
+fi
+[ -n "$s" ] || exit 0
+s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\r'/\\r}"; s="${s//$'\t'/\\t}"
+printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"}}\n' "$name" "$s"

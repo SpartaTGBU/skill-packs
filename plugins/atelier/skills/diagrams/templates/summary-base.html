@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<!-- Self-contained: no external fonts/CDNs. System font fallbacks are used. -->
+<style>
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --fs-caption: 12px; --fs-sm: 14px; --fs-body: 16px; --fs-lead: 18px;
+  --fs-h3: 20px; --fs-h2: 24px; --fs-h1: 32px; --fs-display: 48px;
+  --lh-body: 1.6; --lh-tight: 1.15; --tracking-display: -0.03em;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-6: 24px; --sp-8: 32px; --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
+  --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+  --canvas: #fafafa; --surface: #ffffff; --hairline: #ebebeb;
+  --ink: #171717; --body: #4d4d4d; --mute: #6b6b6b;
+  --accent: #0070f3; --on-accent: #ffffff;
+  --shadow-1: 0 1px 1px rgba(0,0,0,.04), 0 2px 4px rgba(0,0,0,.04);
+  --container: 1200px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #0f1011; --surface: #18191a; --hairline: #23252a;
+    --ink: #f7f8f8; --body: #d0d6e0; --mute: #8a8f98; --accent: #828fff;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light dark; }
+body { margin: 0; font: 400 var(--fs-body)/var(--lh-body) var(--font-sans);
+       color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; }
+img, svg { max-width: 100%; height: auto; }
+p { max-width: 70ch; color: var(--body); margin: 0 0 var(--sp-4); }
+h1,h2,h3 { line-height: var(--lh-tight); letter-spacing: var(--tracking-display);
+           text-wrap: balance; font-weight: 600; margin: 0 0 var(--sp-4); }
+h1 { font-size: clamp(var(--fs-h1), 5vw, var(--fs-display)); }
+h2 { font-size: var(--fs-h2); margin-top: var(--sp-12); }
+h3 { font-size: var(--fs-h3); }
+a { color: var(--accent); }
+code, pre { font-family: var(--font-mono); font-size: var(--fs-sm); }
+pre { overflow-x: auto; padding: var(--sp-4); background: var(--surface);
+      border: 1px solid var(--hairline); border-radius: var(--r-md); }
+:where(a,button):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+.container { max-width: var(--container); margin: 0 auto; padding: var(--sp-16) var(--sp-6); }
+.lead { font-size: var(--fs-lead); color: var(--body); }
+.eyebrow { font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: .08em; color: var(--mute); }
+.grid { display: grid; gap: var(--sp-6); grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg);
+        padding: var(--sp-6); box-shadow: var(--shadow-1); min-width: 0; }
+.card p:last-child { margin-bottom: 0; }
+.stat { font-size: var(--fs-h1); font-weight: 600; letter-spacing: var(--tracking-display); }
+footer { margin-top: var(--sp-16); padding-top: var(--sp-6); border-top: 1px solid var(--hairline);
+         font-size: var(--fs-sm); color: var(--mute); }
+@media (max-width: 600px) { .container { padding: var(--sp-12) var(--sp-4); } }
+</style>
+</head>
+<body>
+<main class="container">
+  <header>
+    <div class="eyebrow">{{EYEBROW}}</div>
+    <h1>{{TITLE}}</h1>
+    <p class="lead">{{LEAD}}</p>
+  </header>
+
+  <section>
+    <h2>{{SECTION_HEADING}}</h2>
+    <div class="grid">
+      <article class="card"><h3>{{CARD_TITLE}}</h3><p>{{CARD_BODY}}</p></article>
+    </div>
+  </section>
+
+  <footer>{{FOOTER}}</footer>
+</main>
+</body>
+</html>

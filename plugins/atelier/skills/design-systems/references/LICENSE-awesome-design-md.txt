@@ -1,0 +1,1 @@
+The files under references/brands/<brand>/DESIGN.md are from https://github.com/VoltAgent/awesome-design-md (MIT License, Copyright (c) VoltAgent). They describe publicly observable design tokens of third-party sites for reference; brand names and marks belong to their owners. Adapt tokens to your own identity; do not ship another company's identity as your own.

@@ -1,0 +1,151 @@
+# Source and claim audit v1
+
+Screen cheaply, then verify the evidence that carries a decision. A DOI lookup,
+famous remembered result, citation mention, generated note, or NotebookLM brief
+is a discovery lead, not a source-supported finding.
+
+## Minimum audit record
+
+For each load-bearing claim, retain:
+
+1. packet/source and claim IDs; bibliographic work ID and specific publication
+   version (or explicitly unknown); acquisition/tool reference and source URL
+2. actual material reviewed: metadata, abstract, generated summary, located
+   full-text excerpt, or unavailable; source/access and identity judgments
+3. saved raw and extracted-text SHA-256 where available; exact quote with
+   character range plus section/page locator; source-fetch receipt if used
+4. verifier reference; supported, partial, contradicted, or unverifiable
+   judgment; applicable population/conditions and uncertainty
+
+Identity, source availability, publication version, and semantic claim support
+are distinct judgments. A located abstract cannot upgrade identity or become
+full text. Raw byte hashes identify a captured artifact, not the journal/preprint
+version, authentic publisher origin, or semantic support. Publication version
+needs a documented version review; unknown versions cannot establish same-version
+support. Quote presence only proves binding, not entailment or adequacy.
+
+Read the relevant methods, results, limitations, supplement, figure/table, or
+correction for decision-relevant detail. The abstract + first pages + conclusion
+may suffice for screening but is never a universal full-paper reading protocol.
+Never report `Read full PDF` unless that actually occurred. Say which sections
+were read and which remain unchecked. If a fourth load-bearing source remains
+beyond an approved read/spot-check bound, explicitly leave it unassessed; do not
+imply all claims were audited after three spot-checks.
+
+Supported abstract claims remain useful at their actual narrower scope. Narrow
+claim wording when evidence is partial; retain contradictions and conditions.
+Unattributed claims, missing citation mentions, and nearby apparently opposing
+sentences are screening flags, not final support/contradiction verdicts. Compare
+the underlying passages before making those judgments.
+
+## Check the inference, not just the quotation
+
+Apply the relevant checks to each consequential claim; do not force a
+statistical checklist onto qualitative/theoretical work or invent missing
+numbers. Use the actual host's reading tools and the source sections already
+identified above. These are source-review instructions, not a new schema,
+automated semantic validator, or requirement to install Hub or another service.
+
+- **Analysis target:** Keep each estimate, uncertainty interval and test result
+  attached to its actual analysis: study/part, sample or subgroup, pooled
+  population, outcome, model and contrast, including adjustments where reported.
+  Inspect the relevant table/figure, caption and notes when needed. Do not move
+  a statistic between parts, subgroups or pooled analyses; a valid pooled result
+  still describes that pooled analysis, not each component separately.
+- **Non-significance:** A non-significant difference does not establish
+  equivalence or no effect. Retain the estimate and uncertainty where reported.
+  An equivalence claim needs an appropriate analysis with justified equivalence
+  bounds, not a non-significant test alone.
+- **Effect target:** Distinguish main effects, interactions and simple/conditional
+  effects. An interaction is not an unconditional main effect; state the contrast
+  and conditions actually tested. That one subgroup is significant and another
+  is not does not itself establish an interaction.
+- **Causal scope:** Separate association, statistical mediation, causal effect
+  and demonstrated mechanism. Observational mediation alone does not establish a
+  causal mechanism; causal wording needs a defensible design/identification
+  argument and supporting evidence. Explicitly retain its assumptions and
+  unresolved confounding or temporal-order limits.
+- **Target transfer:** Separate the studied population/system from the proposed
+  target. A human-only finding is not direct evidence about model-agent behavior,
+  nor does a different population or task automatically transfer. When bridging
+  them, label the transfer as an inference and identify the missing target-specific
+  evidence; do not present the proposed explanation as a result of the cited study.
+
+If the analysis or transfer cannot be checked within the reading scope, narrow
+the claim or retain it as partial/unverifiable with the missing check visible.
+A verbatim quote and matching bytes do not resolve these inference questions.
+
+## Optional executable source-audit profile
+
+For substantive reviews needing local binding checks, keep an optional
+`research-source-audit/1.0` sidecar alongside the unchanged strict
+`ResearchEvidencePacket` v1. Do not add properties to the v1 packet or change
+its status enums. The profile's `partial`/`unverifiable` assessments describe
+remaining limits; the packet retains its existing vocabulary. Use `unverified`
+(or `mixed` when actually mixed) until packet wording and all required support
+are justified.
+
+Before using the optional kwargs, probe the **installed runtime**, not just its
+version string. A skill/plugin update does not replace an already installed
+Python wheel; the proposed source wheel and an older published wheel can both
+report `1.2.0` while exposing different capabilities.
+
+```bash
+python - <<'PY'
+import inspect
+from importlib.resources import files
+from research_hub.evidence_harness import validate_evidence_packet
+parameters = inspect.signature(validate_evidence_packet).parameters
+available = {"source_audit", "artifact_root"} <= parameters.keys()
+available = available and files("research_hub").joinpath(
+    "schemas/research-source-audit-1.0.json"
+).is_file()
+print("source-audit/1.0 available:", available)
+raise SystemExit(0 if available else 1)
+PY
+```
+
+If this probe fails, do not call unsupported kwargs or present packet-only
+validation as source binding. Preserve manual/native source review and label
+mechanical source-audit validation unavailable for that runtime. Available
+native discovery remains usable. A tested proposed source build does not imply
+publication or installation of a new runtime; those are separate approved steps.
+
+Production validation, **only after that probe passes**, is:
+
+```python
+from pathlib import Path
+from research_hub.evidence_harness import validate_evidence_packet
+findings = validate_evidence_packet(
+    packet, source_audit=profile, artifact_root=Path("./evidence"),
+)
+```
+
+The schema is `research_hub/schemas/research-source-audit-1.0.json`; the Python
+validator uses local files only and never fetches a source. Each observation
+records work/publication version, actual level/status, raw/text hashes and
+paths, and an optional existing source-fetch result. Source-fetch bundles are
+replayed with the production receipt validator before use. Native captures are
+allowed without source-fetch receipts but provide weaker provenance; identify
+them as native captures rather than implying receipt replay or publisher proof.
+Paths must stay inside the supplied artifact root. A supported assessment binds
+the current packet hash, packet source/claim/verifier IDs, known version,
+required evidence level, exact quote/range, and saved bytes. Every claim is
+assessed or explicitly listed as unassessed; an unassessed claim cannot be
+marked supported. Revalidate after a source, version, or decision changes.
+
+The profile is optional: legacy packet-only callers retain v1 validation.
+A packet-only pass means structural/status consistency, never source-passage
+verification. A profile pass additionally proves local binding consistency,
+never scientific sufficiency, source authenticity, complete coverage, novelty,
+or submission readiness. Human source/semantic review remains required.
+
+## Report what was checked
+
+A search ledger is not an execution receipt. Follow the native protocol's
+receipt levels and preserve the actual host observation. A direction-check
+`current` binding can include a supplied nonexistent locator: that checker does
+not interpret locator prose. A source-audit quote/range match adds local binding,
+not semantic entailment. Report which checker and optional profile actually ran,
+its inputs/version and findings, separately from manual source assessment.
+Never describe packet-only or filled-field validation as verified reading.

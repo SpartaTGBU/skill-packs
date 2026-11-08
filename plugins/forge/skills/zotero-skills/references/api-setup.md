@@ -1,0 +1,80 @@
+# API Setup
+
+This skill routes operations through two APIs automatically:
+
+| | Local API | Web API |
+|---|---|---|
+| **Base URL** | `http://localhost:23119/api` | `https://api.zotero.org` |
+| **Auth** | Header: `Zotero-Allowed-Request: true` | Header: `Zotero-API-Key: <key>` |
+| **Capabilities** | **Read-only** (GET) | **Full CRUD** (GET/POST/PATCH/DELETE) |
+| **Speed** | Very fast (localhost) | Standard (network) |
+| **Rate limit** | None | ~100 req / 10 sec |
+| **Requires** | Zotero desktop running | API key |
+
+**Routing rules:**
+- **Search & Read** → Local API (via MCP tools or direct HTTP) — fast, no key needed
+- **Create / Update / Delete** → Web API (via pyzotero) — requires API key
+- **Fallback** → If Zotero desktop is closed, all operations go through Web API automatically
+
+> **Warning:** MCP write tools (`zotero_create_note`, `zotero_batch_update_tags`) use the local API and **will fail** with 400/501 errors. Always use pyzotero for writes.
+
+## Getting API Credentials
+
+1. Go to [zotero.org/settings/keys](https://www.zotero.org/settings/keys)
+2. Click **"Create new private key"**. Grant the **least privilege** that your use needs — for read-only workflows do **not** enable write; scope the key to a single library/group where possible rather than granting access to all libraries. Enable write access only if you will create/update/delete.
+3. Copy the key and your **Library ID** (shown on the same page)
+4. **Preferred:** store credentials in **environment variables** or `~/.config/zotero-skills/.env` (never commit them):
+
+```bash
+export ZOTERO_API_KEY="your_key_here"
+export ZOTERO_LIBRARY_ID="your_library_id"
+export ZOTERO_LIBRARY_TYPE="user"
+```
+
+   The shared client resolves credentials in this order: **env vars → `~/.config/zotero-skills/.env` → `config.json`**.
+   `config.json` is a **deprecated** fallback (emits a `DeprecationWarning`); if you use it, keep it
+   gitignored and `chmod 600`. Never place a real key in any committed file.
+
+> **Checking whether credentials are configured:** never open or print
+> `~/.config/zotero-skills/.env` or `config.json` to check. Call `credentials_status()`
+> instead; it does the same env → `~/.config/zotero-skills/.env` → `config.json`
+> resolution internally and returns only booleans and a source label
+> (`"env"` / `"~/.config/zotero-skills/.env"` / `"config.json"` / `"none"`), never the
+> key or library ID itself. An empty shell environment variable is not
+> proof that no key exists elsewhere in that chain.
+
+## Using the Shared Client
+
+```python
+import os, sys
+sys.path.insert(0, os.path.expanduser("~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/zotero-skills/scripts"))
+from zotero_client import get_client, get_collection, add_note, check_duplicate, ZoteroDualClient
+
+# Option A: Web API client (for writes)
+zot = get_client()  # reads credentials from config.json or env vars
+
+# Option B: Dual client (local reads + web writes, auto-fallback)
+dual = ZoteroDualClient()
+results = dual.search("flood adaptation")            # local API if available
+dual.create_note("ITEM_KEY", "Section", "Notes...")  # always web API
+```
+
+**Available functions in `zotero_client.py`:**
+
+| Function | Description |
+|---|---|
+| `get_client()` | Configured `pyzotero.Zotero` Web API instance |
+| `get_collection(name)` | Find collection key by display name from `config.json` |
+| `add_note(zot, item_key, content)` | Attach a child note to a library item |
+| `check_duplicate(zot, title, doi)` | Check if item with given title or DOI exists |
+| `check_local_api(timeout, library_id)` | Test if Zotero desktop local API is reachable |
+| `credentials_status()` | Report whether a key/library ID are configured and which layer they came from, as booleans + a source label; never returns the value. Call this instead of opening `~/.config/zotero-skills/.env` or `config.json` |
+| `ZoteroDualClient` | Dual-API wrapper with auto-fallback |
+| `ZoteroDualClient.attach_pdf(parent_key, path, filename=None)` | Attach a PDF via a short, safe, `zot_`-prefixed temp filename; raises the failed-upload detail instead of failing silently (see `create-operations.md`) |
+| `ZoteroDualClient.restore_item(key)` | Reverse `trash_item()`: PATCH `deleted=0` |
+| `ZoteroDualClient.merge_duplicates(keep_key, dup_key, require_same_doi=True)` | Merge a duplicate into the keeper: move children, union collections/tags/relations, add a `dc:replaces` relation, then trash the duplicate (see `merge-duplicates.md`) |
+| `ZoteroDualClient.add_to_collection(item_key, collection_key)` | Add one membership without removing existing memberships |
+| `ZoteroDualClient.remove_from_collection(item_key, collection_key)` | Remove only the named membership and preserve others |
+| `ZoteroDualClient.move_to_collection(item_key, collection_key, from_collection_key=...)` | Remove the named source membership and add the target; omitting `from_collection_key` retains the older add-only behavior |
+| `ZoteroDualClient.update_collection(collection_key, updates)` / `rename_collection(collection_key, new_name)` | Update collection `name` or `parentCollection` metadata using the current Web API version |
+| `safe_api_call(func)` | Wrapper with automatic rate-limit backoff |

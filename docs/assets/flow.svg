@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" width="960" height="440" role="img" aria-labelledby="t d">
+  <title id="t">How the skill packs flow</title>
+  <desc id="d">A request is sized, then goes through thorough planning, lean ponytail implementation, thorough review and verification. Skills are loaded on demand with skl load at each stage.</desc>
+  <style>
+    text{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;fill:#e6edf3}
+    .bg{fill:#0d1117}
+    .node{fill:#161b22;stroke:#30363d;stroke-width:1.5}
+    .plan{stroke:#58a6ff}.impl{stroke:#3fb950}.rev{stroke:#d29922}.size{stroke:#bc8cff}
+    .h{font-size:15px;font-weight:700}
+    .s{font-size:11.5px;fill:#8b949e}
+    .tag{font-size:11px;font-weight:700;letter-spacing:.08em}
+    .wire{fill:none;stroke:#30363d;stroke-width:2;stroke-dasharray:5 5}
+    .ld{fill:none;stroke:#8b949e;stroke-width:1.2;stroke-dasharray:3 4}
+    .pill{fill:#0d1117;stroke:#30363d}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;fill:#79c0ff}
+    .glow{animation:glow 12s infinite}
+    .g1{animation-delay:0s}.g2{animation-delay:2s}.g3{animation-delay:4s}.g4{animation-delay:6s}.g5{animation-delay:8s}
+    @keyframes glow{0%,14%{filter:drop-shadow(0 0 7px currentColor);opacity:1}18%,100%{filter:none;opacity:.78}}
+    .flow{stroke-dashoffset:0;animation:dash 1.2s linear infinite}
+    @keyframes dash{to{stroke-dashoffset:-20}}
+    .blink{animation:blink 2.4s ease-in-out infinite}
+    @keyframes blink{50%{opacity:.25}}
+    @media (prefers-reduced-motion:reduce){.glow,.flow,.blink{animation:none}}
+  </style>
+  <rect class="bg" width="960" height="440" rx="14"/>
+  <text x="32" y="40" class="h" style="font-size:18px">Plan thoroughly. Build lean. Review hard.</text>
+  <text x="32" y="60" class="s">Process scales with the task. Skills load only when the work needs them.</text>
+
+  <!-- main wire -->
+  <path id="main" class="wire flow" d="M110 190 H850"/>
+
+  <!-- request -->
+  <g><rect class="node" x="32" y="150" width="130" height="80" rx="10"/>
+  <text x="97" y="184" class="h" text-anchor="middle">Request</text>
+  <text x="97" y="204" class="s" text-anchor="middle">"add X", "fix Y"</text></g>
+
+  <!-- size -->
+  <g class="glow g1" style="color:#bc8cff"><rect class="node size" x="200" y="150" width="130" height="80" rx="10"/>
+  <text x="265" y="184" class="h" text-anchor="middle">Size it</text>
+  <text x="265" y="204" class="s" text-anchor="middle">trivial / small /</text>
+  <text x="265" y="218" class="s" text-anchor="middle">medium / large</text></g>
+
+  <!-- plan -->
+  <g class="glow g2" style="color:#58a6ff"><rect class="node plan" x="368" y="150" width="140" height="80" rx="10"/>
+  <text x="438" y="178" class="tag" text-anchor="middle" style="fill:#58a6ff">PLAN</text>
+  <text x="438" y="198" class="h" text-anchor="middle">Thorough</text>
+  <text x="438" y="216" class="s" text-anchor="middle">brainstorm, spec, plan</text></g>
+
+  <!-- implement -->
+  <g class="glow g3" style="color:#3fb950"><rect class="node impl" x="546" y="150" width="140" height="80" rx="10"/>
+  <text x="616" y="178" class="tag" text-anchor="middle" style="fill:#3fb950">IMPLEMENT</text>
+  <text x="616" y="198" class="h" text-anchor="middle">Lean</text>
+  <text x="616" y="216" class="s" text-anchor="middle">ponytail, tdd, debug</text></g>
+
+  <!-- review -->
+  <g class="glow g4" style="color:#d29922"><rect class="node rev" x="724" y="150" width="130" height="80" rx="10"/>
+  <text x="789" y="178" class="tag" text-anchor="middle" style="fill:#d29922">REVIEW</text>
+  <text x="789" y="198" class="h" text-anchor="middle">Thorough</text>
+  <text x="789" y="216" class="s" text-anchor="middle">parallel reviewers</text></g>
+
+  <!-- done -->
+  <g class="glow g5" style="color:#3fb950"><rect class="node" x="892" y="150" width="48" height="80" rx="10" style="stroke:#3fb950"/>
+  <text x="916" y="196" class="h" text-anchor="middle" style="fill:#3fb950;font-size:22px">&#10003;</text></g>
+
+  <!-- traveling pulse -->
+  <circle r="7" fill="#f0f6fc">
+    <animateMotion dur="12s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" path="M80 190 H916"/>
+  </circle>
+
+  <!-- review -> implement loop -->
+  <path class="ld flow" d="M789 232 V262 H616 V232"/>
+  <rect class="pill" x="640" y="250" width="124" height="22" rx="11"/>
+  <text x="702" y="265" class="s" text-anchor="middle">fix findings, re-review</text>
+
+  <!-- skl load lane -->
+  <g>
+    <rect class="node" x="32" y="318" width="896" height="92" rx="10"/>
+    <text x="52" y="344" class="tag" style="fill:#79c0ff">ON-DEMAND LOADING</text>
+    <text x="52" y="366" class="code">skl search "rust async"</text>
+    <text x="52" y="386" class="code">skl load forge:rust forge:debugging</text>
+    <text x="360" y="366" class="s">Pack skills stay out of context until needed. Load one or two per stage,</text>
+    <text x="360" y="384" class="s">follow them, and re-load after compaction.</text>
+    <text x="360" y="402" class="s">ponytail is injected automatically into every session and subagent.</text>
+    <circle cx="334" cy="360" r="4" fill="#79c0ff" class="blink"/>
+  </g>
+  <path class="ld" d="M438 232 V318 M616 262 V318 M789 232 V250"/>
+</svg>
