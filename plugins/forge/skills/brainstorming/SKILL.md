@@ -1,5 +1,5 @@
 ---
-disable-model-invocation: true  # skl: on-demand pack skill
+# skl: model-visible (in the Skill tool listing; `skl hide` leaves it alone)
 name: brainstorming
 description: Find out what the user actually wants before anything is built - relentless clarifying questions one at a time, alternatives laid out with trade-offs, and a design the user approves before any code. Use before building features, components, behaviour changes or anything new (software or not), when a request is ambiguous, when the user says "let's build X", "brainstorm", "grill me", "stress-test this plan", or before forge:writing-specs / forge:writing-plans. Tiny, fully specified tasks skip it.
 ---

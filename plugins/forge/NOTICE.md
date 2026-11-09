@@ -22,3 +22,5 @@ Design merge (ideas, rules and short tables synthesized, rewritten; no scripts o
 - https://github.com/leonxlnx/taste-skill @ 12af471 (MIT)
 - https://github.com/pbakaus/impeccable @ df3a4ab (Apache-2.0)
 - https://github.com/heygen-com/hyperframes @ 443ded4 (Apache-2.0)
+
+- forge:hill-climb draws on Theo Browne (t3.gg) videos on hill climbing with agents (youtube.com/watch?v=xq0eB8vxeqk, NBCM_ZoWZo8, uLGxb4F3SyI); forge:goal paraphrases Claude Code's /goal and ProposeGoal behavior.

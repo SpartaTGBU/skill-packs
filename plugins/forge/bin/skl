@@ -7,7 +7,8 @@ them out of the per-turn skill listing (users can still type /forge:rust). Agent
   skl search <words>     rank pack skills by name/description match
   skl list [pack]        every pack skill with a one-line description
   skl load <name>...     print SKILL.md (forge:rust, forge-rust or rust) plus its directory listing
-  skl hide               mark (and YAML-quote) any pack skill missing the marker (run after adding skills)
+  skl hide               mark (and YAML-quote) any pack skill missing the marker (run after adding skills);
+                         skips routers and skills whose frontmatter has `# skl: model-visible`
   skl hook-track         PostToolUse hook: remember which skills this session loaded
   skl hook-recall        print skills loaded before compaction (used by the SessionStart hook)
 """
@@ -17,6 +18,7 @@ from pathlib import Path
 PLUGINS = Path(os.environ.get("SKL_PLUGINS", Path(__file__).resolve().parents[2]))
 PACKS = ("forge", "atrium", "atelier")
 MARK = "disable-model-invocation: true  # skl: on-demand pack skill"
+VISIBLE = "# skl: model-visible"  # opt-out: skill stays in the Skill tool listing
 STATE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state")) / "skl"
 
 
@@ -101,9 +103,9 @@ def cmd_search(words):
 def cmd_hide():
     changed = 0
     for n, _, f, _ in skills():
-        if n.split(":")[1].startswith("using-"):
-            continue
         t = old = f.read_text()
+        if n.split(":")[1].startswith("using-") or VISIBLE in t.split("\n---", 1)[0]:
+            continue
         # An unquoted `description: a: b` is invalid YAML; Claude Code then parses leniently and drops the marker.
         t = re.sub(r"^(description:[ \t]*)([^'\"|>\s].*(?:: | #).*)$",
                    lambda m: m.group(1) + json.dumps(m.group(2), ensure_ascii=False), t, count=1, flags=re.M)

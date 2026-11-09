@@ -18,14 +18,14 @@ Pick the size before anything else, because it decides how much process to run. 
 
 ## On-demand loading with `skl`
 
-Claude Code lists every available skill in each turn's context. With 181 skills that would be wasteful, so pack skills are marked `disable-model-invocation: true` and stay out of that list. `skl` fills the gap:
+Claude Code lists every available skill in each turn's context. With 183 skills that would be wasteful, so pack skills are marked `disable-model-invocation: true` and stay out of that list. There are two exceptions besides the routers. The clarify-and-goal skills (`forge:brainstorming`, `forge:brainstorm-technical-design`, `forge:goal` and `forge:hill-climb`) carry `# skl: model-visible` instead. That keeps them in the list, so the model invokes them on its own whenever a goal or requirement is unclear. `skl` fills the gap for everything else:
 
 | Command | Does |
 |---------|------|
 | `skl search <words>` | Ranks skills by name and description match |
 | `skl list [pack]` | One line per skill |
 | `skl load <name>...` | Prints `SKILL.md` and its directory listing; accepts `forge:rust`, `forge-rust` or `rust` |
-| `skl hide` | Marks any skill missing the on-demand marker; run after adding a skill |
+| `skl hide` | Marks any skill missing the on-demand marker; run after adding a skill. Skips routers and `# skl: model-visible` skills |
 
 Hooks keep this reliable. A `PostToolUse` hook records which skills a session loaded, and a `SessionStart` hook on `compact` reminds the agent which ones to reload.
 

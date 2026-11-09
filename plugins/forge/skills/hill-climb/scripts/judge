@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+"""Ask a model to judge something (text plus optional screenshots), for hill-climb judge panels.
+
+  judge models                                  list model ids the backend offers
+  judge ask -m MODEL [-e low] [-i shot.png ...] < brief.md
+                                                send stdin as one user message, print the reply
+
+Backends (--backend or $JUDGE_BACKEND):
+  copilot  (default) your own GitHub Copilot subscription. GitHub OAuth token from
+           $COPILOT_GITHUB_TOKEN, else the output of $COPILOT_TOKEN_CMD, else
+           `secret-tool lookup account github-copilot`. Uses Copilot's unofficial
+           copilot_internal token exchange (as editor integrations do); your account, your ToS risk.
+  openai   any OpenAI-compatible API: $JUDGE_API_BASE (e.g. https://openrouter.ai/api/v1)
+           and key from $JUDGE_API_KEY.
+
+Tokens are read at call time and never printed or written to disk. Standard library only.
+"""
+import argparse, base64, json, mimetypes, os, shlex, subprocess, sys, urllib.error, urllib.request
+
+EXCHANGE_URL = "https://api.github.com/copilot_internal/v2/token"
+EDITOR = {"Editor-Version": "vscode/1.104.1", "User-Agent": "GitHubCopilotChat/0.26.7"}
+
+
+def die(msg):
+    sys.exit(f"judge: {msg}")
+
+
+def http(url, headers, body=None, timeout=600):
+    data = json.dumps(body).encode() if body is not None else None
+    req = urllib.request.Request(url, data=data, headers={**headers, "Accept": "application/json",
+                                 **({"Content-Type": "application/json"} if data else {})})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:
+        die(f"HTTP {e.code} from {url.split('?')[0]}: {e.read().decode(errors='replace')[:500]}")
+    except urllib.error.URLError as e:
+        die(f"cannot reach {url.split('?')[0]}: {e.reason}")
+
+
+def run_token_cmd(cmd):
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+
+
+def copilot_session():
+    raw = os.environ.get("COPILOT_GITHUB_TOKEN") or ""
+    if not raw and os.environ.get("COPILOT_TOKEN_CMD"):
+        raw = run_token_cmd(shlex.split(os.environ["COPILOT_TOKEN_CMD"]))
+    if not raw:
+        raw = run_token_cmd(["secret-tool", "lookup", "account", "github-copilot"])
+    if not raw:
+        die("no Copilot token: set COPILOT_GITHUB_TOKEN or COPILOT_TOKEN_CMD, or store one with "
+            "`secret-tool store --label=github-copilot account github-copilot`")
+    ex = http(EXCHANGE_URL, {"Authorization": f"token {raw}", **EDITOR})
+    if not ex.get("token"):
+        die("token exchange returned no Copilot token (is a Copilot subscription active?)")
+    api = (ex.get("endpoints") or {}).get("api") or "https://api.githubcopilot.com"
+    # Copilot-Integration-Id is required: without it subscription models 400 as not available.
+    headers = {"Authorization": f"Bearer {ex['token']}", "Copilot-Integration-Id": "vscode-chat",
+               "Openai-Intent": "conversation-edits", "x-initiator": "user", **EDITOR}
+    return api.rstrip("/"), headers
+
+
+def openai_session():
+    base, key = os.environ.get("JUDGE_API_BASE"), os.environ.get("JUDGE_API_KEY")
+    if not base or not key:
+        die("openai backend needs JUDGE_API_BASE and JUDGE_API_KEY")
+    return base.rstrip("/"), {"Authorization": f"Bearer {key}"}
+
+
+def session(backend):
+    return copilot_session() if backend == "copilot" else openai_session()
+
+
+def catalog(api, headers):
+    return http(f"{api}/models", headers).get("data", [])
+
+
+def cmd_models(a):
+    api, h = session(a.backend)
+    for m in sorted(catalog(api, h), key=lambda m: m.get("id", "")):
+        caps = m.get("capabilities") or {}
+        if caps.get("type", "chat") != "chat":
+            continue
+        sup = caps.get("supports") or {}
+        flags = ",".join(k for k in ("vision", "reasoning_effort", "tool_calls") if sup.get(k))
+        eps = ",".join(m.get("supported_endpoints") or ["/chat/completions"])
+        hidden = "" if m.get("model_picker_enabled", True) else "  (hidden)"
+        print(f"{m['id']:<34} {eps:<40} {flags}{hidden}")
+
+
+def cmd_ask(a):
+    prompt = sys.stdin.read()
+    if not prompt.strip():
+        die("empty prompt on stdin")
+    api, h = session(a.backend)
+    eps = ["/chat/completions"]
+    if a.backend == "copilot":  # Copilot advertises per-model endpoints; others: chat completions
+        model = next((m for m in catalog(api, h) if m.get("id") == a.model), None)
+        if model is None:
+            die(f"model {a.model!r} not offered by this subscription; run `judge models`")
+        eps = model.get("supported_endpoints") or eps
+    images = []
+    for path in a.image:
+        mime = mimetypes.guess_type(path)[0] or "image/png"
+        with open(path, "rb") as f:
+            images.append(f"data:{mime};base64,{base64.b64encode(f.read()).decode()}")
+    if images and a.backend == "copilot":
+        h = {**h, "Copilot-Vision-Request": "true"}
+
+    if "/responses" in eps:  # preferred when offered: some models 400 on chat even if listed
+        content = [{"type": "input_text", "text": prompt}] + [
+            {"type": "input_image", "image_url": u} for u in images]
+        body = {"model": a.model, "input": [{"role": "user", "content": content}]}
+        if a.effort:
+            body["reasoning"] = {"effort": a.effort}
+        r = http(f"{api}/responses", h, body)
+        print("".join(c.get("text", "") for o in r.get("output", []) if o.get("type") == "message"
+                      for c in o.get("content", [])))
+    elif "/chat/completions" in eps:
+        content = [{"type": "text", "text": prompt}] + [
+            {"type": "image_url", "image_url": {"url": u}} for u in images]
+        body = {"model": a.model, "messages": [{"role": "user", "content": content}]}
+        if a.effort:
+            body["reasoning_effort"] = a.effort
+        r = http(f"{api}/chat/completions", h, body)
+        print(r["choices"][0]["message"].get("content") or "")
+    else:
+        die(f"model {a.model!r} only supports {eps}; not handled")
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--backend", choices=["copilot", "openai"],
+                   default=os.environ.get("JUDGE_BACKEND", "copilot"))
+    sub = p.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("models").set_defaults(fn=cmd_models)
+    ask = sub.add_parser("ask")
+    ask.add_argument("-m", "--model", required=True)
+    ask.add_argument("-e", "--effort", choices=["none", "minimal", "low", "medium", "high", "xhigh"])
+    ask.add_argument("-i", "--image", action="append", default=[], help="screenshot to attach (repeatable)")
+    ask.set_defaults(fn=cmd_ask)
+    a = p.parse_args()
+    a.fn(a)
+
+
+if __name__ == "__main__":
+    main()

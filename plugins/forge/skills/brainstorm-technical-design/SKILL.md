@@ -1,7 +1,7 @@
 ---
-disable-model-invocation: true  # skl: on-demand pack skill
+# skl: model-visible (in the Skill tool listing; `skl hide` leaves it alone)
 name: brainstorm-technical-design
-description: "Combined design session: forge:brainstorming's relentless questioning run together with forge:architecture's domain modeling, seam placement and ADRs, so every resolved decision lands in GLOSSARY.md, docs/adr/ and the design doc as you go. Use when the user says \"grill me with docs\", \"grill this design\", \"design session\", wants to stress-test a plan that touches module structure or domain language, or starts a feature in an existing codebase with real architectural choices."
+description: "Combined design session: forge:brainstorming's relentless questioning run together with forge:architecture's domain modeling, seam placement and ADRs, so every resolved decision lands in GLOSSARY.md, docs/adr/ and the design doc as you go. Use when the user says \"grill me with docs\", \"grill this design\", \"design session\", wants to stress-test a plan that touches module structure or domain language, or starts a feature in an existing codebase with real architectural choices. Also use it on your own when you need clarification before building: the goal, the success measure or the module shape is unclear, and guessing would cost real rework."
 ---
 
 # Brainstorm technical design
@@ -24,13 +24,14 @@ skill only says how they combine. Where they conflict, this file wins.
 Ask every question through AskUserQuestion with proposed options, recommendation first (see
 forge:brainstorming). Use **grill mode** (rounds of up to 4 questions per call, recommended answer
 first) when the user brought a plan; otherwise one question per call. In every round, ask questions on three
-tracks, each only once its prerequisites are settled:
+tracks (four when the work is hill-shaped), each only once its prerequisites are settled:
 
 | Track | Asks about | Lands in |
 |-------|-----------|----------|
 | **Intent** | why, who, success, non-goals, constraints only they know | design doc |
 | **Language** | terms that are vague, overloaded or clash with the glossary | `GLOSSARY.md`, updated inline as each term resolves |
 | **Shape** | where seams go, dependency category, interface depth, what can be deleted instead of built | design doc; an ADR when the decision is hard to reverse, surprising and a real trade-off |
+| **Hill** | only when success is a number or a quality bar (a port against a reference, N× faster, an eval score, UI quality, a size cut): the target sentence, the verifier, the pinned reference, the correctness guard, the first bar and the next one, the held-out set, judge panel or program | `HILL.md` header (format in forge:hill-climb), updated inline like the glossary |
 
 Rules:
 - **Write as you go, not at the end.** When a term resolves, update the glossary in the same turn
@@ -41,6 +42,10 @@ Rules:
   (forge:ponytail's ladder). Say what you chose *not* to add.
 - **Design it twice** (forge:architecture) for any interface that several callers will depend on;
   bring the comparison back as a grill question.
+- **Spot the hill early.** If the Intent answers contain "faster", "smaller", "match X", "as good as
+  Y" or a score, load forge:hill-climb and open the Hill track. Push the verifier as far as it goes:
+  a program first, a judge panel only when nothing can be computed. The design should also give the
+  verifier a seam of its own (a `just verify` entry point the climber can't edit).
 - **Contradictions are findings.** If the user's account and the code disagree, show both and ask
   which is true before going on.
 
@@ -53,4 +58,6 @@ Every branch of the design tree is visited and nothing is silently assumed. Then
    glossary terms and ADRs it relies on.
 3. Get approval. The brainstorming hard gate applies: no code before it.
 4. Summarise what changed on disk: glossary terms added or changed, ADRs written, the design path.
-5. Next step: forge:writing-plans.
+5. Next step: forge:writing-plans. When the Hill track ran, the plan's last task is "verifier runs
+   and records the baseline in `HILL.md`". After that, hand off to forge:hill-climb. It starts at
+   *Climb*, because the target, verifier and bar were all settled here.

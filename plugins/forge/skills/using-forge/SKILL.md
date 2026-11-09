@@ -10,6 +10,10 @@ are thorough; implementation is lean (ponytail).** Process scales with the task.
 
 ## How to load a pack skill
 
+Exception: the clarify-and-goal skills (`forge:brainstorming`, `forge:brainstorm-technical-design`,
+`forge:goal`, `forge:hill-climb`) are in the Skill tool listing. Invoke them yourself whenever you
+need clarification or a clearer goal; don't wait for the user to ask.
+
 Pack skills (`forge:*`, `atrium:*`, `atelier:*`) are **not** in the Skill tool, to keep context
 small. Load one through Bash, only when the work needs it, and follow it as if it were invoked:
 
@@ -51,6 +55,8 @@ When unsure between two sizes, pick the larger for *planning* and the smaller fo
 - Bug, failure or unexpected behaviour → `forge:debugging` (root cause before fix)
 - Executing a written plan → `forge:executing-plans`
 - Independent tasks that can run concurrently → `forge:parallel-agents`
+- Long unattended run toward a measurable target (`/goal`, "keep going until", N× faster, score ≥ N) → `forge:hill-climb`
+- Multi-turn work whose "done" should be one checkable condition, or you're unsure what done means → `forge:goal`
 - Need an isolated workspace → `forge:git-worktrees`
 
 **Review (comprehensive)**
