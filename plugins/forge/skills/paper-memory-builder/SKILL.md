@@ -173,12 +173,12 @@ evidence for human assessment, not automatic rejection. On validation
 failure, report diagnostics and leave the original file unchanged; do not
 coerce statuses (including invalid `dropped`) or renumber claims.
 
-The structural rules are enforced by `scripts/check_claims_schema.py` against
-the JSON Schema at `references/claims.schema.json`. Run the validator
-manually after editing `.paper/claims.yml` by hand:
+The structural rules are defined by the JSON Schema at
+`references/claims.schema.json`. After editing `.paper/claims.yml` by hand,
+validate it from the skill directory (needs `pip install jsonschema pyyaml`):
 
 ```bash
-python scripts/check_claims_schema.py <path-to-claims.yml>
+python3 -c 'import sys, json, yaml, jsonschema; jsonschema.validate(yaml.safe_load(open(sys.argv[1])), json.load(open(sys.argv[2]))); print("claims.yml OK")' <path-to-claims.yml> references/claims.schema.json
 ```
 
 ## See also

@@ -503,7 +503,7 @@ Idempotency means running the same playbook multiple times produces the same res
 ### Template Best Practices
 
 ```jinja2
-{# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/templates/nginx.conf.j2 #}
+{# templates/nginx.conf.j2 #}
 
 {# Use comments to explain complex logic #}
 user {{ nginx_user }};

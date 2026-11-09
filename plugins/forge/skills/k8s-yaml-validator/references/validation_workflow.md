@@ -10,7 +10,7 @@ This document outlines the comprehensive validation workflow for Kubernetes YAML
 
 **Command:**
 ```bash
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/count_yaml_documents.py <file.yaml>
+python3 scripts/count_yaml_documents.py <file.yaml>
 ```
 
 **Fallback when Python is unavailable (estimated count):**
@@ -24,7 +24,7 @@ awk 'BEGIN{d=0;seen=0} /^[[:space:]]*---[[:space:]]*$/ {if(seen){d++;seen=0}; ne
 
 **Command:**
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/setup_tools.sh
+bash scripts/setup_tools.sh
 ```
 
 If required tools are missing, continue with available tools and report skipped stages.
@@ -120,7 +120,7 @@ Shows what would change if applied to the cluster.
 
 Use the wrapper script (handles missing PyYAML automatically):
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/detect_crd_wrapper.sh <file.yaml>
+bash scripts/detect_crd_wrapper.sh <file.yaml>
 ```
 
 Output example:
@@ -174,13 +174,13 @@ Once documentation is found:
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ 0. Count Documents                                          │
-│    Run: python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/count_yaml_documents.py <file.yaml> │
+│    Run: python3 scripts/count_yaml_documents.py <file.yaml> │
 │    Record: documents + separators                           │
 └─────────────────────────────────────────────────────────────┘
                            ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ 1. Check Tools                                              │
-│    Run: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/setup_tools.sh                         │
+│    Run: bash scripts/setup_tools.sh                         │
 │    Continue with available tools                            │
 └─────────────────────────────────────────────────────────────┘
                            ↓
@@ -192,7 +192,7 @@ Once documentation is found:
                            ↓
 ┌─────────────────────────────────────────────────────────────┐
 │ 3. Detect CRDs                                              │
-│    Run: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/detect_crd_wrapper.sh <file.yaml>      │
+│    Run: bash scripts/detect_crd_wrapper.sh <file.yaml>      │
 │    Parse: Extract kind, apiVersion, group                   │
 └─────────────────────────────────────────────────────────────┘
                            ↓
@@ -233,7 +233,7 @@ Once documentation is found:
 ## Error Handling
 
 ### Tool Not Found
-- Run `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/setup_tools.sh` to check tool availability
+- Run `scripts/setup_tools.sh` to check tool availability
 - Provide installation instructions
 - Skip optional validation stages if tools missing
 

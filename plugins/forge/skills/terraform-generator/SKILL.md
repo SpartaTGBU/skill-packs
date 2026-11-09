@@ -93,9 +93,9 @@ Before generating configuration, you MUST consult reference files using this mat
 Open references by path:
 
 ```
-~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-generator/references/terraform_best_practices.md
-~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-generator/references/provider_examples.md
-~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-generator/references/common_patterns.md
+references/terraform_best_practices.md
+references/provider_examples.md
+references/common_patterns.md
 ```
 
 ### Step 3: Generate Terraform Configuration
@@ -533,7 +533,7 @@ Always consider version compatibility:
      - AzureRM: major-pin policy (for example `~> 4.0`)
      - Google: major-pin policy (for example `~> 7.0`)
      - Kubernetes: major/minor pin based on target cluster/provider compatibility
-   - Use the same provider/version language in `SKILL.md`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-generator/references/terraform_best_practices.md`, and template `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-generator/assets/minimal-project/versions.tf`.
+   - Use the same provider/version language in `SKILL.md`, `references/terraform_best_practices.md`, and template `assets/minimal-project/versions.tf`.
 
 3. **Module Versions:**
    - Always pin module versions
@@ -1020,7 +1020,7 @@ The `references/` directory contains detailed documentation for reference:
 
 Open a reference directly by relative path:
 ```
-~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-generator/references/[filename].md
+references/[filename].md
 ```
 
 ### assets/
@@ -1034,7 +1034,7 @@ Templates can be copied and customized for the user's specific needs.
 ## Notes
 
 - Always run forge:terraform-validator after generation
-- For feature/version drift checks in CI, run `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-generator/scripts/run_ci_checks.sh`
+- For feature/version drift checks in CI, run `bash scripts/run_ci_checks.sh`
 - Web search is essential for custom providers/modules
 - Follow the principle of least surprise in configurations
 - Make configurations readable and maintainable

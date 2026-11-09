@@ -43,18 +43,18 @@ Run commands from repository root unless noted.
 - `jq` (optional; improves JSON-heavy troubleshooting workflows)
 
 ### Script prerequisites
-- Scripts live in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/scripts/`
+- Scripts live in `scripts/`
 - Main orchestrator can run child scripts even if `+x` is missing (it uses `bash` fallback)
 - If you want direct execution (`./script.sh`), make scripts executable:
 
 ```bash
-chmod +x ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/scripts/*.sh
+chmod +x scripts/*.sh
 ```
 
 ### Preflight check (recommended)
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator
+SKILL_DIR=.
 
 command -v bash grep sed awk head wc find >/dev/null && echo "required tools: ok" || echo "required tools: missing"
 command -v jq >/dev/null && echo "jq: installed (optional)" || echo "jq: missing (optional)"
@@ -68,7 +68,7 @@ command -v jq >/dev/null && echo "jq: installed (optional)" || echo "jq: missing
 Use a single base path variable to avoid path ambiguity.
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator
+SKILL_DIR=.
 TARGET_JENKINSFILE="Jenkinsfile"
 
 # Full validation (recommended)
@@ -78,7 +78,7 @@ bash "$SKILL_DIR/scripts/validate_jenkinsfile.sh" "$TARGET_JENKINSFILE"
 ### Common options
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator
+SKILL_DIR=.
 TARGET_JENKINSFILE="Jenkinsfile"
 
 bash "$SKILL_DIR/scripts/validate_jenkinsfile.sh" --syntax-only "$TARGET_JENKINSFILE"
@@ -94,7 +94,7 @@ bash "$SKILL_DIR/scripts/validate_jenkinsfile.sh" --assume-scripted "$TARGET_JEN
 ### Shared library validation
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator
+SKILL_DIR=.
 
 bash "$SKILL_DIR/scripts/validate_shared_library.sh" vars/myStep.groovy
 bash "$SKILL_DIR/scripts/validate_shared_library.sh" vars/
@@ -105,12 +105,12 @@ bash "$SKILL_DIR/scripts/validate_shared_library.sh" /path/to/shared-library
 ### Regression and local CI checks
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator
+SKILL_DIR=.
 bash "$SKILL_DIR/tests/run_local_ci.sh"
 ```
 
 `run_local_ci.sh` is the supported local/CI entrypoint for regression coverage. It runs:
-- `bash -n` syntax checks for all `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/scripts/*.sh` and `tests/*.sh` files
+- `bash -n` syntax checks for all `scripts/*.sh` and `tests/*.sh` files
 - `tests/test_validate_jenkinsfile.sh` regression scenarios
 
 ## Deterministic Validation Flow
@@ -141,7 +141,7 @@ bash "$SKILL_DIR/tests/run_local_ci.sh"
 ## Individual Script Commands (Advanced)
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator
+SKILL_DIR=.
 TARGET_JENKINSFILE="Jenkinsfile"
 
 # Type detection
@@ -196,7 +196,7 @@ bash "$SKILL_DIR/scripts/best_practices.sh" "$TARGET_JENKINSFILE"
 
 ### Unknown plugin steps
 Use this order:
-1. Check local reference: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/references/common_plugins.md`
+1. Check local reference: `references/common_plugins.md`
 2. Context7 lookup:
    - `Context7 resolve-library-id tool` with query like `jenkinsci <plugin-name>-plugin`
    - `Context7 query-docs tool` for usage and parameters
@@ -210,7 +210,7 @@ Use this order:
 
 When plugin-specific validation is requested:
 1. Identify unknown steps from Jenkinsfile or validator logs.
-2. Check `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/references/common_plugins.md` first.
+2. Check `references/common_plugins.md` first.
 3. If missing, use Context7 (`resolve-library-id` then `query-docs`).
 4. If still missing, use web search against official plugin index/docs.
 5. Return required parameters, optional parameters, version-sensitive notes, and security guidance.
@@ -218,10 +218,10 @@ When plugin-specific validation is requested:
 ## References
 
 Local references:
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/references/declarative_syntax.md`
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/references/scripted_syntax.md`
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/references/best_practices.md`
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator/references/common_plugins.md`
+- `references/declarative_syntax.md`
+- `references/scripted_syntax.md`
+- `references/best_practices.md`
+- `references/common_plugins.md`
 
 External references:
 - [Jenkins Pipeline Syntax](https://www.jenkins.io/doc/book/pipeline/syntax/)
@@ -258,7 +258,7 @@ Next Actions:
 ### Example 1: Full Jenkinsfile validation
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator
+SKILL_DIR=.
 bash "$SKILL_DIR/scripts/validate_jenkinsfile.sh" Jenkinsfile
 ```
 
@@ -270,7 +270,7 @@ Expected behavior:
 ### Example 2: Shared library directory validation
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/jenkinsfile-validator
+SKILL_DIR=.
 bash "$SKILL_DIR/scripts/validate_shared_library.sh" examples/shared-library
 ```
 

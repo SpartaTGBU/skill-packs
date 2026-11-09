@@ -20,7 +20,7 @@ small. Load one through Bash, only when the work needs it, and follow it as if i
 
 - `skl load forge:rust` (several names at once is fine) prints the skill and its directory
 - `skl search <words>` finds the right one; `skl list [pack]` lists them all
-- If `skl` is not on PATH: `~/.claude/local-plugins/forge-marketplace/plugins/forge/bin/skl`
+- If `skl` is not on PATH: run `<forge plugin root>/bin/skl`. The forge router injected at session start ends with the `forge plugin root:` line.
 
 Load the one or two you need, not the whole route. After compaction, re-load any you still need.
 

@@ -52,10 +52,10 @@ If using an older Terragrunt version, some commands may need adjustment.
 
 ### 1. Comprehensive Validation Suite
 
-Run the comprehensive validation script to perform all checks at once:
+Run the comprehensive validation script to perform all checks at once (only after the user confirms the code is trusted: it evaluates the HCL, and `run_cmd` executes):
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/validate_terragrunt.sh [TARGET_DIR]
+bash scripts/validate_terragrunt.sh [TARGET_DIR]
 ```
 
 **What it validates:**
@@ -80,13 +80,13 @@ bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-v
 **Example usage:**
 ```bash
 # Full validation
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/validate_terragrunt.sh ./infrastructure/prod
+bash scripts/validate_terragrunt.sh ./infrastructure/prod
 
 # Skip plan generation (faster)
-SKIP_PLAN=true bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/validate_terragrunt.sh ./infrastructure
+SKIP_PLAN=true bash scripts/validate_terragrunt.sh ./infrastructure
 
 # Only validate, skip linting and security
-SKIP_LINT=true SKIP_SECURITY=true bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/validate_terragrunt.sh
+SKIP_LINT=true SKIP_SECURITY=true bash scripts/validate_terragrunt.sh
 ```
 
 ### 2. Custom Provider and Module Detection
@@ -94,7 +94,7 @@ SKIP_LINT=true SKIP_SECURITY=true bash ~/.claude/local-plugins/forge-marketplace
 Use the detection script to identify custom providers and modules that may require documentation lookup:
 
 ```bash
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/detect_custom_resources.py [DIRECTORY] [--format text|json]
+python3 scripts/detect_custom_resources.py [DIRECTORY] [--format text|json]
 ```
 
 **What it detects:**
@@ -155,7 +155,7 @@ python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrun
 **Example using Context7 MCP:**
 ```
 # 1. Detect custom resources
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/detect_custom_resources.py ./infrastructure
+python3 scripts/detect_custom_resources.py ./infrastructure
 # Output: Provider: datadog/datadog, Version: 3.30.0
 
 # 2. Resolve library ID
@@ -176,7 +176,7 @@ Context7 query-docs tool with:
 **Example using web search:**
 ```bash
 # Detect custom resources
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/detect_custom_resources.py ./infrastructure
+python3 scripts/detect_custom_resources.py ./infrastructure
 
 # Then search for documentation:
 # web search: "datadog terraform provider 3.30.0 authentication configuration"
@@ -604,13 +604,15 @@ terragrunt --experiment cas run --all plan
 
 Follow this workflow when validating Terragrunt configurations:
 
+> **Trust gate:** Run `scripts/validate_terragrunt.sh`, `terragrunt hcl validate --inputs`, `terragrunt dag graph`, init, validate or plan only after the user confirms the code is trusted, because evaluating the HCL runs `run_cmd` and other functions in its locals. Until then, stick to static checks: `terragrunt hcl fmt --check` and the security scanners (Trivy/Checkov).
+
 ### Canonical Executable Workflow (Default Path)
 
 Use one executable path so docs and scripts stay aligned:
 
 ```bash
 # Main validation
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/validate_terragrunt.sh <target-directory>
+bash scripts/validate_terragrunt.sh <target-directory>
 
 # Deterministic fixture tests (required after script changes)
 python3 test/test_detect_custom_resources.py
@@ -627,10 +629,10 @@ Execution expectations:
 
 ```bash
 # Read the best practices reference file first
-if [ -f ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md ]; then
-  cat ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md
+if [ -f references/best_practices.md ]; then
+  cat references/best_practices.md
 else
-  echo "WARNING: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md not found; continue with built-in checklist below."
+  echo "WARNING: references/best_practices.md not found; continue with built-in checklist below."
 fi
 ```
 
@@ -650,7 +652,7 @@ This ensures you understand the patterns, anti-patterns, and checklists you will
 
 3. **Detect custom resources:**
    ```bash
-   python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/detect_custom_resources.py .
+   python3 scripts/detect_custom_resources.py .
    ```
 
 ### Documentation Lookup (MANDATORY for ALL detected custom resources)
@@ -678,9 +680,9 @@ This ensures you understand the patterns, anti-patterns, and checklists you will
 
 ### Validation Execution
 
-7. **Run comprehensive validation:**
+7. **Run comprehensive validation (only after the user confirms the code is trusted; see the trust gate above):**
    ```bash
-   bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/validate_terragrunt.sh <target-directory>
+   bash scripts/validate_terragrunt.sh <target-directory>
    ```
 
 8. **Review output for errors:**
@@ -696,7 +698,7 @@ This ensures you understand the patterns, anti-patterns, and checklists you will
 
 > **You MUST verify each checklist item below and document the result (✅ pass or ❌ fail). Incomplete verification is not acceptable.**
 
-9. **Perform explicit best practices verification using `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md`:**
+9. **Perform explicit best practices verification using `references/best_practices.md`:**
 
    **Configuration Pattern Checklist - verify each item:**
    ```
@@ -813,10 +815,10 @@ Reference the comprehensive best practices guide for detailed recommendations:
 
 ```bash
 # Read the best practices reference
-if [ -f ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md ]; then
-  cat ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md
+if [ -f references/best_practices.md ]; then
+  cat references/best_practices.md
 else
-  echo "WARNING: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md not found; continue with checklist in this document."
+  echo "WARNING: references/best_practices.md not found; continue with checklist in this document."
 fi
 ```
 
@@ -839,7 +841,7 @@ fi
 - ❌ Missing version constraints
 - ❌ Unencrypted state
 
-Refer to `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md` for complete examples and detailed guidance.
+Refer to `references/best_practices.md` for complete examples and detailed guidance.
 
 ## Tool Requirements
 
@@ -907,7 +909,7 @@ This provides version-aware documentation directly, as an alternative to web sea
 Use the deterministic skill-level CI gate as the blocking check:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/run_ci_checks.sh --require-shellcheck
+bash scripts/run_ci_checks.sh --require-shellcheck
 ```
 
 This gate runs:
@@ -927,18 +929,18 @@ Terragrunt/Terraform credentials configured:
 set -euo pipefail
 
 echo "Running deterministic validator checks..."
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/run_ci_checks.sh --require-shellcheck
+bash scripts/run_ci_checks.sh --require-shellcheck
 
 echo "Installing dependencies..."
 # Install terragrunt, terraform, tflint, trivy/checkov
 
 echo "Detecting custom resources..."
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/detect_custom_resources.py . --format json > custom_resources.json
+python3 scripts/detect_custom_resources.py . --format json > custom_resources.json
 
 # Could integrate with automated documentation lookup here
 
 echo "Running validation suite..."
-SKIP_PLAN=true SKIP_BACKEND_INIT=true bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/validate_terragrunt.sh .
+SKIP_PLAN=true SKIP_BACKEND_INIT=true bash scripts/validate_terragrunt.sh .
 
 echo "Validation complete!"
 ```
@@ -1107,12 +1109,12 @@ grep -A5 "cycle" <(terragrunt dag graph 2>&1)
 
 ### Scripts
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/validate_terragrunt.sh` - Comprehensive validation suite
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/scripts/detect_custom_resources.py` - Custom provider/module detector
+- `scripts/validate_terragrunt.sh` - Comprehensive validation suite
+- `scripts/detect_custom_resources.py` - Custom provider/module detector
 
 ### References
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md` - Comprehensive best practices guide covering:
+- `references/best_practices.md` - Comprehensive best practices guide covering:
   - Directory structure patterns
   - DRY principles and configuration sharing
   - Dependency management

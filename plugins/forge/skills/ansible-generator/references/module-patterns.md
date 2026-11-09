@@ -151,7 +151,7 @@
 ```yaml
 - name: Deploy configuration from template
   ansible.builtin.template:
-    src: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/templates/app_config.j2
+    src: templates/app_config.j2
     dest: /etc/app/config.yml
     mode: '0644'
     owner: appuser
@@ -338,7 +338,7 @@
 #### ansible.builtin.script
 ```yaml
 - name: Run script from control node
-  ansible.builtin.script: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/scripts/setup.sh
+  ansible.builtin.script: files/setup.sh
   args:
     creates: /etc/app/setup.done
 ```

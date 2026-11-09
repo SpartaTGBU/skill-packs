@@ -14,7 +14,7 @@ description: >
 
 Three outputs: diagrams-as-code that live next to the source (Mermaid/D2/Graphviz), a standalone architecture/infra diagram as one HTML file with inline SVG (section A), and a one-page HTML summary of content or a screenshot (section B). Every output is rendered and looked at before it is reported. General visual decisions: `atelier:visual-design`. Auditing the resulting HTML: `atelier:ui-review`. Charts of data: `dataviz`, not this skill. Animated explainers: `atelier:motion-design`.
 
-Files (under `~/.claude/local-plugins/forge-marketplace/plugins/atelier/skills/diagrams/`): `templates/architecture.html` (working examples of every component, arrow, boundary, legend), `templates/summary-base.html` (token-based page skeleton), `references/summary-design-rules.md` (rules plus a 15-item pass/fail rubric), `scripts/render-check.mjs` (optional verifier), `references/render-report-schema.md`.
+Files (under ``): `templates/architecture.html` (working examples of every component, arrow, boundary, legend), `templates/summary-base.html` (token-based page skeleton), `references/summary-design-rules.md` (rules plus a 15-item pass/fail rubric), `scripts/render-check.mjs` (optional verifier), `references/render-report-schema.md`.
 
 ## 1. Choose the diagram type
 
@@ -101,7 +101,7 @@ Produces ONE self-contained `.html` (inline CSS, inline SVG or data-URI images, 
 - HTML: your harness's browser or screenshot tool at 1280x800 and 390x844; look for overlap, clipped text, horizontal scroll, low contrast. A wide diagram may scroll horizontally inside its card on mobile; the page itself must not.
 - Optional scripted check (Node + Playwright; downloads a browser, so run only with the user's consent, from a scratch copy so the skill stays clean):
 ```bash
-mkdir -p /tmp/render-check && cp ~/.claude/local-plugins/forge-marketplace/plugins/atelier/skills/diagrams/scripts/* /tmp/render-check/ && cd /tmp/render-check && npm install && npx playwright install chromium
+mkdir -p /tmp/render-check && cp scripts/* /tmp/render-check/ && cd /tmp/render-check && npm install && npx playwright install chromium
 node /tmp/render-check/render-check.mjs page.html --out render --viewports 1280x800,390x844 [--ref ref.png --diff-threshold 0.05]
 ```
 It reports console errors, failed requests, horizontal overflow, clipped text, axe color-contrast violations and (with `--ref`) pixel diff to `render/report.json` (schema in `references/render-report-schema.md`; exit 0 pass, 1 failures, 2 runtime error). Local files only; no network calls beyond what the page requests.

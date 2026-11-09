@@ -67,10 +67,10 @@ Stop conditions for stage 5:
 ## Reference Path Map
 
 Consult these files directly by path as needed:
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/security_best_practices.md` for non-root users, secret handling, base image hardening, vulnerability scanning.
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/optimization_patterns.md` for multi-stage strategy, cache optimization, layer reduction, BuildKit cache mounts.
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/language_specific_guides.md` for language/framework runtime and package-manager patterns.
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/multistage_builds.md` for advanced stage-splitting and artifact-copy patterns.
+- `references/security_best_practices.md` for non-root users, secret handling, base image hardening, vulnerability scanning.
+- `references/optimization_patterns.md` for multi-stage strategy, cache optimization, layer reduction, BuildKit cache mounts.
+- `references/language_specific_guides.md` for language/framework runtime and package-manager patterns.
+- `references/multistage_builds.md` for advanced stage-splitting and artifact-copy patterns.
 
 ## Dockerfile Generation Workflow
 
@@ -135,9 +135,9 @@ Follow this workflow when generating Dockerfiles. Adapt based on user needs:
 **Research Process (strict fallback chain):**
 
 1. **Read local references first (required):**
-   - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/security_best_practices.md`
-   - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/optimization_patterns.md`
-   - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/language_specific_guides.md`
+   - `references/security_best_practices.md`
+   - `references/optimization_patterns.md`
+   - `references/language_specific_guides.md`
 
 2. **Use Context7 docs lookup when local references are insufficient (preferred external source):**
    ```
@@ -526,7 +526,7 @@ build/
 **Fallback path (if skill invocation is unavailable):**
 1. Try local validator script directly:
    ```bash
-   bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/dockerfile-validate.sh Dockerfile
+   bash ../dockerfile-validator/scripts/dockerfile-validate.sh Dockerfile
    ```
 2. If that path is unavailable, run available tools directly:
    ```bash
@@ -631,7 +631,7 @@ curl http://localhost:3000/health
 - [ ] Test the build locally: `docker build -t myapp:1.0 .`
 - [ ] Run and verify the container works as expected
 - [ ] Update CI/CD pipeline to use the new Dockerfile
-- [ ] Consider BuildKit cache mounts for faster builds (see ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/optimization_patterns.md)
+- [ ] Consider BuildKit cache mounts for faster builds (see references/optimization_patterns.md)
 - [ ] Set up automated vulnerability scanning with `docker scout` or `trivy`
 - [ ] Push to registry and deploy
 ```
@@ -653,7 +653,7 @@ The `scripts/` directory contains standalone bash scripts for manual Dockerfile 
 **Script usage example:**
 ```bash
 # Manual Dockerfile generation
-cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/scripts
+cd scripts
 ./generate_nodejs.sh --version 20 --port 3000 --output Dockerfile
 ```
 
@@ -948,7 +948,7 @@ docker scout sbom myapp:latest
 
 **Use Case:** Dramatically faster builds by persisting package manager caches across builds.
 
-**Already covered in detail in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-generator/references/optimization_patterns.md`.**
+**Already covered in detail in `references/optimization_patterns.md`.**
 
 **Quick reference:**
 ```dockerfile

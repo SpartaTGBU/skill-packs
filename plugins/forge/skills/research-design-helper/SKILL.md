@@ -117,10 +117,10 @@ directly).
 
 ```bash
 # From the directory that contains design_brief.md:
-node ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/research-design-helper/scripts/brief_to_docx.js design_brief --no-toc
+node scripts/brief_to_docx.js design_brief --no-toc
 
 # zh-TW variant (auto-selects Microsoft JhengHei):
-node ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/research-design-helper/scripts/brief_to_docx.js design_brief.zh-TW --no-toc
+node scripts/brief_to_docx.js design_brief.zh-TW --no-toc
 ```
 
 Optional: needs node and the npm `docx` package already present (do not install unasked; skip otherwise). The `--no-toc` flag is

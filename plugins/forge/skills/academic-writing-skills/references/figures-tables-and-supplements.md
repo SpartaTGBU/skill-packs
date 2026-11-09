@@ -91,7 +91,7 @@ The source citations reproduce contextual rationales; they do not substantiate t
 
 ### Original Figure 6
 
-![Original ABM Figure 6: six panels comparing homeowner and renter losses and financial outcomes.](../assets/examples/abm-figure-6.png)
+*Example figure (image not bundled): Original ABM Figure 6: six panels comparing homeowner and renter losses and financial outcomes.*
 
 > **Figure 6.** Flood losses and financial outcomes per household for homeowners (left) and renters (right) from 2011 to 2023. Panels (a) and (b) compare cumulative GUL (red) and actual loss (blue) under the adaptation scenario (solid) and the no-adaptation baseline (dashed). Under the adaptation scenario, panels (c) and (d) show annual premiums, OOP costs, and OOP rates, while panels (e) and (f) show annual insurance payouts and payout rates. Lines and bars show medians across 50 simulation runs, and black error bars indicate the IQR. Gray shading marks major flood years (2011 and 2021).
 
@@ -123,7 +123,7 @@ Retain data source/version/date, coordinate reference system or projection where
 
 ### Original ABM Figure 1
 
-![Original ABM Figure 1: Passaic River Basin locator and tract-area SFHA categories](../assets/examples/abm-figure-1.png)
+*Example figure (image not bundled): Original ABM Figure 1: Passaic River Basin locator and tract-area SFHA categories*
 
 > **Figure 1.** The study area of this paper: the Passaic River Basin and the flood modeling domain with percentages of each census tract’s area within the Special Flood Hazard Area (SFHA).
 

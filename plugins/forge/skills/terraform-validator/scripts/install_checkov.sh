@@ -89,6 +89,15 @@ check_python() {
     echo -e "${GREEN}✓${NC} Python version: $python_version"
 }
 
+# Remove INSTALL_DIR only when it is a Python venv (guards against CHECKOV_INSTALL_DIR typos).
+remove_venv_dir() {
+    if [ ! -f "$INSTALL_DIR/pyvenv.cfg" ]; then
+        echo -e "${RED}Refusing to remove ${INSTALL_DIR}: no pyvenv.cfg (not a virtual environment)${NC}" >&2
+        exit 1
+    fi
+    rm -rf "$INSTALL_DIR"
+}
+
 # Create virtual environment
 create_venv() {
     echo -e "${BLUE}Creating virtual environment at: ${INSTALL_DIR}${NC}"
@@ -96,12 +105,12 @@ create_venv() {
     if [ -d "$INSTALL_DIR" ]; then
         echo -e "${YELLOW}Virtual environment already exists${NC}"
         if [ "$FORCE_RECREATE" = "true" ] || [ "$AUTO_YES" = "true" ]; then
-            rm -rf "$INSTALL_DIR"
+            remove_venv_dir
         else
             read -p "Remove and recreate? (y/N): " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
-                rm -rf "$INSTALL_DIR"
+                remove_venv_dir
             else
                 echo "Installation cancelled"
                 exit 0
@@ -142,13 +151,26 @@ create_wrapper() {
     # Ensure ~/.local/bin exists
     mkdir -p "$(dirname "$WRAPPER_LINK")"
 
+    # Only replace a wrapper this script wrote; rm first so cat never follows a symlink.
+    if [ -e "$WRAPPER_LINK" ] || [ -L "$WRAPPER_LINK" ]; then
+        if ! grep -q "^# terraform-validator checkov wrapper$" "$WRAPPER_LINK" 2>/dev/null; then
+            echo -e "${RED}Refusing to overwrite ${WRAPPER_LINK}: not a wrapper written by this script${NC}" >&2
+            exit 1
+        fi
+        rm -f "$WRAPPER_LINK"
+    fi
+
+    local quoted_script_path
+    printf -v quoted_script_path '%q' "$SCRIPT_PATH"
+
     # Create wrapper script
     cat > "$WRAPPER_LINK" << WRAPPER_EOF
 #!/bin/bash
 # Checkov wrapper script - executes checkov from virtual environment
+# terraform-validator checkov wrapper
 
 VENV_DIR="\${CHECKOV_INSTALL_DIR:-\$HOME/.local/checkov-venv}"
-INSTALL_SCRIPT_PATH="$SCRIPT_PATH"
+INSTALL_SCRIPT_PATH=$quoted_script_path
 
 if [ ! -d "\$VENV_DIR" ]; then
     echo "ERROR: Checkov virtual environment not found at: \$VENV_DIR" >&2
@@ -242,7 +264,7 @@ do_uninstall() {
     # Remove virtual environment
     if [ -d "$INSTALL_DIR" ]; then
         echo "Removing virtual environment..."
-        rm -rf "$INSTALL_DIR"
+        remove_venv_dir
         echo -e "${GREEN}✓${NC} Virtual environment removed"
     fi
 

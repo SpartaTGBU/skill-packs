@@ -36,6 +36,8 @@ def http(url, headers, body=None, timeout=600):
         die(f"HTTP {e.code} from {url.split('?')[0]}: {e.read().decode(errors='replace')[:500]}")
     except urllib.error.URLError as e:
         die(f"cannot reach {url.split('?')[0]}: {e.reason}")
+    except ValueError:  # e.g. a CR/LF in the token; never let the traceback print the header
+        die("token or key contains invalid characters (check for a trailing newline or CR)")
 
 
 def run_token_cmd(cmd):
@@ -46,7 +48,7 @@ def run_token_cmd(cmd):
 
 
 def copilot_session():
-    raw = os.environ.get("COPILOT_GITHUB_TOKEN") or ""
+    raw = (os.environ.get("COPILOT_GITHUB_TOKEN") or "").strip()
     if not raw and os.environ.get("COPILOT_TOKEN_CMD"):
         raw = run_token_cmd(shlex.split(os.environ["COPILOT_TOKEN_CMD"]))
     if not raw:
@@ -65,7 +67,7 @@ def copilot_session():
 
 
 def openai_session():
-    base, key = os.environ.get("JUDGE_API_BASE"), os.environ.get("JUDGE_API_KEY")
+    base, key = os.environ.get("JUDGE_API_BASE"), (os.environ.get("JUDGE_API_KEY") or "").strip()
     if not base or not key:
         die("openai backend needs JUDGE_API_BASE and JUDGE_API_KEY")
     return base.rstrip("/"), {"Authorization": f"Bearer {key}"}
@@ -144,6 +146,8 @@ def main():
     ask.add_argument("-i", "--image", action="append", default=[], help="screenshot to attach (repeatable)")
     ask.set_defaults(fn=cmd_ask)
     a = p.parse_args()
+    if a.backend not in ("copilot", "openai"):  # argparse doesn't check a default from $JUDGE_BACKEND
+        p.error(f"unknown backend {a.backend!r}; use copilot or openai")
     a.fn(a)
 
 

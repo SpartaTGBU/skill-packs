@@ -47,22 +47,22 @@ If details are missing, ask briefly. If the user does not provide them, proceed 
 
 ### Stage 2: Reference Extraction Checklist
 
-Before drafting content, extract the following from local ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/references/templates.
+Before drafting content, extract the following from local references/templates.
 
 #### Required references
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/references/best-practices.md`
+- `references/best-practices.md`
   - Extract: FQCN requirements, idempotency rules, naming, security expectations.
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/references/module-patterns.md`
+- `references/module-patterns.md`
   - Extract: correct module/parameter patterns for the exact task type.
 
 #### Required templates by output type
 
-- Playbook: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/playbook/basic_playbook.yml`
-- Role: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/role/` (including `meta/argument_specs.yml` and `molecule/default/` for test scaffolding)
-- Inventory (INI): `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/inventory/hosts`
-- Inventory (YAML): `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/inventory/hosts.yml`
-- Project config: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/project/ansible.cfg`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/project/requirements.yml`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/project/.ansible-lint`
+- Playbook: `assets/templates/playbook/basic_playbook.yml`
+- Role: `assets/templates/role/` (including `meta/argument_specs.yml` and `molecule/default/` for test scaffolding)
+- Inventory (INI): `assets/templates/inventory/hosts`
+- Inventory (YAML): `assets/templates/inventory/hosts.yml`
+- Project config: `assets/templates/project/ansible.cfg`, `assets/templates/project/requirements.yml`, `assets/templates/project/.ansible-lint`
 
 #### Extraction checks
 
@@ -100,17 +100,17 @@ Use the matrix below to keep validation deterministic and non-blocking.
 
 ### Playbooks
 
-- Use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/playbook/basic_playbook.yml` as structure.
+- Use `assets/templates/playbook/basic_playbook.yml` as structure.
 - Include: header comments, `pre_tasks`/`tasks`/`post_tasks` as needed, handlers, tags.
 - Add health checks when service deployment/configuration is involved.
 
 ### Roles
 
-- Build from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/role/` structure.
+- Build from `assets/templates/role/` structure.
 - Keep defaults in `defaults/main.yml`; keep higher-priority role vars in `vars/main.yml`.
 - Include OS-specific vars (`vars/Debian.yml`, `vars/RedHat.yml`) when relevant.
 - Add `meta/argument_specs.yml` for variable validation.
-- Include `molecule/default/` scaffold (from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/assets/templates/role/molecule/`) for production-ready roles.
+- Include `molecule/default/` scaffold (from `assets/templates/role/molecule/`) for production-ready roles.
 
 ### Task Files
 
@@ -134,7 +134,7 @@ Use the matrix below to keep validation deterministic and non-blocking.
 When the request depends on non-builtin modules/collections:
 
 1. Identify collection + module and required version sensitivity.
-2. Check local `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/references/module-patterns.md` first.
+2. Check local `references/module-patterns.md` first.
 3. If still unresolved and network/tools are available, query Context7:
    - `Context7 resolve-library-id tool`
    - `Context7 query-docs tool`
@@ -200,7 +200,7 @@ For generated executable artifacts, use this response structure:
 This skill execution is complete only when all applicable items are true:
 
 - Trigger decision is explicit (`full-generation`, `snippet-only`, or `docs-only`).
-- Required ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/references/templates were consulted for the selected artifact type.
+- Required references/templates were consulted for the selected artifact type.
 - Generated output has no unresolved placeholders.
 - Validation followed default behavior or a documented exception from the matrix.
 - Any skipped checks include a concrete reason and deferred command(s).

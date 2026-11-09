@@ -13,7 +13,7 @@ Use this skill to validate Makefiles with a local-first, deterministic flow.
 Default validator entrypoint:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/scripts/validate_makefile.sh <makefile-path>
+bash scripts/validate_makefile.sh <makefile-path>
 ```
 
 Validation layers:
@@ -48,7 +48,7 @@ Use this skill when the request includes Makefile quality, linting, validation, 
 Run from this skill directory for shortest commands:
 
 ```bash
-cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator
+cd .
 ```
 
 ### Step 1: Preflight
@@ -61,10 +61,10 @@ cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-valid
 
 ```bash
 # From skill directory
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/scripts/validate_makefile.sh <makefile-path>
+bash scripts/validate_makefile.sh <makefile-path>
 
 # From repository root
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/scripts/validate_makefile.sh <makefile-path>
+bash scripts/validate_makefile.sh <makefile-path>
 ```
 
 Always record:
@@ -97,7 +97,7 @@ Open only the docs required by the current findings.
 After applying fixes, rerun:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/scripts/validate_makefile.sh <makefile-path>
+bash scripts/validate_makefile.sh <makefile-path>
 ```
 
 Loop rules:
@@ -113,13 +113,13 @@ Use explicit file-open commands so paths are unambiguous.
 From repository root:
 
 ```bash
-sed -n '1,220p' ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/docs/best-practices.md
-sed -n '1,220p' ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/docs/common-mistakes.md
-sed -n '1,220p' ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/docs/bake-tool.md
-rg -n "PHONY|DELETE_ON_ERROR|ONESHELL|tab|credential|mbake" ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/docs/*.md
+sed -n '1,220p' docs/best-practices.md
+sed -n '1,220p' docs/common-mistakes.md
+sed -n '1,220p' docs/bake-tool.md
+rg -n "PHONY|DELETE_ON_ERROR|ONESHELL|tab|credential|mbake" docs/*.md
 ```
 
-From `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator`:
+From `.`:
 
 ```bash
 sed -n '1,220p' docs/best-practices.md
@@ -207,7 +207,7 @@ grep -nE "^(  |    |        )[a-zA-Z@\\$\\(]" <makefile-path>
 4. Rerun validator with plain output and capture log:
 
 ```bash
-NO_COLOR=1 bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/scripts/validate_makefile.sh <makefile-path> > /tmp/makefile-validator.log 2>&1
+NO_COLOR=1 bash scripts/validate_makefile.sh <makefile-path> > /tmp/makefile-validator.log 2>&1
 echo "exit=$? log=/tmp/makefile-validator.log"
 ```
 

@@ -46,7 +46,7 @@ Run with explicit paths so commands are repeatable:
 
 ```bash
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator
+SKILL_DIR=.
 TARGET_FILE="$REPO_ROOT/<relative/path/to/file.yaml>"
 ```
 
@@ -77,7 +77,7 @@ Expected output (example):
 ```
 
 Gate rules:
-- If `documents >= 3`, load `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/references/validation_workflow.md` before Stage 1.
+- If `documents >= 3`, load `references/validation_workflow.md` before Stage 1.
 - Always include the document count in the final report summary.
 - If `python3` is unavailable, use fallback:
 ```bash
@@ -622,9 +622,9 @@ The `test/` directory contains example files to exercise all validation paths. U
    - Commands:
 ```bash
 cd "$SKILL_DIR"
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/count_yaml_documents.py test/deployment-test.yaml
+python3 scripts/count_yaml_documents.py test/deployment-test.yaml
 yamllint -c assets/.yamllint test/deployment-test.yaml
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/detect_crd_wrapper.sh test/deployment-test.yaml
+bash scripts/detect_crd_wrapper.sh test/deployment-test.yaml
 kubeconform \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
@@ -639,8 +639,8 @@ kubectl apply --dry-run=server -f test/deployment-test.yaml
    - Commands:
 ```bash
 cd "$SKILL_DIR"
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/count_yaml_documents.py test/certificate-crd-test.yaml
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/detect_crd_wrapper.sh test/certificate-crd-test.yaml
+python3 scripts/count_yaml_documents.py test/certificate-crd-test.yaml
+bash scripts/detect_crd_wrapper.sh test/certificate-crd-test.yaml
 kubeconform \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
@@ -654,9 +654,9 @@ kubeconform \
    - Commands:
 ```bash
 cd "$SKILL_DIR"
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/count_yaml_documents.py test/comprehensive-test.yaml
+python3 scripts/count_yaml_documents.py test/comprehensive-test.yaml
 yamllint -c assets/.yamllint test/comprehensive-test.yaml
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/detect_crd_wrapper.sh test/comprehensive-test.yaml
+bash scripts/detect_crd_wrapper.sh test/comprehensive-test.yaml
 kubeconform \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
@@ -671,8 +671,8 @@ kubectl apply --dry-run=server -f test/comprehensive-test.yaml
    - Commands:
 ```bash
 cd "$SKILL_DIR"
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/count_yaml_documents.py test/comprehensive-test.yaml
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/detect_crd_wrapper.sh test/comprehensive-test.yaml
+python3 scripts/count_yaml_documents.py test/comprehensive-test.yaml
+bash scripts/detect_crd_wrapper.sh test/comprehensive-test.yaml
 ```
 
 5. **Schema Validation Error Path (type mismatches)**
@@ -682,9 +682,9 @@ bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-val
    - Commands:
 ```bash
 cd "$SKILL_DIR"
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/count_yaml_documents.py test/schema-errors-test.yaml
+python3 scripts/count_yaml_documents.py test/schema-errors-test.yaml
 yamllint -c assets/.yamllint test/schema-errors-test.yaml
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/detect_crd_wrapper.sh test/schema-errors-test.yaml
+bash scripts/detect_crd_wrapper.sh test/schema-errors-test.yaml
 kubeconform \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
@@ -708,7 +708,7 @@ KUBECONFIG=/tmp/nonexistent-kubeconfig kubectl apply --dry-run=client --validate
    - Commands:
 ```bash
 cd "$SKILL_DIR"
-PATH="/usr/bin:/bin" bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/setup_tools.sh
+PATH="/usr/bin:/bin" bash scripts/setup_tools.sh
 ```
 
 ### Creating New Test Files

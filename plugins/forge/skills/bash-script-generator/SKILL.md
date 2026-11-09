@@ -35,7 +35,7 @@ Follow stages in order. Do not skip a stage; use the documented fallback when bl
 | Capability | Default Path | Fallback Path |
 |---|---|---|
 | Requirement clarification | the ask-the-user question tool tool | Ask same questions in normal chat; mark unresolved items as assumptions |
-| Script scaffold | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/scripts/generate_script_template.sh ...` | Copy `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/assets/templates/standard-template.sh` manually or hand-craft minimal scaffold |
+| Script scaffold | `bash scripts/generate_script_template.sh ...` | Copy `assets/templates/standard-template.sh` manually or hand-craft minimal scaffold |
 | Validation | `forge:bash-script-validator` | Local checks: `bash -n`, `shellcheck` if available, `sh -n` for POSIX mode |
 
 If a fallback path is used, state it explicitly in the final summary.
@@ -101,7 +101,7 @@ Citation format (required):
 
 1. Generate scaffold:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/scripts/generate_script_template.sh standard output-script.sh
+bash scripts/generate_script_template.sh standard output-script.sh
 ```
 2. Replace placeholders and add business logic.
 3. Keep logging to stderr and data output to stdout unless requirements say otherwise.
@@ -128,10 +128,10 @@ Default validation path:
 Fallback validation path (when validator skill is unavailable):
 ```bash
 # Deterministic local gate for this skill:
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/scripts/run_ci_checks.sh --skip-shellcheck
+bash scripts/run_ci_checks.sh --skip-shellcheck
 
 # CI gate (shellcheck required):
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/scripts/run_ci_checks.sh --require-shellcheck
+bash scripts/run_ci_checks.sh --require-shellcheck
 ```
 
 If any check is skipped, include `Skipped check`, `Reason`, and `Risk` in the output.
@@ -152,7 +152,7 @@ Always return:
 1. Clarify missing data format and output expectations.
 2. Capture `REQ-*` table.
 3. Choose template-first path.
-4. Generate scaffold with `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/scripts/generate_script_template.sh`.
+4. Generate scaffold with `scripts/generate_script_template.sh`.
 5. Implement logic and map functions to `REQ-*`.
 6. Validate with `forge:bash-script-validator` and rerun until clean.
 7. Return final summary with citations.
@@ -179,10 +179,10 @@ The task is complete only when all items are true:
 
 ## Helper Scripts and Assets
 
-- Script generator: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/scripts/generate_script_template.sh`
-- Deterministic CI gate: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/scripts/run_ci_checks.sh`
-- Regression test suite: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/scripts/test_generator.sh`
-- Standard scaffold: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-generator/assets/templates/standard-template.sh`
+- Script generator: `scripts/generate_script_template.sh`
+- Deterministic CI gate: `scripts/run_ci_checks.sh`
+- Regression test suite: `scripts/test_generator.sh`
+- Standard scaffold: `assets/templates/standard-template.sh`
 - Example output style: `examples/log-analyzer.sh`
 
 ## Reference Docs

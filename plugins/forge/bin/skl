@@ -103,16 +103,19 @@ def cmd_search(words):
 def cmd_hide():
     changed = 0
     for n, _, f, _ in skills():
-        t = old = f.read_text()
-        if n.split(":")[1].startswith("using-") or VISIBLE in t.split("\n---", 1)[0]:
+        old = f.read_text(encoding="utf-8")
+        head, sep, body = old.partition("\n---")  # edit the frontmatter only, never the body
+        if n.split(":")[1].startswith("using-") or VISIBLE in head:
             continue
+        t = head
         # An unquoted `description: a: b` is invalid YAML; Claude Code then parses leniently and drops the marker.
         t = re.sub(r"^(description:[ \t]*)([^'\"|>\s].*(?:: | #).*)$",
                    lambda m: m.group(1) + json.dumps(m.group(2), ensure_ascii=False), t, count=1, flags=re.M)
-        if "disable-model-invocation" not in t.split("\n---", 1)[0]:
+        if "disable-model-invocation" not in t:
             t = t.replace("---\n", f"---\n{MARK}\n", 1)
+        t += sep + body
         if t != old:
-            f.write_text(t)
+            f.write_text(t, encoding="utf-8")
             changed += 1
             print(f"fixed {n}")
     print(f"{changed} skill(s) marked")
@@ -131,19 +134,21 @@ def cmd_hook_track():
     if names:
         STATE.mkdir(parents=True, exist_ok=True)
         f = STATE / sid
-        old = f.read_text().split() if f.exists() else []
+        old = f.read_text(encoding="utf-8", errors="replace").split() if f.exists() else []
         f.write_text("\n".join(dict.fromkeys(old + names)) + "\n")
 
 
 def cmd_hook_recall(sid):
     f = STATE / re.sub(r"[^A-Za-z0-9_-]", "", sid)
-    if sid and f.exists() and f.read_text().split():
+    if sid and f.exists() and f.read_text(encoding="utf-8", errors="replace").split():
         print("Pack skills this session loaded before compaction (their text was compacted away): "
-              + ", ".join(f.read_text().split())
+              + ", ".join(f.read_text(encoding="utf-8", errors="replace").split())
               + ". If the current work still needs one, re-run `skl load <name>` before continuing.")
 
 
 def main(a):
+    if hasattr(sys.stdout, "reconfigure"):  # Windows pipes default to cp1252
+        sys.stdout.reconfigure(encoding="utf-8")
     if not a or a[0] in ("-h", "--help", "help"):
         print(__doc__.strip())
         return 0

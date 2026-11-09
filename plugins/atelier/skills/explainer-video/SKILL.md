@@ -3,17 +3,10 @@ disable-model-invocation: true  # skl: on-demand pack skill
 name: explainer-video
 description: >
   Narrated explainer videos and product demos built by an agent: script, synthesized voice, word-level
-  timing, drawings cued to spoken words, platform sizes, and a frame-based verify loop before an MP4 with
-  captions. Use for "make an explainer", "how it works video", voiceover walkthrough, narrated tutorial,
-  product demo with a clicking cursor, or a Short/Reel/TikTok that explains something. Split rules:
-  silent promos, kinetic type and the render engine go to atelier:video-composition; a trailer that sells
-  a feeling to atelier:launch-film; shot plans for live or edited work to atelier:video-direction; existing
-  footage to atelier:video-editing; generated clips to atelier:ai-video; equations as content to
-  atelier:math-animation; narration-free UI micro-motion to atelier:motion-design; narration-free artful
-  or generative motion to atelier:art-motion; hand-drawn frame animation to atelier:2d-animation; a rigged
-  or SVG character to atelier:svg-character-animation; copying a motion seen on a site to
-  atelier:animation-reverse-engineering; deep mix review to atelier:audio-review; judging a finished
-  visual to atelier:visual-qa.
+  timing, drawings cued to spoken words, platform sizes, and a frame-based verify loop before an MP4
+  with captions. Use for "make an explainer", "how it works video", voiceover walkthrough, narrated
+  tutorial, product demo with a clicking cursor, or a Short/Reel/TikTok that explains something. Not
+  for silent promos, trailers, existing footage or generated clips; sibling routing is in Neighbours.
 ---
 
 # Explainer video

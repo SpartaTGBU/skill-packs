@@ -316,7 +316,7 @@ cat > test/roles/mytest/tasks/main.yml <<EOF
 EOF
 
 # Validate it
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role.sh test/roles/mytest
+bash scripts/validate_role.sh test/roles/mytest
 ```
 
 ## CI/CD Integration
@@ -342,7 +342,7 @@ jobs:
       - name: Validate all roles
         run: |
           for role in test/roles/*; do
-            bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role.sh "$role"
+            bash scripts/validate_role.sh "$role"
           done
 ```
 

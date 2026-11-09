@@ -9,7 +9,7 @@ Act is a tool that allows you to run your GitHub Actions locally, providing fast
 curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
 
 # Or use the skill's installation script
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/install_tools.sh
+bash scripts/install_tools.sh
 ```
 
 ## Core Commands

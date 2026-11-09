@@ -204,11 +204,12 @@ if [ -n "$YAMLLINT_CMD" ]; then
 
     if [ -n "$YAML_FILES" ]; then
         YAML_ERRORS=0
-        for file in $YAML_FILES; do
+        # Process substitution (not a pipe) so YAML_ERRORS survives the loop; -print0 keeps spaced paths whole.
+        while IFS= read -r -d '' file; do
             if ! $YAMLLINT_CMD $YAMLLINT_CONFIG "$file" 2>&1 | grep -v "warning  found forbidden document start"; then
                 YAML_ERRORS=$((YAML_ERRORS + 1))
             fi
-        done
+        done < <(find "$ROLE_ABS_PATH" -type f \( -name "*.yml" -o -name "*.yaml" \) ! -path "*/.git/*" ! -path "*/molecule/*" -print0 2>/dev/null)
 
         if [ $YAML_ERRORS -eq 0 ]; then
             echo -e "${COLOR_GREEN}✓ YAML syntax check passed${COLOR_RESET}"

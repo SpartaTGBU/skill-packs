@@ -10,7 +10,7 @@ description: Validate, lint, audit, or debug Ansible playbooks, roles, inventori
 
 Comprehensive toolkit for validating, linting, and testing Ansible playbooks, roles, and collections. This skill provides automated workflows for ensuring Ansible code quality, syntax validation, dry-run testing with check mode and molecule, and intelligent documentation lookup for custom modules and collections with version awareness.
 
-**Default behavior:** When validating any Ansible role with a `molecule/` directory, attempt Molecule automatically using `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/test_role.sh <role-path>`. If Molecule cannot run due to environment/runtime limits, mark Molecule as `BLOCKED`, report why, and continue all non-Molecule validation steps.
+**Default behavior:** Run the static checks (syntax, lint, security scans) by default. When an Ansible role has a `molecule/` directory, ask the user to confirm the role is trusted before running `bash scripts/test_role.sh <role-path>`, because Molecule create/converge executes the role's tasks. If the user confirms but Molecule cannot run due to environment/runtime limits, mark Molecule as `BLOCKED`, report why, and continue all non-Molecule validation steps.
 
 ## Trigger Guidance
 
@@ -45,10 +45,10 @@ Apply this skill when encountering any of these scenarios:
 Run preflight before validation to avoid dead ends:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/setup_tools.sh
+bash scripts/setup_tools.sh
 ```
 
-Command path assumption: run commands from this skill root (`~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator`) or use absolute paths.
+Command path assumption: run commands from this skill root (`.`) or use absolute paths.
 
 Preflight requirements:
 - Baseline validation: `ansible`, `ansible-playbook`, `ansible-lint` (plus `yamllint` recommended)
@@ -66,11 +66,11 @@ Use wrappers by default for consistent behavior and fallback handling.
 
 | Validation scenario | Default command | Use direct command when | Fallback if command cannot run |
 |---|---|---|---|
-| Playbook syntax/lint | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook.sh <playbook.yml>` | User asks for a single focused check only (`ansible-playbook --syntax-check`, `ansible-lint`, or `yamllint`) | Run any available direct checks and report skipped checks as `BLOCKED` |
-| Role structural validation | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role.sh <role-dir>` | User asks only for specific sub-checks (for example, structure only) | Run structure/YAML checks that are possible and report missing stages |
-| Role Molecule execution | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/test_role.sh <role-dir> [scenario]` | User explicitly asks for manual stage-by-stage Molecule commands | Mark Molecule `BLOCKED` with reason and continue non-Molecule role checks |
-| Security scanning | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook_security.sh <path>` or `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role_security.sh <path>` plus `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/scan_secrets.sh <path>` | User requests raw Checkov output formatting or custom flags | Run whichever scanner is available; if one is missing, run the other and report coverage gap |
-| Module/collection discovery | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/extract_ansible_info_wrapper.sh <path>` | Python environment is already known-good and user wants direct parser output | If extraction fails, manually inspect `requirements.yml`/`galaxy.yml` and continue with best-effort lookup |
+| Playbook syntax/lint | `bash scripts/validate_playbook.sh <playbook.yml>` | User asks for a single focused check only (`ansible-playbook --syntax-check`, `ansible-lint`, or `yamllint`) | Run any available direct checks and report skipped checks as `BLOCKED` |
+| Role structural validation | `bash scripts/validate_role.sh <role-dir>` | User asks only for specific sub-checks (for example, structure only) | Run structure/YAML checks that are possible and report missing stages |
+| Role Molecule execution | `bash scripts/test_role.sh <role-dir> [scenario]` | User explicitly asks for manual stage-by-stage Molecule commands | Mark Molecule `BLOCKED` with reason and continue non-Molecule role checks |
+| Security scanning | `bash scripts/validate_playbook_security.sh <path>` or `bash scripts/validate_role_security.sh <path>` plus `bash scripts/scan_secrets.sh <path>` | User requests raw Checkov output formatting or custom flags | Run whichever scanner is available; if one is missing, run the other and report coverage gap |
+| Module/collection discovery | `bash scripts/extract_ansible_info_wrapper.sh <path>` | Python environment is already known-good and user wants direct parser output | If extraction fails, manually inspect `requirements.yml`/`galaxy.yml` and continue with best-effort lookup |
 
 ## Validation Workflow
 
@@ -78,7 +78,7 @@ Follow this deterministic workflow and never stop at a missing dependency:
 
 ```
 0. Preflight
-   ├─> Run: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/setup_tools.sh
+   ├─> Run: bash scripts/setup_tools.sh
    ├─> Record tool/runtime readiness
    └─> Continue even when optional tools are missing
 
@@ -95,10 +95,10 @@ Follow this deterministic workflow and never stop at a missing dependency:
 
 3. Lint and Best Practices
    ├─> Run ansible-lint (comprehensive linting)
-   ├─> Check for deprecated modules (see ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/module_alternatives.md)
+   ├─> Check for deprecated modules (see references/module_alternatives.md)
    ├─> **DETECT NON-FQCN MODULE USAGE** (apt vs ansible.builtin.apt)
-   │   └─> Run bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/check_fqcn.sh to identify short module names
-   │   └─> Recommend FQCN alternatives from ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/module_alternatives.md
+   │   └─> Run bash scripts/check_fqcn.sh to identify short module names
+   │   └─> Recommend FQCN alternatives from references/module_alternatives.md
    ├─> Verify role structure
    └─> Report linting issues
 
@@ -109,7 +109,7 @@ Follow this deterministic workflow and never stop at a missing dependency:
 
 5. Molecule Testing (for roles with molecule/) - AUTOMATIC ATTEMPT
    ├─> Check if molecule/ directory exists in role
-   ├─> If present, run: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/test_role.sh <role-path> [scenario]
+   ├─> If present, run: bash scripts/test_role.sh <role-path> [scenario]
    ├─> If script exits 2, mark Molecule as BLOCKED (environment/runtime issue)
    ├─> If script exits 1, mark Molecule as FAIL (role/test issue)
    └─> Continue remaining validation regardless of Molecule outcome
@@ -121,8 +121,8 @@ Follow this deterministic workflow and never stop at a missing dependency:
    └─> Provide version-specific guidance
 
 7. Security and Best Practices Review - DUAL SCANNING DEFAULT
-   ├─> Run bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook_security.sh or validate_role_security.sh (Checkov)
-   ├─> Run bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/scan_secrets.sh for hardcoded secret detection
+   ├─> Run bash scripts/validate_playbook_security.sh or validate_role_security.sh (Checkov)
+   ├─> Run bash scripts/scan_secrets.sh for hardcoded secret detection
    │   └─> This catches secrets Checkov may miss (passwords, API keys, tokens)
    ├─> If one scanner is unavailable, run the other and report reduced coverage
    ├─> Validate privilege escalation
@@ -149,14 +149,14 @@ When issues are detected, consult the mapped reference and include a specific re
 
 | Error class | Typical detector | Required reference | Required action |
 |---|---|---|---|
-| YAML parse/format errors | `yamllint`, `ansible-playbook --syntax-check` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/common_errors.md` (Syntax Errors) | Quote the matching syntax fix pattern and apply corrected YAML structure |
-| Module/action resolution errors | `ansible-playbook`, `ansible-lint` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/common_errors.md` (Module/Collection Errors) | Provide install/version fix commands (`ansible-galaxy collection install ...`) |
-| Deprecated or non-FQCN module usage | `ansible-lint`, `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/check_fqcn.sh` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/module_alternatives.md` | Provide exact FQCN/module replacement per finding |
-| Template/variable errors | `ansible-playbook`, check mode | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/common_errors.md` (Template/Variable Errors), `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/best_practices.md` (Variable Management) | Recommend `default()`, `required()`, or type conversion fixes |
-| Connection/inventory/privilege errors | `ansible-playbook --check`, runtime output | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/common_errors.md` (Connection, Inventory, Privilege sections) | Provide corrected inventory/auth/become configuration |
-| Security policy failures (CKV_*) | `validate_*_security.sh` / Checkov | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/security_checklist.md` | Map failed policy to a secure task rewrite |
-| Hardcoded secrets | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/scan_secrets.sh` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/security_checklist.md` (Secrets Management) | Replace with Vault/env/external secret manager approach |
-| Role structure/idempotency warnings | `validate_role.sh`, Molecule idempotence | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/best_practices.md` | Provide role layout or idempotency remediation steps |
+| YAML parse/format errors | `yamllint`, `ansible-playbook --syntax-check` | `references/common_errors.md` (Syntax Errors) | Quote the matching syntax fix pattern and apply corrected YAML structure |
+| Module/action resolution errors | `ansible-playbook`, `ansible-lint` | `references/common_errors.md` (Module/Collection Errors) | Provide install/version fix commands (`ansible-galaxy collection install ...`) |
+| Deprecated or non-FQCN module usage | `ansible-lint`, `bash scripts/check_fqcn.sh` | `references/module_alternatives.md` | Provide exact FQCN/module replacement per finding |
+| Template/variable errors | `ansible-playbook`, check mode | `references/common_errors.md` (Template/Variable Errors), `references/best_practices.md` (Variable Management) | Recommend `default()`, `required()`, or type conversion fixes |
+| Connection/inventory/privilege errors | `ansible-playbook --check`, runtime output | `references/common_errors.md` (Connection, Inventory, Privilege sections) | Provide corrected inventory/auth/become configuration |
+| Security policy failures (CKV_*) | `validate_*_security.sh` / Checkov | `references/security_checklist.md` | Map failed policy to a secure task rewrite |
+| Hardcoded secrets | `bash scripts/scan_secrets.sh` | `references/security_checklist.md` (Secrets Management) | Replace with Vault/env/external secret manager approach |
+| Role structure/idempotency warnings | `validate_role.sh`, Molecule idempotence | `references/best_practices.md` | Provide role layout or idempotency remediation steps |
 
 External documentation lookup trigger:
 - If the issue involves a custom/private collection or unknown module parameters not covered locally, run module discovery + documentation lookup (see section 7).
@@ -265,13 +265,13 @@ While ansible-lint focuses on code quality and best practices, Checkov specifica
 
 ```bash
 # Scan playbook for security issues
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook_security.sh playbook.yml
+bash scripts/validate_playbook_security.sh playbook.yml
 
 # Scan entire directory
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook_security.sh /path/to/playbooks/
+bash scripts/validate_playbook_security.sh /path/to/playbooks/
 
 # Scan role for security issues
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role_security.sh roles/webserver/
+bash scripts/validate_role_security.sh roles/webserver/
 
 # Direct checkov usage
 checkov -d . --framework ansible
@@ -336,8 +336,8 @@ Checkov complements ansible-lint:
 **Best Practice:** Run both tools for comprehensive validation:
 ```bash
 # Complete validation workflow
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook.sh playbook.yml         # Syntax + Lint
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook_security.sh playbook.yml  # Security
+bash scripts/validate_playbook.sh playbook.yml         # Syntax + Lint
+bash scripts/validate_playbook_security.sh playbook.yml  # Security
 ```
 
 **Output Format:**
@@ -357,8 +357,8 @@ Failed Checks:
 
 **Remediation Resources:**
 - Checkov Policy Index: https://www.checkov.io/5.Policy%20Index/ansible.html
-- Ansible Security Checklist: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/security_checklist.md`
-- Ansible Best Practices: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/best_practices.md`
+- Ansible Security Checklist: `references/security_checklist.md`
+- Ansible Best Practices: `references/best_practices.md`
 
 **Installation:**
 
@@ -482,7 +482,7 @@ When reviewing check mode output, focus on:
 
 **Purpose:** Test Ansible roles in isolated environments with multiple scenarios.
 
-**Automatic attempt policy:** When validating any Ansible role with a `molecule/` directory, automatically attempt Molecule tests using `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/test_role.sh <role-path> [scenario]`.
+**Automatic attempt policy:** When validating any Ansible role with a `molecule/` directory, automatically attempt Molecule tests using `bash scripts/test_role.sh <role-path> [scenario]`.
 
 **When to Use:**
 - Automatically triggered when validating roles with molecule/ directory
@@ -594,7 +594,7 @@ Use this reporting language for blocked Molecule runs:
 Molecule Status: BLOCKED
 Reason: <missing dependency/runtime and failing command>
 Fallback Applied: Completed syntax, lint, check-mode, and security validation without Molecule runtime tests.
-Next Action: <install/start dependency>; rerun `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/test_role.sh <role-path> [scenario]`
+Next Action: <install/start dependency>; rerun `bash scripts/test_role.sh <role-path> [scenario]`
 ```
 
 ### 7. Custom Module and Collection Documentation Lookup
@@ -612,7 +612,7 @@ Next Action: <install/start dependency>; rerun `bash ~/.claude/local-plugins/for
 **Detection Workflow:**
 
 1. **Extract Module Information:**
-   - Use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/extract_ansible_info_wrapper.sh` to parse playbooks and roles
+   - Use `scripts/extract_ansible_info_wrapper.sh` to parse playbooks and roles
    - Identify module usage and collections
    - Extract version constraints from `requirements.yml`
 
@@ -778,9 +778,9 @@ User working with: community.docker.docker_container version 3.0.0
 **Reference Documentation:**
 
 For detailed security guidelines and best practices, refer to:
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/security_checklist.md` - Common security vulnerabilities
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/best_practices.md` - Ansible coding standards
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/references/common_errors.md` - Common errors and solutions
+- `references/security_checklist.md` - Common security vulnerabilities
+- `references/best_practices.md` - Ansible coding standards
+- `references/common_errors.md` - Common errors and solutions
 
 ## Tool Prerequisites
 
@@ -788,7 +788,7 @@ Run this preflight before validation:
 
 ```bash
 # Preferred one-shot preflight
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/setup_tools.sh
+bash scripts/setup_tools.sh
 
 # Check Ansible installation
 ansible --version
@@ -895,14 +895,14 @@ Test functionality with new module
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/setup_tools.sh
+bash scripts/setup_tools.sh
 ```
 
 **extract_ansible_info_wrapper.sh** - Bash wrapper for extract_ansible_info.py that automatically handles PyYAML dependencies. Creates a temporary venv if PyYAML is not available in system Python.
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/extract_ansible_info_wrapper.sh <path-to-playbook-or-role>
+bash scripts/extract_ansible_info_wrapper.sh <path-to-playbook-or-role>
 ```
 
 Output: JSON structure with modules, collections, and versions
@@ -913,23 +913,23 @@ Output: JSON structure with modules, collections, and versions
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook.sh <playbook.yml>
+bash scripts/validate_playbook.sh <playbook.yml>
 ```
 
 **validate_playbook_security.sh** - Security validation script that scans playbooks for security vulnerabilities using Checkov. Automatically installs checkov in a temporary venv if not available. Complements validate_playbook.sh by focusing on security-specific checks like SSL/TLS validation, HTTPS enforcement, and package signature verification.
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook_security.sh <playbook.yml>
+bash scripts/validate_playbook_security.sh <playbook.yml>
 # Or scan entire directory
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook_security.sh /path/to/playbooks/
+bash scripts/validate_playbook_security.sh /path/to/playbooks/
 ```
 
 **validate_role.sh** - Comprehensive role validation script that checks role structure, YAML syntax, Ansible syntax, linting, and molecule configuration.
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role.sh <role-directory>
+bash scripts/validate_role.sh <role-directory>
 ```
 
 Validates:
@@ -944,21 +944,21 @@ Validates:
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role_security.sh <role-directory>
+bash scripts/validate_role_security.sh <role-directory>
 ```
 
 **test_role.sh** - Wrapper script for Molecule testing with automatic dependency installation. If `molecule` is missing, it creates a temporary venv and installs dependencies. Returns exit code `2` for environment/runtime blockers (for example missing Docker/Podman runtime) and exit code `1` for role/test failures.
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/test_role.sh <role-directory> [scenario]
+bash scripts/test_role.sh <role-directory> [scenario]
 ```
 
 **scan_secrets.sh** - Comprehensive secret scanner that uses grep-based pattern matching to detect hardcoded secrets in Ansible files. Complements Checkov security scanning by catching secrets that static analysis may miss, including passwords, API keys, tokens, AWS credentials, and private keys.
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/scan_secrets.sh <playbook.yml|role-directory|directory>
+bash scripts/scan_secrets.sh <playbook.yml|role-directory|directory>
 ```
 
 Detects:
@@ -974,7 +974,7 @@ Detects:
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/check_fqcn.sh <playbook.yml|role-directory|directory>
+bash scripts/check_fqcn.sh <playbook.yml|role-directory|directory>
 ```
 
 Detects:
@@ -988,7 +988,7 @@ Provides specific migration recommendations with FQCN alternatives.
 
 Usage:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_inventory.sh <inventory-file|inventory-directory>
+bash scripts/validate_inventory.sh <inventory-file|inventory-directory>
 ```
 
 Validation stages:
@@ -1023,12 +1023,12 @@ Validation stages:
 User: "Check if this playbook.yml file is valid"
 
 Steps:
-1. Run preflight: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/setup_tools.sh`
-2. Run wrapper: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook.sh playbook.yml`
+1. Run preflight: `bash scripts/setup_tools.sh`
+2. Run wrapper: `bash scripts/validate_playbook.sh playbook.yml`
 3. If inventory is provided, run check mode: `ansible-playbook -i <inventory> playbook.yml --check --diff`
 4. Run security wrappers:
-   - `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_playbook_security.sh playbook.yml`
-   - `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/scan_secrets.sh playbook.yml`
+   - `bash scripts/validate_playbook_security.sh playbook.yml`
+   - `bash scripts/scan_secrets.sh playbook.yml`
 5. If custom modules are detected, run docs lookup workflow (Context7 first, web fallback)
 6. Report results with PASS/FAIL/BLOCKED/SKIPPED counts and remediation steps
 ```
@@ -1039,8 +1039,8 @@ Steps:
 User: "Validate my ansible role in ./roles/webserver/"
 
 Steps:
-1. Run preflight: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/setup_tools.sh`
-2. Run role wrapper: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role.sh ./roles/webserver/`
+1. Run preflight: `bash scripts/setup_tools.sh`
+2. Run role wrapper: `bash scripts/validate_role.sh ./roles/webserver/`
 3. This checks:
    - Role directory structure (tasks/, defaults/, handlers/, meta/, etc.)
    - Required main.yml files
@@ -1049,12 +1049,12 @@ Steps:
    - Best practices with ansible-lint
    - Molecule configuration (if present)
 4. If `molecule/` exists, attempt Molecule automatically:
-   - `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/test_role.sh ./roles/webserver/`
+   - `bash scripts/test_role.sh ./roles/webserver/`
    - Exit `2`: report `Molecule Status: BLOCKED` with reason, continue remaining checks
    - Exit `1`: report `Molecule Status: FAIL` with debugging guidance
 5. Run role security checks:
-   - `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/validate_role_security.sh ./roles/webserver/`
-   - `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/scan_secrets.sh ./roles/webserver/`
+   - `bash scripts/validate_role_security.sh ./roles/webserver/`
+   - `bash scripts/scan_secrets.sh ./roles/webserver/`
 6. If custom modules detected, run documentation lookup workflow
 7. Provide final report with severity, blockers, and rerun actions
 ```
@@ -1095,8 +1095,8 @@ User: "Test my nginx role with molecule"
 
 Steps:
 1. Check if molecule is configured in role
-2. Run preflight (`bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/setup_tools.sh`) and confirm Docker/Podman runtime availability
-3. Run `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/test_role.sh <role-path> [scenario]`
+2. Run preflight (`bash scripts/setup_tools.sh`) and confirm Docker/Podman runtime availability
+3. Run `bash scripts/test_role.sh <role-path> [scenario]`
 4. If exit code is `2`, mark Molecule `BLOCKED`, report reason, and continue non-Molecule checks
 5. If exit code is `1`, inspect converge/verify output and report role issues
 6. Analyze idempotency, syntax, and verification outcomes

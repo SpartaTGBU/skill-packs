@@ -176,7 +176,7 @@ Default path (MUST for full pipeline generation):
 Script fallback if validator skill is unavailable but local validator scripts exist:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-validator/scripts/validate_azure_pipelines.sh <pipeline-file>
+bash ../azure-pipelines-validator/scripts/validate_azure_pipelines.sh <pipeline-file>
 ```
 
 Manual fallback when neither skill nor script can run:

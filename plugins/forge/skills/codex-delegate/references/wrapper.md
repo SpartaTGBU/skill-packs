@@ -7,12 +7,12 @@ The `scripts/run_codex.sh` and `scripts/run_codex.ps1` wrappers run Codex CLI sy
 ### From Claude Code Bash (recommended)
 
 ```bash
-bash "~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/codex-delegate/scripts/run_codex.sh" \
+bash "scripts/run_codex.sh" \
   --brief-file .ai/codex_task_<name>.md \
   --repo "$PWD"
 ```
 
-`~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/codex-delegate` is resolved in a marketplace-loaded skill. For a
+`.` is resolved in a marketplace-loaded skill. For a
 repository checkout, use `scripts/run_codex.sh`; for a direct portable skill,
 use `<skill-root>/scripts/run_codex.sh`.
 

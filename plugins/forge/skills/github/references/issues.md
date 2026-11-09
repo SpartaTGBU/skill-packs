@@ -16,7 +16,7 @@ else
   AUTH="git"
   if [ -z "$GITHUB_TOKEN" ]; then
     if grep -q "github.com" ~/.git-credentials 2>/dev/null; then
-      GITHUB_TOKEN=$(python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github/scripts/git-credential-token.py)
+      GITHUB_TOKEN=$(python3 scripts/git-credential-token.py)
     fi
   fi
 fi

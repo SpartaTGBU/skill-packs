@@ -98,7 +98,7 @@ Blocking checkpoint rule:
 1. Read relevant files before generation using explicit file-open/read actions.
 2. Minimum file set:
    - `examples/common_queries.logql` for syntax and query patterns
-   - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/logql-generator/references/best_practices.md` for performance and alerting guidance
+   - `references/best_practices.md` for performance and alerting guidance
 3. Do not generate the final query until this checkpoint is complete.
 
 Fallback when file-read tools are unavailable:
@@ -401,7 +401,7 @@ Use Stage 6 policy. Trigger external docs for:
 ## Resources
 
 - `examples/common_queries.logql`: Query patterns, template function examples
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/logql-generator/references/best_practices.md`: Optimization, anti-patterns, alerting guidance
+- `references/best_practices.md`: Optimization, anti-patterns, alerting guidance
 
 ## Example Flows
 

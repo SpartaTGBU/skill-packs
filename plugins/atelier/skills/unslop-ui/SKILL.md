@@ -4,19 +4,11 @@ name: unslop-ui
 description: >
   Detect and remove AI-looking UI ("slop tells") and turn a vibecoded screen into a designed one:
   audit with a selector-level checklist, write a short brief, then repair the shell, the content
-  blocks and (for marketing pages) the hero, and prove it with a before/after render. Use when
-  someone says "this looks AI-generated", "unslop", "de-slop", "make it not look vibecoded",
-  "polish this generic dashboard/landing page", or a UI shows purple gradients, glows, gradient
-  text, emoji icons, sparkle "New" badges, tracked uppercase labels, pulsing dots, uneven spacing.
-  Split rule: this skill audits AND repairs the look of an existing screen. Critique only goes to
-  atelier:ui-review; new design to atelier:visual-design; build from scratch to atelier:frontend-design;
-  tokens to atelier:design-systems; motion craft to atelier:motion-design; engineering finish to
-  atelier:ui-engineering-polish; UX research to atelier:ui-ux-intelligence; screenshot gates to
-  atelier:visual-qa; new standalone files to atelier:html-design-artifacts or atelier:prototype; assets
-  to atelier:illustration-and-icons, atelier:logo-design, atelier:diagrams; rendered video to
-  atelier:art-motion, launch-film, product-demo-video, explainer-video, one-line-video, video-direction,
-  video-composition, video-editing, shot-recipes, ai-video; drawn animation to atelier:2d-animation,
-  svg-character-animation, math-animation, animation-reverse-engineering; sound to atelier:audio-review.
+  blocks and (for marketing pages) the hero, and prove it with a before/after render. Use when someone
+  says "this looks AI-generated", "unslop", "de-slop", "make it not look vibecoded", "polish this
+  generic dashboard/landing page", or a UI shows purple gradients, glows, gradient text, emoji icons,
+  sparkle "New" badges, tracked uppercase labels, pulsing dots, uneven spacing. Audits AND repairs an
+  existing screen; critique-only or new builds go to siblings in Neighbours.
 ---
 
 # Unslop UI

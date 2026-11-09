@@ -211,7 +211,7 @@ stages:
 Extract common logic into templates.
 
 ```yaml
-# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/npm-build.yml
+# templates/npm-build.yml
 steps:
 - task: NodeTool@0
   inputs:
@@ -227,7 +227,7 @@ steps:
 
 # azure-pipelines.yml
 steps:
-- template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/npm-build.yml
+- template: templates/npm-build.yml
   parameters:
     nodeVersion: '20'
 ```

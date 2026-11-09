@@ -2,20 +2,12 @@
 disable-model-invocation: true  # skl: on-demand pack skill
 name: logo-design
 description: >
-  Logo and brand-mark design from brief to production SVG: choosing a mark type, generating and culling
-  concepts, geometric construction, optical corrections, colour, lockups, a small-size / one-colour /
-  reversed test protocol, delivery files, and studying a reference library without copying.
+  Logo and brand-mark design from brief to production SVG: choosing a mark type, generating and
+  culling concepts, geometric construction, optical corrections, colour, lockups, a small-size /
+  one-colour / reversed test protocol, delivery files, and studying a reference library without copying.
   Use when the user wants a logo, wordmark, monogram, symbol, favicon or app-icon mark designed,
-  refreshed, critiqued or compared. Neighbours: atelier:illustration-and-icons (icon sets, spot art);
-  atelier:design-systems (tokens and brand rules once a mark exists); atelier:visual-design,
-  atelier:frontend-design, atelier:html-design-artifacts, atelier:prototype (placing the logo in a page
-  or mock); atelier:ui-review, atelier:unslop-ui, atelier:ui-engineering-polish (judging or polishing a
-  built UI); atelier:svg-character-animation, atelier:motion-design, atelier:2d-animation,
-  atelier:art-motion (animating it); atelier:launch-film, atelier:video-composition,
-  atelier:explainer-video, atelier:product-demo-video (logo in video); atelier:ai-video (AI-generated
-  logo or sting output); atelier:video-editing, atelier:one-line-video (cutting or one-prompt video
-  with a logo in it); atelier:visual-qa (render review); atelier:diagrams (not logos); atelier:ui-ux-intelligence (UI style and palette advice for interfaces; the mark itself stays here). No overlap with
-  atelier:animation-reverse-engineering, video-direction, shot-recipes, audio-review, math-animation.
+  refreshed, critiqued or compared. Not for icon sets, page layout or animating the mark; see
+  Neighbours for sibling skills.
 ---
 
 # Logo Design

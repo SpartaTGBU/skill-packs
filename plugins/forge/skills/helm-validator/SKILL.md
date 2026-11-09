@@ -47,8 +47,8 @@ Out of scope by default:
 
 ### Mode A: Local Validation (no cluster required)
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/setup_tools.sh
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/validate_chart_structure.sh <chart-directory>
+bash scripts/setup_tools.sh
+bash scripts/validate_chart_structure.sh <chart-directory>
 helm lint <chart-directory> --strict
 helm template <release-name> <chart-directory> --values <values-file> --debug --output-dir ./rendered
 find ./rendered -type f \( -name "*.yaml" -o -name "*.yml" \) -exec yamllint -c assets/.yamllint {} +
@@ -67,7 +67,7 @@ Follow this sequential validation workflow. Each stage catches different types o
 Before starting validation, verify required tools are installed:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/setup_tools.sh
+bash scripts/setup_tools.sh
 ```
 
 Required tools:
@@ -86,14 +86,14 @@ Fallback policy for unavailable tools or environment constraints:
 | `kubectl` missing or no kube-context | Skip Stage 8, continue with remaining stages | ⚠️ Warning |
 | No internet access for CRD docs | Use local CRD manifests and kubeconform output, mark doc lookup incomplete | ⚠️ Warning |
 
-If tools are missing, provide installation instructions from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/setup_tools.sh` output and continue with the fallback path above.
+If tools are missing, provide installation instructions from `scripts/setup_tools.sh` output and continue with the fallback path above.
 
 ### Stage 2: Helm Chart Structure Validation
 
 Verify the chart follows the standard Helm directory structure:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/validate_chart_structure.sh <chart-directory>
+bash scripts/validate_chart_structure.sh <chart-directory>
 ```
 
 **Expected structure:**
@@ -158,7 +158,7 @@ helm template <release-name> <chart-directory> \
 **Options to consider:**
 - `--values values.yaml`: Use specific values file
 - `--set key=value`: Override individual values
-- `--show-only ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/deployment.yaml`: Render specific template
+- `--show-only templates/deployment.yaml`: Render specific template
 - `--validate`: Validate against Kubernetes OpenAPI schema
 - `--include-crds`: Include CRDs in rendered output
 - `--is-upgrade`: Simulate upgrade scenario
@@ -208,12 +208,12 @@ Before schema validation, detect if the chart contains or renders Custom Resourc
 # Check crds/ directory
 if [ -d <chart-directory>/crds ]; then
   find <chart-directory>/crds -type f \( -name "*.yaml" -o -name "*.yml" \) \
-    -exec bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/detect_crd_wrapper.sh {} +
+    -exec bash scripts/detect_crd_wrapper.sh {} +
 fi
 
 # Check rendered templates
 find ./rendered -type f \( -name "*.yaml" -o -name "*.yml" \) \
-  -exec bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/detect_crd_wrapper.sh {} +
+  -exec bash scripts/detect_crd_wrapper.sh {} +
 ```
 
 The script outputs JSON with resource information:
@@ -409,8 +409,8 @@ find ./rendered -type f \( -name "*.yaml" -o -name "*.yml" \) \
 
 **If ANY warnings, errors, or security issues were found, you MUST read:**
 ```
-Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/references/helm_best_practices.md
-Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/references/k8s_best_practices.md
+Read references/helm_best_practices.md
+Read references/k8s_best_practices.md
 ```
 
 Use these references to provide context and recommendations for each issue found.
@@ -471,7 +471,7 @@ Example format:
 ## Proposed Changes
 
 ### 1. Add securityContext to Deployment
-**File:** ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/deployment.yaml:25
+**File:** templates/deployment.yaml:25
 **Severity:** ⚠️ Warning
 **Reason:** Running containers as root is a security risk
 
@@ -512,9 +512,9 @@ spec:
 #### Step 5: Automation Opportunities
 
 List all detected automation opportunities:
-- If `_helpers.tpl` is missing → Recommend: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/generate_helpers.sh <chart>`
+- If `_helpers.tpl` is missing → Recommend: `bash scripts/generate_helpers.sh <chart>`
 - If `.helmignore` is missing → Recommend: Copy from `assets/.helmignore`
-- If `values.schema.json` is missing → Recommend: Copy and customize from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/assets/values.schema.json`
+- If `values.schema.json` is missing → Recommend: Copy and customize from `assets/values.schema.json`
 - If `NOTES.txt` is missing → Recommend: Create post-install notes template
 - If `README.md` is missing → Recommend: Create chart documentation
 
@@ -555,7 +555,7 @@ This section covers advanced Helm templating techniques, helper functions, and a
 
 ### Template Helpers (`_helpers.tpl`)
 
-Template helpers are reusable functions defined in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/_helpers.tpl`. They promote DRY principles and consistency.
+Template helpers are reusable functions defined in `templates/_helpers.tpl`. They promote DRY principles and consistency.
 
 **Standard helper patterns:**
 
@@ -880,8 +880,8 @@ When analyzing charts, identify opportunities for helper functions:
 For detailed Helm and Kubernetes best practices, load the references:
 
 ```
-Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/references/helm_best_practices.md
-Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/references/k8s_best_practices.md
+Read references/helm_best_practices.md
+Read references/k8s_best_practices.md
 ```
 
 These references include:
@@ -926,7 +926,7 @@ postgresql:
 ## Error Handling Strategies
 
 ### Tool Not Available
-- Run `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/setup_tools.sh` to check availability
+- Run `scripts/setup_tools.sh` to check availability
 - Provide installation instructions
 - Skip optional stages but document what was skipped
 - Continue with available tools
@@ -1040,7 +1040,7 @@ For comprehensive testing, use Helm test resources:
 
 1. **Create test resources:**
 ```yaml
-# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/tests/test-connection.yaml
+# templates/tests/test-connection.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -1071,9 +1071,9 @@ helm test <release-name>
 
 | Missing Item | Recommendation |
 |--------------|----------------|
-| `_helpers.tpl` | Run: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/generate_helpers.sh <chart>` |
+| `_helpers.tpl` | Run: `bash scripts/generate_helpers.sh <chart>` |
 | `.helmignore` | Copy from: `assets/.helmignore` |
-| `values.schema.json` | Copy and customize from: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/assets/values.schema.json` |
+| `values.schema.json` | Copy and customize from: `assets/values.schema.json` |
 | `NOTES.txt` | Create post-install notes template |
 | `README.md` | Create chart documentation |
 | Repeated patterns | Extract to helper functions |
@@ -1105,31 +1105,31 @@ helm test <release-name>
 - Checks for required validation tools (helm, yamllint, kubeconform, kubectl)
 - Provides installation instructions for missing tools
 - Verifies versions of installed tools
-- Usage: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/setup_tools.sh`
+- Usage: `bash scripts/setup_tools.sh`
 
 **validate_chart_structure.sh**
 - Validates Helm chart directory structure
 - Checks for required files (Chart.yaml, values.yaml, templates/)
 - Verifies file formats and syntax
-- Usage: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/validate_chart_structure.sh <chart-directory>`
+- Usage: `bash scripts/validate_chart_structure.sh <chart-directory>`
 
 **detect_crd_wrapper.sh**
 - Wrapper script that handles Python dependency management
 - Automatically creates temporary venv if PyYAML is not available
 - Calls detect_crd.py to parse YAML files
-- Usage: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/detect_crd_wrapper.sh <file.yaml> [file2.yaml ...]`
+- Usage: `bash scripts/detect_crd_wrapper.sh <file.yaml> [file2.yaml ...]`
 
 **detect_crd.py**
 - Parses YAML files to identify Custom Resource Definitions
 - Extracts kind, apiVersion, group, and version information
 - Outputs JSON for programmatic processing
 - Requires PyYAML (handled automatically by wrapper script)
-- Can be called directly: `python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/detect_crd.py <file.yaml> [file2.yaml ...]`
+- Can be called directly: `python3 scripts/detect_crd.py <file.yaml> [file2.yaml ...]`
 
 **generate_helpers.sh**
 - Generates standard Helm helpers (_helpers.tpl) for a chart
 - Creates fullname, labels, and selector helpers
-- Usage: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/generate_helpers.sh <chart-directory>`
+- Usage: `bash scripts/generate_helpers.sh <chart-directory>`
 
 ### references/
 

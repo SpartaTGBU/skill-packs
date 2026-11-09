@@ -142,36 +142,36 @@ blocked_exit() {
     exit 2
 }
 
-read_serviceaccount_token() {
-    local token
-    token="$(pod_exec cat "$SERVICEACCOUNT_TOKEN_FILE" 2>/dev/null || true)"
-    token="${token//$'\r'/}"
-    token="${token//$'\n'/}"
-    printf "%s" "$token"
+# The token is read by a shell inside the pod so it never appears in local kubectl argv.
+pod_curl_bearer() {
+    # shellcheck disable=SC2016 # expanded by the in-pod shell
+    pod_exec sh -c 't=$(cat "$1"); shift; exec curl -H "Authorization: Bearer $t" "$@"' sh "$SERVICEACCOUNT_TOKEN_FILE" "$@"
+}
+
+pod_wget_bearer() {
+    # shellcheck disable=SC2016 # expanded by the in-pod shell
+    pod_exec sh -c 't=$(cat "$1"); shift; exec wget --header="Authorization: Bearer $t" "$@"' sh "$SERVICEACCOUNT_TOKEN_FILE" "$@"
 }
 
 api_probe_secure() {
-    local token
-
     if ! pod_exec test -r "$SERVICEACCOUNT_CA" >/dev/null 2>&1 || \
         ! pod_exec test -r "$SERVICEACCOUNT_TOKEN_FILE" >/dev/null 2>&1; then
         echo "service account CA/token files are missing in the pod. Use --insecure only for explicit troubleshooting override." >&2
         return 1
     fi
 
-    token="$(read_serviceaccount_token)"
-    if [ -z "$token" ]; then
+    if ! pod_exec test -s "$SERVICEACCOUNT_TOKEN_FILE" >/dev/null 2>&1; then
         echo "service account token is empty; cannot authenticate secure API probe." >&2
         return 1
     fi
 
-    if pod_exec curl --fail --silent --show-error --cacert "$SERVICEACCOUNT_CA" --max-time 5 \
-        -H "Authorization: Bearer $token" "$KUBERNETES_API_URL" >/dev/null 2>&1; then
+    if pod_curl_bearer --fail --silent --show-error --cacert "$SERVICEACCOUNT_CA" --max-time 5 \
+        "$KUBERNETES_API_URL" >/dev/null 2>&1; then
         return 0
     fi
 
-    if pod_exec wget -q --timeout=5 --ca-certificate="$SERVICEACCOUNT_CA" \
-        --header="Authorization: Bearer $token" -O /dev/null "$KUBERNETES_API_URL" >/dev/null 2>&1; then
+    if pod_wget_bearer -q --timeout=5 --ca-certificate="$SERVICEACCOUNT_CA" \
+        -O /dev/null "$KUBERNETES_API_URL" >/dev/null 2>&1; then
         return 0
     fi
 
@@ -180,17 +180,15 @@ api_probe_secure() {
 }
 
 api_probe_insecure() {
-    local token
-    token="$(read_serviceaccount_token)"
     warn "Insecure TLS mode enabled (--insecure). Certificate validation is bypassed for API probe."
 
-    if [ -n "$token" ]; then
-        if pod_exec curl --fail --silent --show-error -k --max-time 5 \
-            -H "Authorization: Bearer $token" "$KUBERNETES_API_URL" >/dev/null 2>&1; then
+    if pod_exec test -s "$SERVICEACCOUNT_TOKEN_FILE" >/dev/null 2>&1; then
+        if pod_curl_bearer --fail --silent --show-error -k --max-time 5 \
+            "$KUBERNETES_API_URL" >/dev/null 2>&1; then
             return 0
         fi
-        if pod_exec wget -q --timeout=5 --no-check-certificate \
-            --header="Authorization: Bearer $token" -O /dev/null "$KUBERNETES_API_URL" >/dev/null 2>&1; then
+        if pod_wget_bearer -q --timeout=5 --no-check-certificate \
+            -O /dev/null "$KUBERNETES_API_URL" >/dev/null 2>&1; then
             return 0
         fi
     else

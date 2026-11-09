@@ -40,7 +40,7 @@ Use this skill when the request includes script quality, linting, syntax checkin
 Run commands from this skill directory:
 
 ```bash
-cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator
+cd .
 ```
 
 ### Step 1: Preflight
@@ -52,14 +52,14 @@ cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-va
 ### Step 2: Run Baseline Validation (Default Path)
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh <script-path>
+bash scripts/validate.sh <script-path>
 ```
 
 For deterministic stage behavior, set the ShellCheck provider explicitly:
 
 ```bash
 # Modes: auto (default), system, wrapper, disabled
-VALIDATOR_SHELLCHECK_MODE=system bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh <script-path>
+VALIDATOR_SHELLCHECK_MODE=system bash scripts/validate.sh <script-path>
 ```
 
 Record:
@@ -95,7 +95,7 @@ If the request includes patching files and write access is available, apply fixe
 After each batch of edits, rerun the validator:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh <script-path>
+bash scripts/validate.sh <script-path>
 ```
 
 Rerun loop rules:
@@ -111,7 +111,7 @@ Use these branches only when the default flow cannot run as-is.
 
 | Constraint | Fallback action | Reporting requirement |
 | --- | --- | --- |
-| `shellcheck` missing, wrapper available | Let `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh` use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/shellcheck_wrapper.sh --cache` automatically | State that wrapper mode was used |
+| `shellcheck` missing, wrapper available | Let `scripts/validate.sh` use `scripts/shellcheck_wrapper.sh --cache` automatically | State that wrapper mode was used |
 | `shellcheck` and wrapper unavailable | Run syntax + custom checks only (validator does this) | Explicitly call out reduced coverage and missing ShellCheck analysis |
 | Python unavailable for wrapper | Skip wrapper path, keep syntax + custom checks | State why ShellCheck could not run |
 | Target file is read-only | Provide precise patch suggestions without editing | Mark response as "advisory only" |
@@ -145,7 +145,7 @@ Citation rules:
 Use this structure for deterministic output:
 
 - `Validation Results`
-- `Command`: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh <script-path>`
+- `Command`: `bash scripts/validate.sh <script-path>`
 - `Detected shell`: `<shell>`
 - `Exit code`: `<code>`
 - `Summary`: `<errors> errors, <warnings> warnings, <info> info`
@@ -160,7 +160,7 @@ Use this structure for deterministic output:
   ```
 - `Why`: `<short explanation>`
 - `Reference`: `docs/<file>.md -> <Section> -> <Subsection>`
-- `Rerun command`: `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh <script-path>`
+- `Rerun command`: `bash scripts/validate.sh <script-path>`
 - `Exit code after fixes`: `<code>`
 - `Remaining issues`: `<count or none>`
 
@@ -170,11 +170,11 @@ Use this structure for deterministic output:
 
 ```bash
 # 1) Baseline validation
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh examples/bad-bash.sh
+bash scripts/validate.sh examples/bad-bash.sh
 
 # 2) Apply fixes to target script
 # 3) Rerun validation
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh examples/bad-bash.sh
+bash scripts/validate.sh examples/bad-bash.sh
 ```
 
 Expected behavior: full syntax + ShellCheck + custom-check coverage, with iterative reruns until stable.
@@ -183,7 +183,7 @@ Expected behavior: full syntax + ShellCheck + custom-check coverage, with iterat
 
 ```bash
 # Requires a system shellcheck binary.
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/run_ci_checks.sh
+bash scripts/run_ci_checks.sh
 ```
 
 This runner enforces `VALIDATOR_REQUIRE_SHELLCHECK=1` and `VALIDATOR_SHELLCHECK_MODE=system`
@@ -193,7 +193,7 @@ so CI fails if the ShellCheck stage is skipped or unavailable.
 
 ```bash
 # shellcheck unavailable and wrapper cannot run
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh examples/bad-shell.sh
+bash scripts/validate.sh examples/bad-shell.sh
 ```
 
 Expected behavior: syntax + custom checks still run. Report reduced coverage and list what must be revalidated once ShellCheck is available.
@@ -202,12 +202,12 @@ Expected behavior: syntax + custom checks still run. Report reduced coverage and
 
 ### Scripts
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh`: primary validator entrypoint
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/shellcheck_wrapper.sh`: optional ShellCheck fallback using a cached Python virtual environment
+- `scripts/validate.sh`: primary validator entrypoint
+- `scripts/shellcheck_wrapper.sh`: optional ShellCheck fallback using a cached Python virtual environment
 
 ### Detection and Ordering
 
-Validation order in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/bash-script-validator/scripts/validate.sh`:
+Validation order in `scripts/validate.sh`:
 
 1. File checks (exists/readable/text)
 2. Shebang-based shell detection

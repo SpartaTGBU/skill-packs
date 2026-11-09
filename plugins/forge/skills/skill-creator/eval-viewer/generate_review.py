@@ -16,12 +16,8 @@ import argparse
 import base64
 import json
 import mimetypes
-import os
 import re
-import signal
-import subprocess
 import sys
-import time
 import webbrowser
 from functools import partial
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -278,32 +274,15 @@ def generate_html(
 
     data_json = json.dumps(embedded)
 
+    # Escape "</" so embedded strings cannot close the <script> tag.
+    data_json = data_json.replace("</", "<\\/")
+
     return template.replace("/*__EMBEDDED_DATA__*/", f"const EMBEDDED_DATA = {data_json};")
 
 
 # ---------------------------------------------------------------------------
 # HTTP server (stdlib only, zero dependencies)
 # ---------------------------------------------------------------------------
-
-def _kill_port(port: int) -> None:
-    """Kill any process listening on the given port."""
-    try:
-        result = subprocess.run(
-            ["lsof", "-ti", f":{port}"],
-            capture_output=True, text=True, timeout=5,
-        )
-        for pid_str in result.stdout.strip().split("\n"):
-            if pid_str.strip():
-                try:
-                    os.kill(int(pid_str.strip()), signal.SIGTERM)
-                except (ProcessLookupError, ValueError):
-                    pass
-        if result.stdout.strip():
-            time.sleep(0.5)
-    except subprocess.TimeoutExpired:
-        pass
-    except FileNotFoundError:
-        print("Note: lsof not found, cannot check if port is in use", file=sys.stderr)
 
 class ReviewHandler(BaseHTTPRequestHandler):
     """Serves the review HTML and handles feedback saves.
@@ -360,6 +339,14 @@ class ReviewHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         if self.path == "/api/feedback":
+            # Block cross-site writes: browsers send Origin on cross-origin POSTs,
+            # and a non-simple Content-Type forces a CORS preflight we never answer.
+            port = self.server.server_address[1]
+            origin = self.headers.get("Origin")
+            if (origin is not None and origin not in (f"http://127.0.0.1:{port}", f"http://localhost:{port}")) \
+                    or self.headers.get_content_type() != "application/json":
+                self.send_error(403)
+                return
             length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(length)
             try:
@@ -435,14 +422,12 @@ def main() -> None:
         print(f"\n  Static viewer written to: {args.static}\n")
         sys.exit(0)
 
-    # Kill any existing process on the target port
     port = args.port
-    _kill_port(port)
     handler = partial(ReviewHandler, workspace, skill_name, feedback_path, previous, benchmark_path)
     try:
         server = HTTPServer(("127.0.0.1", port), handler)
     except OSError:
-        # Port still in use after kill attempt — find a free one
+        # Port in use — find a free one
         server = HTTPServer(("127.0.0.1", 0), handler)
         port = server.server_address[1]
 

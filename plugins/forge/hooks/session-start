@@ -6,7 +6,7 @@
 # FORGE_PONYTAIL=off disables ponytail everywhere. Bash builtins only on SessionStart: PATH may be broken at startup.
 set -euo pipefail
 root="${CLAUDE_PLUGIN_ROOT:-${0%/hooks/*}}"
-ev=""; [ -t 0 ] || ev="$(cat 2>/dev/null || true)"
+ev=""; [ -t 0 ] || { IFS= read -r -d '' ev || true; }  # builtin: no external cat
 q='[[:space:]]*:[[:space:]]*"'
 name=SessionStart
 [[ $ev =~ \"hook_event_name\"${q}(SubagentStart|UserPromptSubmit)\" ]] && name=${BASH_REMATCH[1]}
@@ -15,7 +15,7 @@ mark="${XDG_STATE_HOME:-$HOME/.local/state}/skl/ponytail-$sid"
 s=""
 if [ $name = SessionStart ]; then
   f="$root/skills/using-forge/SKILL.md"
-  [ -r "$f" ] && s="<forge>"$'\n'"$(<"$f")"
+  [ -r "$f" ] && s="<forge>"$'\n'"$(<"$f")"$'\n\n'"forge plugin root: $root (skl: \"$root/bin/skl\"; on Windows without python3: python \"$root/bin/skl\")"
   if [[ $ev =~ \"source\"${q}(compact|clear)\" ]]; then
     [ -e "$mark" ] && { rm -f "$mark" 2>/dev/null || true; }
     if [ "${BASH_REMATCH[1]}" = compact ] && [ -n "$sid" ]; then
@@ -32,7 +32,8 @@ else
   else
     [[ $ev =~ \"permission_mode\"${q}plan\" ]] && exit 0
     [ -n "$sid" ] && ! [ -e "$mark" ] || exit 0
-    mkdir -p "${mark%/*}" && : > "$mark"
+    mkdir -p "${mark%/*}" 2>/dev/null && : > "$mark" 2>/dev/null || exit 0  # no state dir: skip rather than inject every prompt
+    find "${mark%/*}" -maxdepth 1 -type f -mtime +14 -delete 2>/dev/null || true
   fi
   b="$(<"$p")"; b="${b#---*$'\n'---$'\n'}"
   s="<ponytail>"$'\n'"Active now (injected, no need to load it; does not apply while in plan mode)."$'\n'"$b"$'\n'"</ponytail>"

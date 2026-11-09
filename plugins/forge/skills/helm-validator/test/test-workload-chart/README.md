@@ -13,11 +13,11 @@ This chart exists to exercise and demonstrate the **mandatory Stage 9 Security B
 | Violation | Location | Expected Finding |
 |-----------|----------|-----------------|
 | `:latest` image tag | `values.yaml` → `image.tag` | Stage 9: image tag issue |
-| Missing pod-level `securityContext` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/deployment.yaml` → `spec.template.spec` | Stage 9: missing `runAsNonRoot`, `runAsUser`, `fsGroup` |
-| Missing container-level `securityContext` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/deployment.yaml` → `spec.template.spec.containers[0]` | Stage 9: missing `allowPrivilegeEscalation: false`, `readOnlyRootFilesystem: true`, `capabilities.drop: [ALL]` |
-| Missing `resources` block | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/deployment.yaml` → `spec.template.spec.containers[0]` | Stage 9: no CPU/memory limits or requests |
-| Missing `livenessProbe` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/deployment.yaml` → `spec.template.spec.containers[0]` | Stage 9: no liveness probe |
-| Missing `readinessProbe` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/deployment.yaml` → `spec.template.spec.containers[0]` | Stage 9: no readiness probe |
+| Missing pod-level `securityContext` | `templates/deployment.yaml` → `spec.template.spec` | Stage 9: missing `runAsNonRoot`, `runAsUser`, `fsGroup` |
+| Missing container-level `securityContext` | `templates/deployment.yaml` → `spec.template.spec.containers[0]` | Stage 9: missing `allowPrivilegeEscalation: false`, `readOnlyRootFilesystem: true`, `capabilities.drop: [ALL]` |
+| Missing `resources` block | `templates/deployment.yaml` → `spec.template.spec.containers[0]` | Stage 9: no CPU/memory limits or requests |
+| Missing `livenessProbe` | `templates/deployment.yaml` → `spec.template.spec.containers[0]` | Stage 9: no liveness probe |
+| Missing `readinessProbe` | `templates/deployment.yaml` → `spec.template.spec.containers[0]` | Stage 9: no readiness probe |
 
 ## Running the Validation
 
@@ -28,7 +28,7 @@ This chart exists to exercise and demonstrate the **mandatory Stage 9 Security B
 bash test/test_stage9_workload.sh
 
 # Stage 2: Structure check
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/validate_chart_structure.sh test/test-workload-chart
+bash scripts/validate_chart_structure.sh test/test-workload-chart
 
 # Stage 3: Helm lint
 helm lint test/test-workload-chart --strict
@@ -42,7 +42,7 @@ find /tmp/workload-rendered -type f \( -name "*.yaml" -o -name "*.yml" \) \
 
 # Stage 6: CRD detection (expect: no CRDs)
 find /tmp/workload-rendered -type f \( -name "*.yaml" -o -name "*.yml" \) \
-  -exec bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/scripts/detect_crd_wrapper.sh {} +
+  -exec bash scripts/detect_crd_wrapper.sh {} +
 
 # Stage 7: Schema validation
 find /tmp/workload-rendered -type f \( -name "*.yaml" -o -name "*.yml" \) -exec \

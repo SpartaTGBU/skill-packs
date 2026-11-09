@@ -12,7 +12,7 @@ A complete, valid CI pipeline that passes all validation checks.
 
 **Usage:**
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh examples/valid-ci.yml
+bash scripts/validate_workflow.sh examples/valid-ci.yml
 ```
 
 **Expected Result:** All validations pass
@@ -33,7 +33,7 @@ A workflow containing common intentional errors for testing error detection.
 
 **Usage:**
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh examples/with-errors.yml
+bash scripts/validate_workflow.sh examples/with-errors.yml
 ```
 
 **Expected Result:** Multiple errors reported by actionlint
@@ -54,7 +54,7 @@ A workflow using older action versions to test version validation.
 
 **Usage:**
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh --check-versions examples/outdated-versions.yml
+bash scripts/validate_workflow.sh --check-versions examples/outdated-versions.yml
 ```
 
 **Expected Result:** Version warnings for outdated actions
@@ -65,24 +65,24 @@ bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actio
 
 1. **Test successful validation:**
    ```bash
-   bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh examples/valid-ci.yml
+   bash scripts/validate_workflow.sh examples/valid-ci.yml
    ```
 
 2. **Test error detection:**
    ```bash
-   bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh examples/with-errors.yml
+   bash scripts/validate_workflow.sh examples/with-errors.yml
    ```
 
 3. **Test version checking:**
    ```bash
-   bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh --check-versions examples/outdated-versions.yml
+   bash scripts/validate_workflow.sh --check-versions examples/outdated-versions.yml
    ```
 
 4. **Test all examples:**
    ```bash
    for file in examples/*.yml; do
      echo "=== Testing: $file ==="
-     bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh --lint-only "$file"
+     bash scripts/validate_workflow.sh --lint-only "$file"
      echo ""
    done
    ```

@@ -50,7 +50,7 @@ Mechanical -> Codex. Reasoning, long-context synthesis, judgment, review -> the 
 1. **Brief**: write `.ai/codex_task_<name>.md` with Context / Goal / Constraints / Acceptance (template `references/task-template.md`). For judgment-sensitive work (debugging, write-capable change, review, research) also add the XML blocks from `references/codex-prompt-blocks.md`. If a task splitter or `forge:research-hub-multi-ai` already wrote the brief, read its plan (`.coord/plan.yml` or `.coord/multi_ai_plan.md`) for round context first.
 2. **Run** the wrapper from the repo:
    ```bash
-   bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/codex-delegate/scripts/run_codex.sh \
+   bash scripts/run_codex.sh \
      --brief-file .ai/codex_task_<name>.md \
      --repo "$PWD"
    ```

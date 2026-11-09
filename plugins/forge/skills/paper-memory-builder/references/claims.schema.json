@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/WenyuChiou/research-hub/blob/master/skills/paper-memory-builder/references/claims.schema.json",
   "title": ".paper/claims.yml schema",
-  "description": "JSON Schema (Draft 2020-12) for paper-memory-builder's .paper/claims.yml output. Enforces the anti-leakage rule: an active claim with empty/absent evidence_artifacts MUST have status: gap and a non-empty gap_reason; editorially removed (rejected) claims may omit evidence or use an empty array without gap_reason. Validated by scripts/check_claims_schema.py in CI.",
+  "description": "JSON Schema (Draft 2020-12) for paper-memory-builder's .paper/claims.yml output. Enforces the anti-leakage rule: an active claim with empty/absent evidence_artifacts MUST have status: gap and a non-empty gap_reason; editorially removed (rejected) claims may omit evidence or use an empty array without gap_reason. Validate with the jsonschema one-liner in SKILL.md. in CI.",
   "type": "object",
   "required": ["claims"],
   "additionalProperties": true,

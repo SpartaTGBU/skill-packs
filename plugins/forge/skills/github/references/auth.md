@@ -263,7 +263,7 @@ If git credentials are already configured (via credential.helper store), the tok
 
 ```bash
 # Read from git credential store
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github/scripts/git-credential-token.py
+python3 scripts/git-credential-token.py
 ```
 
 ### Helper: Detect Auth Method
@@ -277,7 +277,7 @@ if command -v gh &>/dev/null && gh auth status &>/dev/null; then
 elif [ -n "$GITHUB_TOKEN" ]; then
   echo "AUTH_METHOD=curl"
 elif grep -q "github.com" ~/.git-credentials 2>/dev/null; then
-  export GITHUB_TOKEN=$(python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github/scripts/git-credential-token.py)
+  export GITHUB_TOKEN=$(python3 scripts/git-credential-token.py)
   echo "AUTH_METHOD=curl"
 else
   echo "AUTH_METHOD=none"

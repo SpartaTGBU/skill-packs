@@ -34,7 +34,7 @@ If running from another location, use absolute paths to `scripts/` files.
 Run the syntax validation script to check for basic correctness:
 
 ```bash
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/promql-validator/scripts/validate_syntax.py "<query>"
+python3 scripts/validate_syntax.py "<query>"
 ```
 
 Output parsing notes:
@@ -55,7 +55,7 @@ The script will check for:
 Run the best practices checker to detect anti-patterns and optimization opportunities:
 
 ```bash
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/promql-validator/scripts/check_best_practices.py "<query>"
+python3 scripts/check_best_practices.py "<query>"
 ```
 
 Output parsing notes:

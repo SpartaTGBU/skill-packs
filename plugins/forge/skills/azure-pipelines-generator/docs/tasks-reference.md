@@ -620,7 +620,7 @@ You can also create and use custom tasks from:
 - task: PublisherName.ExtensionName.TaskName@version
 
 # Template as reusable task
-- template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/my-custom-task.yml
+- template: templates/my-custom-task.yml
   parameters:
     parameter1: value
 ```

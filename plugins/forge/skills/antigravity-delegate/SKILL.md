@@ -25,7 +25,7 @@ Facts behind the wrapper flags:
 Use the wrapper (it adds an agy preflight, `--verify-file` / `--verify-sentinel` result-contract enforcement, auth/quota classification, optional `--model` / `--effort`):
 
 ```bash
-sh ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/antigravity-delegate/scripts/run_agy.sh \
+sh scripts/run_agy.sh \
   /absolute/.ai/agy_task_<NNN>_<slug>.md /absolute/workspace 300 \
   --verify-file /absolute/.ai/agy_result_<NNN>_<slug>.md
 ```

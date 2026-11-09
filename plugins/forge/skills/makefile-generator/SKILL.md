@@ -90,12 +90,12 @@ Collect information for the following categories. **Use the ask-the-user questio
 
    | Doc | Full Path |
    |-----|-----------|
-   | Structure guide | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/makefile-structure.md` |
-   | Variables guide | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/variables-guide.md` |
-   | Targets guide | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/targets-guide.md` |
-   | Patterns guide | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/patterns-guide.md` |
-   | Optimization guide | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/optimization-guide.md` |
-   | Security guide | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/security-guide.md` |
+   | Structure guide | `docs/makefile-structure.md` |
+   | Variables guide | `docs/variables-guide.md` |
+   | Targets guide | `docs/targets-guide.md` |
+   | Patterns guide | `docs/patterns-guide.md` |
+   | Optimization guide | `docs/optimization-guide.md` |
+   | Security guide | `docs/security-guide.md` |
 
    | Requirement | Read This Doc |
    |-------------|---------------|
@@ -111,8 +111,8 @@ Collect information for the following categories. **Use the ask-the-user questio
    **Deterministic open/read commands:**
    ```bash
    # From repository root:
-   sed -n '1,220p' ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/patterns-guide.md
-   rg -n "Pattern 5|Pattern 8" ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/patterns-guide.md
+   sed -n '1,220p' docs/patterns-guide.md
+   rg -n "Pattern 5|Pattern 8" docs/patterns-guide.md
 
    # From skill directory:
    sed -n '1,220p' docs/security-guide.md
@@ -123,13 +123,13 @@ Collect information for the following categories. **Use the ask-the-user questio
    **Required Workflow Example (Docker + Go with version embedding):**
    ```bash
    # Step 1: Read Go pattern
-   rg -n "Pattern 5" ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/patterns-guide.md
+   rg -n "Pattern 5" docs/patterns-guide.md
 
    # Step 2: Read Docker pattern
-   rg -n "Pattern 8" ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/patterns-guide.md
+   rg -n "Pattern 8" docs/patterns-guide.md
 
    # Step 3: Read security guidance
-   sed -n '1,220p' ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/docs/security-guide.md
+   sed -n '1,220p' docs/security-guide.md
    ```
    Then generate Makefile and list consulted docs in a header comment.
 
@@ -161,10 +161,10 @@ Collect information for the following categories. **Use the ask-the-user questio
 **Optional helper-script fast path (for standard layouts):**
 ```bash
 # Generate template: TYPE NAME OUTPUT
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/generate_makefile_template.sh go myservice Makefile
+bash scripts/generate_makefile_template.sh go myservice Makefile
 
 # Add only selected standard targets
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/add_standard_targets.sh Makefile install clean help
+bash scripts/add_standard_targets.sh Makefile install clean help
 ```
 Use manual authoring when requirements are complex (Docker release flow, multi-binary matrices, custom toolchains).
 
@@ -534,44 +534,44 @@ These scripts are **optional convenience tools** for quick template generation.
 ### generate_makefile_template.sh
 
 Generates a complete Makefile template for a specific project type.
-Script path: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/generate_makefile_template.sh`
+Script path: `scripts/generate_makefile_template.sh`
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/generate_makefile_template.sh [TYPE] [NAME] [OUTPUT_FILE]
+bash scripts/generate_makefile_template.sh [TYPE] [NAME] [OUTPUT_FILE]
 
 Types: c, c-lib, cpp, go, python, java, generic
 ```
 
 **Example:**
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/generate_makefile_template.sh go myservice
+bash scripts/generate_makefile_template.sh go myservice
 # Creates Makefile with Go patterns, version embedding, standard targets
 
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/generate_makefile_template.sh go myservice build/Makefile
+bash scripts/generate_makefile_template.sh go myservice build/Makefile
 # Writes template to build/Makefile (TYPE NAME OUTPUT)
 ```
 
 ### add_standard_targets.sh
 
 Adds missing standard GNU targets to an existing Makefile.
-Script path: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/add_standard_targets.sh`
+Script path: `scripts/add_standard_targets.sh`
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/add_standard_targets.sh [MAKEFILE] [TARGETS...]
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/add_standard_targets.sh [TARGETS...]  # uses ./Makefile
+bash scripts/add_standard_targets.sh [MAKEFILE] [TARGETS...]
+bash scripts/add_standard_targets.sh [TARGETS...]  # uses ./Makefile
 
 Targets: all, install, uninstall, clean, distclean, test, check, help, dist
 ```
 
 **Example:**
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/add_standard_targets.sh Makefile install uninstall help
+bash scripts/add_standard_targets.sh Makefile install uninstall help
 # Adds install, uninstall, help targets if they don't exist
 
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/add_standard_targets.sh clean test
+bash scripts/add_standard_targets.sh clean test
 # Explicit-target mode: modifies ./Makefile
 
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-generator/scripts/add_standard_targets.sh -n Makefile dist
+bash scripts/add_standard_targets.sh -n Makefile dist
 # Dry-run mode: shows planned changes without editing files
 ```
 

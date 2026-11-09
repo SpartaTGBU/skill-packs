@@ -28,7 +28,7 @@ this body only routes.
 Assets: `scripts/gh-env.sh` (source it: detects gh vs token auth and owner/repo),
 `scripts/git-credential-token.py` (reads a token from `~/.git-credentials`; prints a secret, so
 never echo it into logs), `templates/` (PR bodies, bug report, feature request).
-Script path prefix: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github/scripts/`.
+Script path prefix: `scripts/`.
 
 ## Core discipline
 

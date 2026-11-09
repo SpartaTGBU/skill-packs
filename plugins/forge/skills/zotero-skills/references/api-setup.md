@@ -47,7 +47,7 @@ export ZOTERO_LIBRARY_TYPE="user"
 
 ```python
 import os, sys
-sys.path.insert(0, os.path.expanduser("~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/zotero-skills/scripts"))
+sys.path.insert(0, os.path.expanduser("scripts"))
 from zotero_client import get_client, get_collection, add_note, check_duplicate, ZoteroDualClient
 
 # Option A: Web API client (for writes)

@@ -23,11 +23,11 @@ Invoke when: deploying Loki, creating configs from scratch, migrating to Loki, i
 
 ### Method 1: Script Generation (Recommended)
 
-**Use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/loki-config-generator/scripts/generate_config.py` for consistent, validated configurations:**
+**Use `scripts/generate_config.py` for consistent, validated configurations:**
 
 ```bash
 # Simple Scalable with S3 (production)
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/loki-config-generator/scripts/generate_config.py \
+python3 scripts/generate_config.py \
   --mode simple-scalable \
   --storage s3 \
   --bucket my-loki-bucket \
@@ -37,14 +37,14 @@ python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/loki-conf
   --output loki-config.yaml
 
 # Monolithic with filesystem (development)
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/loki-config-generator/scripts/generate_config.py \
+python3 scripts/generate_config.py \
   --mode monolithic \
   --storage filesystem \
   --no-auth-enabled \
   --output loki-dev.yaml
 
 # Production with Thanos storage (Loki 3.4+)
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/loki-config-generator/scripts/generate_config.py \
+python3 scripts/generate_config.py \
   --mode simple-scalable \
   --storage s3 \
   --thanos-storage \
@@ -682,9 +682,9 @@ write:
 
 ## Resources
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/loki-config-generator/scripts/generate_config.py** - Generate configs programmatically (RECOMMENDED)
+**scripts/generate_config.py** - Generate configs programmatically (RECOMMENDED)
 **examples/** - Complete configuration examples for all modes
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/loki-config-generator/references/** - Full parameter reference and best practices
+**references/** - Full parameter reference and best practices
 
 ## Related Skills
 

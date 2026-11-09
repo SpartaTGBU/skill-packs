@@ -28,7 +28,7 @@ Templates allow you to define reusable content, logic, and parameters in YAML pi
 
 Reusable sets of steps.
 
-**template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/build-steps.yml**
+**template: templates/build-steps.yml**
 ```yaml
 steps:
 - task: NodeTool@0
@@ -51,14 +51,14 @@ steps:
 jobs:
 - job: Build
   steps:
-  - template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/build-steps.yml
+  - template: templates/build-steps.yml
 ```
 
 ### 2. Job Templates
 
 Reusable job definitions.
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/test-job.yml**
+**templates/test-job.yml**
 ```yaml
 parameters:
 - name: nodeVersion
@@ -91,12 +91,12 @@ jobs:
 stages:
 - stage: Test
   jobs:
-  - template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/test-job.yml
+  - template: templates/test-job.yml
     parameters:
       nodeVersion: '18'
       osImage: 'ubuntu-22.04'
 
-  - template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/test-job.yml
+  - template: templates/test-job.yml
     parameters:
       nodeVersion: '20'
       osImage: 'ubuntu-22.04'
@@ -106,7 +106,7 @@ stages:
 
 Reusable stage definitions.
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/deploy-stage.yml**
+**templates/deploy-stage.yml**
 ```yaml
 parameters:
 - name: environment
@@ -139,11 +139,11 @@ stages:
 - stage: Build
   jobs: [...]
 
-- template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/deploy-stage.yml
+- template: templates/deploy-stage.yml
   parameters:
     environment: 'staging'
 
-- template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/deploy-stage.yml
+- template: templates/deploy-stage.yml
   parameters:
     environment: 'production'
     dependsOn:
@@ -154,7 +154,7 @@ stages:
 
 Reusable variable definitions.
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/variables-common.yml**
+**templates/variables-common.yml**
 ```yaml
 variables:
   nodeVersion: '20'
@@ -165,7 +165,7 @@ variables:
 **Usage:**
 ```yaml
 variables:
-- template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/variables-common.yml
+- template: templates/variables-common.yml
 - name: customVariable
   value: 'customValue'
 ```
@@ -327,7 +327,7 @@ stages:
 
 The `extends` keyword allows you to extend an entire pipeline template.
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/secure-pipeline.yml**
+**templates/secure-pipeline.yml**
 ```yaml
 parameters:
 - name: buildSteps
@@ -354,7 +354,7 @@ stages:
 **azure-pipelines.yml**
 ```yaml
 extends:
-  template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/secure-pipeline.yml
+  template: templates/secure-pipeline.yml
   parameters:
     buildSteps:
     - script: npm ci
@@ -370,7 +370,7 @@ extends:
 
 ```yaml
 # Relative path from current file
-- template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/build-steps.yml
+- template: templates/build-steps.yml
 
 # Relative path with parameters
 - template: ../shared/deploy.yml
@@ -412,7 +412,7 @@ jobs:
 
 ### Matrix Build Template
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/matrix-test.yml**
+**templates/matrix-test.yml**
 ```yaml
 parameters:
 - name: operatingSystems
@@ -448,7 +448,7 @@ jobs:
 
 ### Conditional Stage Template
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/optional-deploy.yml**
+**templates/optional-deploy.yml**
 ```yaml
 parameters:
 - name: shouldDeploy
@@ -473,7 +473,7 @@ stages:
 
 ### Nested Templates
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/full-pipeline.yml**
+**templates/full-pipeline.yml**
 ```yaml
 parameters:
 - name: runTests
@@ -498,7 +498,7 @@ stages:
 ### 1. Parameter Documentation
 
 ```yaml
-# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/deploy.yml
+# templates/deploy.yml
 # Deploys application to specified environment
 # Parameters:
 #   environment: Target environment (dev, staging, prod)
@@ -588,7 +588,7 @@ resources:
 
 ### Build and Test Template
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/build-and-test.yml**
+**templates/build-and-test.yml**
 ```yaml
 parameters:
 - name: projectPath
@@ -624,7 +624,7 @@ steps:
 
 ### Docker Build Template
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/docker-build.yml**
+**templates/docker-build.yml**
 ```yaml
 parameters:
 - name: dockerfilePath
@@ -661,7 +661,7 @@ steps:
 
 ### Deployment Approval Template
 
-**~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-generator/templates/deploy-with-approval.yml**
+**templates/deploy-with-approval.yml**
 ```yaml
 parameters:
 - name: environment

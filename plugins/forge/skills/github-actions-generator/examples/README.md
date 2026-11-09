@@ -131,8 +131,8 @@ These examples can be used as:
 To validate any of these examples:
 
 ```bash
-cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/scripts/validate_workflow.sh ../~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/examples/workflows/nodejs-ci.yml
+cd ../github-actions-validator
+bash scripts/validate_workflow.sh ../examples/workflows/nodejs-ci.yml
 ```
 
 ## Best Practices Demonstrated

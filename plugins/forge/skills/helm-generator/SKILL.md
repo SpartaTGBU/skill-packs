@@ -74,13 +74,13 @@ Do not silently assume critical settings.
    - Operator official docs (preferred)
    - General web search
 
-Also consult `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/crd_patterns.md` for example patterns.
+Also consult `references/crd_patterns.md` for example patterns.
 
 ### Stage 3: Scaffold Chart Structure (Required)
 
 Run:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_chart_structure.sh <chart-name> <output-directory> [options]
+bash scripts/generate_chart_structure.sh <chart-name> <output-directory> [options]
 ```
 
 Options:
@@ -101,7 +101,7 @@ Image parsing behavior:
 
 Idempotency and overwrite behavior:
 - `generate_chart_structure.sh`: prompts before overwrite; `--force` overwrites non-interactively.
-- `generate_standard_helpers.sh`: prompts before replacing `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/_helpers.tpl`; `--force` bypasses prompt.
+- `generate_standard_helpers.sh`: prompts before replacing `templates/_helpers.tpl`; `--force` bypasses prompt.
 
 Expected scaffold shape:
 ```
@@ -125,28 +125,28 @@ mychart/
 
 Run:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_standard_helpers.sh <chart-name> <chart-directory>
+bash scripts/generate_standard_helpers.sh <chart-name> <chart-directory>
 ```
 
 Required helpers: `name`, `fullname`, `chart`, `labels`, `selectorLabels`, `serviceAccountName`.
 
 Fallback:
-- If script execution is blocked, copy `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/assets/_helpers-template.tpl` and replace `CHARTNAME` with the chart name.
+- If script execution is blocked, copy `assets/_helpers-template.tpl` and replace `CHARTNAME` with the chart name.
 
 ### Stage 5: Consult References and Generate Templates (Required)
 
 Consult relevant references once at this stage:
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/resource_templates.md` for the resource patterns being generated
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/helm_template_functions.md` for templating function usage
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/crd_patterns.md` only when CRDs are in scope
+- `references/resource_templates.md` for the resource patterns being generated
+- `references/helm_template_functions.md` for templating function usage
+- `references/crd_patterns.md` only when CRDs are in scope
 
 Example file-open commands:
 ```bash
-sed -n '1,220p' ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/resource_templates.md
-sed -n '1,220p' ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/helm_template_functions.md
+sed -n '1,220p' references/resource_templates.md
+sed -n '1,220p' references/helm_template_functions.md
 ```
 
-Resource coverage from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/resource_templates.md`:
+Resource coverage from `references/resource_templates.md`:
 - Workloads: Deployment, StatefulSet, DaemonSet, Job, CronJob
 - Services: Service, Ingress
 - Config: ConfigMap, Secret
@@ -182,7 +182,7 @@ Structure guidelines:
 - Keep `service.port` and `service.targetPort` separate and explicit
 - Keep `configMap.enabled` / `secret.enabled` aligned with generated templates
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/assets/values-schema-template.json` for JSON Schema validation.
+See `assets/values-schema-template.json` for JSON Schema validation.
 
 ### Stage 7: Validate
 
@@ -195,15 +195,15 @@ helm template test <chart-dir>
 ```
 
 If `helm` is unavailable, report the block clearly and perform partial checks:
-- `bash -n ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_chart_structure.sh`
-- `bash -n ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_standard_helpers.sh`
+- `bash -n scripts/generate_chart_structure.sh`
+- `bash -n scripts/generate_standard_helpers.sh`
 - Verify generated files and key fields manually
 
 Re-run validation after any fixes.
 
 ## Template Functions Quick Reference
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/helm_template_functions.md` for complete guide.
+See `references/helm_template_functions.md` for complete guide.
 
 | Function | Purpose | Example |
 |----------|---------|---------|
@@ -217,7 +217,7 @@ See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generat
 
 ## Working with CRDs
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/crd_patterns.md` for complete examples.
+See `references/crd_patterns.md` for complete examples.
 
 Key points:
 - CRDs you ship -> `crds/` directory (not templated, not deleted on uninstall)
@@ -238,16 +238,16 @@ Key points:
 |-------|----------|
 | Template syntax errors | `helm template test <chart-dir> --debug --show-only templates/<file>.yaml` |
 | Undefined values | `helm lint <chart-dir> --strict` and add `default`/`required` |
-| Checksum include errors | Ensure `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/configmap.yaml` and `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/secret.yaml` exist and `configMap.enabled` / `secret.enabled` are set correctly |
+| Checksum include errors | Ensure `templates/configmap.yaml` and `templates/secret.yaml` exist and `configMap.enabled` / `secret.enabled` are set correctly |
 | Port mismatch (Service vs container) | Set both `service.port` and `service.targetPort`, then re-run `helm template test <chart-dir>` |
 | CRD validation fails | Verify apiVersion/spec fields with Context7 or operator docs, then re-render |
-| Script argument failures | Run `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_chart_structure.sh --help` and pass required values for option flags |
+| Script argument failures | Run `bash scripts/generate_chart_structure.sh --help` and pass required values for option flags |
 
 ## Example Flows
 
 Full scaffold with templates, ingress, HPA, and explicit port mapping:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_chart_structure.sh webapp ./charts \
+bash scripts/generate_chart_structure.sh webapp ./charts \
   --image ghcr.io/acme/webapp:2.3.1 \
   --port 80 \
   --target-port 8080 \
@@ -259,20 +259,20 @@ bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generat
 
 Digest-based image scaffold:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_chart_structure.sh api ./charts \
+bash scripts/generate_chart_structure.sh api ./charts \
   --image ghcr.io/acme/api@sha256:0123456789abcdef \
   --with-templates
 ```
 
 Minimal scaffold without templates:
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_chart_structure.sh starter ./charts
+bash scripts/generate_chart_structure.sh starter ./charts
 ```
 
 ## Scaffold Success Criteria
 
 Mark complete only when all checks pass:
-- [ ] `Chart.yaml`, `values.yaml`, `.helmignore`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/NOTES.txt`, and `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/_helpers.tpl` exist
+- [ ] `Chart.yaml`, `values.yaml`, `.helmignore`, `templates/NOTES.txt`, and `templates/_helpers.tpl` exist
 - [ ] `values.yaml` contains explicit `service.port` and `service.targetPort`
 - [ ] If `--with-templates` was used, `serviceaccount.yaml`, `service.yaml`, `configmap.yaml`, `secret.yaml`, and one workload template exist
 - [ ] Generated workload template uses conditional checksum annotations for config/secret
@@ -284,21 +284,21 @@ Mark complete only when all checks pass:
 ### Scripts
 | Script | Usage |
 |--------|-------|
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_chart_structure.sh` | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_chart_structure.sh <chart-name> <output-dir> [options]` |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_standard_helpers.sh` | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/scripts/generate_standard_helpers.sh <chart-name> <chart-dir> [--force]` |
+| `scripts/generate_chart_structure.sh` | `bash scripts/generate_chart_structure.sh <chart-name> <output-dir> [options]` |
+| `scripts/generate_standard_helpers.sh` | `bash scripts/generate_standard_helpers.sh <chart-name> <chart-dir> [--force]` |
 
 ### References
 | File | Content |
 |------|---------|
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/helm_template_functions.md` | Complete template function guide |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/resource_templates.md` | All K8s resource templates |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/references/crd_patterns.md` | CRD patterns (cert-manager, Prometheus, Istio, ArgoCD) |
+| `references/helm_template_functions.md` | Complete template function guide |
+| `references/resource_templates.md` | All K8s resource templates |
+| `references/crd_patterns.md` | CRD patterns (cert-manager, Prometheus, Istio, ArgoCD) |
 
 ### Assets
 | File | Purpose |
 |------|---------|
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/assets/_helpers-template.tpl` | Standard helpers template |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/assets/values-schema-template.json` | JSON Schema for values validation |
+| `assets/_helpers-template.tpl` | Standard helpers template |
+| `assets/values-schema-template.json` | JSON Schema for values validation |
 
 ## Integration with helm-validator
 

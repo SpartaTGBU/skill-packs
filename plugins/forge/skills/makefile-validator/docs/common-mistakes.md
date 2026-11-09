@@ -787,7 +787,7 @@ clean:
 
 # Or use Go/Python for cross-platform scripts
 clean:
-	@go run ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/makefile-validator/scripts/clean.go
+	@go run scripts/clean.go
 ```
 
 ## Build Logic Errors

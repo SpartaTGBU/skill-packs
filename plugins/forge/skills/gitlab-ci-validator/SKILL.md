@@ -24,8 +24,8 @@ All commands below assume repository root as current working directory.
 
 ```bash
 # Ensure validator scripts are executable
-chmod +x ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/*.sh \
-  ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/*.py
+chmod +x scripts/*.sh \
+  scripts/*.py
 
 # Required runtime
 python3 --version
@@ -34,13 +34,13 @@ python3 --version
 Use one canonical command path for orchestration:
 
 ```bash
-VALIDATOR="bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/validate_gitlab_ci.sh"
+VALIDATOR="bash scripts/validate_gitlab_ci.sh"
 ```
 
 Optional local execution tooling (for `--test-only`):
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/install_tools.sh
+bash scripts/install_tools.sh
 ```
 
 ## Quick Start Commands
@@ -97,9 +97,9 @@ Optional gate: local execution test.
 
 ### References
 
-- Local syntax reference: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/docs/gitlab-ci-reference.md`
-- Local best practices: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/docs/best-practices.md`
-- Local common issues: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/docs/common-issues.md`
+- Local syntax reference: `docs/gitlab-ci-reference.md`
+- Local best practices: `docs/best-practices.md`
+- Local common issues: `docs/common-issues.md`
 - GitLab CI YAML reference: https://docs.gitlab.com/ee/ci/yaml/
 - GitLab CI/CD components: https://docs.gitlab.com/ee/ci/components/
 - GitLab pipeline security guidance: https://docs.gitlab.com/ee/ci/pipelines/settings.html
@@ -143,24 +143,24 @@ stages:
 validate_gitlab_ci:
   stage: validate
   script:
-    - chmod +x ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/*.sh ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/*.py
-    - bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/validate_gitlab_ci.sh .gitlab-ci.yml --strict
+    - chmod +x scripts/*.sh scripts/*.py
+    - bash scripts/validate_gitlab_ci.sh .gitlab-ci.yml --strict
 ```
 
 ## Individual Validators (Advanced)
 
 ```bash
 # Syntax validator (via wrapper for PyYAML fallback)
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/python_wrapper.sh \
-  ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/validate_syntax.py .gitlab-ci.yml
+bash scripts/python_wrapper.sh \
+  scripts/validate_syntax.py .gitlab-ci.yml
 
 # Best-practices validator
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/python_wrapper.sh \
-  ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/check_best_practices.py .gitlab-ci.yml
+bash scripts/python_wrapper.sh \
+  scripts/check_best_practices.py .gitlab-ci.yml
 
 # Security validator
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/python_wrapper.sh \
-  ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/check_security.py .gitlab-ci.yml
+bash scripts/python_wrapper.sh \
+  scripts/check_security.py .gitlab-ci.yml
 ```
 
 ## Done Criteria

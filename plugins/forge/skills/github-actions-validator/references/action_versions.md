@@ -60,10 +60,10 @@ Recommendation: Update actions/upload-artifact to v4 (v3 is deprecated)
 
 ```bash
 # Check action versions in workflow
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh --check-versions .github/workflows/ci.yml
+bash scripts/validate_workflow.sh --check-versions .github/workflows/ci.yml
 
 # Full validation including version check
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/validate_workflow.sh .github/workflows/ci.yml
+bash scripts/validate_workflow.sh .github/workflows/ci.yml
 ```
 
 ## Node.js Runtime Deprecation Timeline

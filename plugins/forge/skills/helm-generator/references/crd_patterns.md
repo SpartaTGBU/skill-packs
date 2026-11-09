@@ -20,7 +20,7 @@ Common Custom Resource Definition patterns and examples for Helm charts.
 
 ### Certificate Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/certificate.yaml`
+**File:** `templates/certificate.yaml`
 
 ```yaml
 {{- if .Values.certificate.enabled }}
@@ -108,7 +108,7 @@ certificate:
 
 ### ClusterIssuer Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/clusterissuer.yaml`
+**File:** `templates/clusterissuer.yaml`
 
 ```yaml
 {{- if .Values.certManager.clusterIssuer.create }}
@@ -170,7 +170,7 @@ certManager:
 
 ### ServiceMonitor Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/servicemonitor.yaml`
+**File:** `templates/servicemonitor.yaml`
 
 ```yaml
 {{- if .Values.metrics.serviceMonitor.enabled }}
@@ -247,7 +247,7 @@ metrics:
 
 ### PrometheusRule Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/prometheusrule.yaml`
+**File:** `templates/prometheusrule.yaml`
 
 ```yaml
 {{- if .Values.metrics.prometheusRule.enabled }}
@@ -322,7 +322,7 @@ metrics:
 
 ### VirtualService Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/virtualservice.yaml`
+**File:** `templates/virtualservice.yaml`
 
 ```yaml
 {{- if .Values.istio.virtualService.enabled }}
@@ -391,7 +391,7 @@ istio:
 
 ### Gateway Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/gateway.yaml`
+**File:** `templates/gateway.yaml`
 
 ```yaml
 {{- if .Values.istio.gateway.enabled }}
@@ -450,7 +450,7 @@ istio:
 
 ### DestinationRule Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/destinationrule.yaml`
+**File:** `templates/destinationrule.yaml`
 
 ```yaml
 {{- if .Values.istio.destinationRule.enabled }}
@@ -512,7 +512,7 @@ istio:
 
 ### Application Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/argocd-application.yaml`
+**File:** `templates/argocd-application.yaml`
 
 ```yaml
 {{- if .Values.argocd.application.enabled }}
@@ -592,7 +592,7 @@ argocd:
 
 ### AppProject Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/argocd-appproject.yaml`
+**File:** `templates/argocd-appproject.yaml`
 
 ```yaml
 {{- if .Values.argocd.appProject.enabled }}
@@ -657,7 +657,7 @@ argocd:
 
 ### SealedSecret Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/sealedsecret.yaml`
+**File:** `templates/sealedsecret.yaml`
 
 ```yaml
 {{- if .Values.sealedSecret.enabled }}
@@ -698,7 +698,7 @@ sealedSecret:
 
 ### ExternalSecret Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/externalsecret.yaml`
+**File:** `templates/externalsecret.yaml`
 
 ```yaml
 {{- if .Values.externalSecret.enabled }}
@@ -781,7 +781,7 @@ externalSecret:
 
 ### SecretStore Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/secretstore.yaml`
+**File:** `templates/secretstore.yaml`
 
 ```yaml
 {{- if .Values.externalSecret.secretStore.create }}
@@ -862,7 +862,7 @@ The Gateway API is the evolution of Kubernetes Ingress, providing more expressiv
 
 ### GatewayClass Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/gatewayclass.yaml`
+**File:** `templates/gatewayclass.yaml`
 
 ```yaml
 {{- if .Values.gatewayAPI.gatewayClass.create }}
@@ -913,7 +913,7 @@ gatewayAPI:
 
 ### Gateway Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/gateway.yaml`
+**File:** `templates/gateway.yaml`
 
 ```yaml
 {{- if .Values.gatewayAPI.gateway.enabled }}
@@ -1003,7 +1003,7 @@ gatewayAPI:
 
 ### HTTPRoute Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/httproute.yaml`
+**File:** `templates/httproute.yaml`
 
 ```yaml
 {{- if .Values.gatewayAPI.httpRoute.enabled }}
@@ -1123,7 +1123,7 @@ gatewayAPI:
 
 ### HTTPRoute with Filters
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/httproute-advanced.yaml`
+**File:** `templates/httproute-advanced.yaml`
 
 ```yaml
 {{- if .Values.gatewayAPI.httpRouteAdvanced.enabled }}
@@ -1235,7 +1235,7 @@ gatewayAPI:
 
 ### GRPCRoute Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/grpcroute.yaml`
+**File:** `templates/grpcroute.yaml`
 
 ```yaml
 {{- if .Values.gatewayAPI.grpcRoute.enabled }}
@@ -1308,7 +1308,7 @@ gatewayAPI:
 
 ### ReferenceGrant Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/referencegrant.yaml`
+**File:** `templates/referencegrant.yaml`
 
 ```yaml
 {{- if .Values.gatewayAPI.referenceGrant.enabled }}
@@ -1363,7 +1363,7 @@ KEDA (Kubernetes Event-driven Autoscaling) provides event-driven autoscaling for
 
 ### ScaledObject Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/scaledobject.yaml`
+**File:** `templates/scaledobject.yaml`
 
 ```yaml
 {{- if .Values.keda.enabled }}
@@ -1516,7 +1516,7 @@ keda:
 
 ### ScaledJob Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/scaledjob.yaml`
+**File:** `templates/scaledjob.yaml`
 
 ```yaml
 {{- if .Values.keda.scaledJob.enabled }}
@@ -1614,7 +1614,7 @@ keda:
 
 ### TriggerAuthentication Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/triggerauthentication.yaml`
+**File:** `templates/triggerauthentication.yaml`
 
 ```yaml
 {{- if .Values.keda.authentication.enabled }}
@@ -1721,7 +1721,7 @@ The VerticalPodAutoscaler automatically adjusts the CPU and memory reservations 
 
 ### VerticalPodAutoscaler Resource
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/vpa.yaml`
+**File:** `templates/vpa.yaml`
 
 ```yaml
 {{- if .Values.vpa.enabled }}
@@ -1828,7 +1828,7 @@ vpa:
 
 For applications where you want VPA recommendations without automatic updates:
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/vpa-recommendation.yaml`
+**File:** `templates/vpa-recommendation.yaml`
 
 ```yaml
 {{- if .Values.vpa.recommendationOnly.enabled }}

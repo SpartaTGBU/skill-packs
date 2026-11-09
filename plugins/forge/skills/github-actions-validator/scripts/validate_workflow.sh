@@ -557,14 +557,14 @@ test_with_act() {
 
     # Determine the workflow file(s) to validate with act
     # act requires workflows to be in .github/workflows/ directory
-    local workflow_flag=""
+    local workflow_flag=()
     local target_description=""
 
     if [ -f "$abs_workflow_path" ]; then
         # Check if the file is inside .github/workflows
         if [[ "$abs_workflow_path" == *"/.github/workflows/"* ]]; then
             # File is in .github/workflows - use -W flag with relative path
-            workflow_flag="-W ${abs_workflow_path#$repo_root/}"
+            workflow_flag=(-W "${abs_workflow_path#"$repo_root"/}")
             target_description="workflow: $(basename "$abs_workflow_path")"
         else
             # File is outside .github/workflows (e.g., examples/)
@@ -580,7 +580,7 @@ test_with_act() {
         # Directory specified
         if [[ "$abs_workflow_path" == *"/.github/workflows"* ]] || [[ "$abs_workflow_path" == "$repo_root/.github/workflows" ]]; then
             # It's the .github/workflows directory - validate all workflows
-            workflow_flag=""
+            workflow_flag=()
             target_description="all workflows in .github/workflows/"
         else
             # Directory outside .github/workflows
@@ -615,9 +615,9 @@ test_with_act() {
 
     # Use --list to show available workflows
     # This validates that workflows can be parsed
-    local list_cmd="${act_path} --list ${workflow_flag} ${runner_images[*]}"
-    log_info "Running: act --list ${workflow_flag}"
-    if ! eval "${list_cmd}" 2>&1 | head -30; then
+    local list_cmd=("$act_path" --list "${workflow_flag[@]}" "${runner_images[@]}")
+    log_info "Running: act --list ${workflow_flag[*]}"
+    if ! "${list_cmd[@]}" 2>&1 | head -30; then
         log_warn "Could not list workflows - this may indicate parsing issues"
         echo ""
     else
@@ -640,9 +640,9 @@ test_with_act() {
     local act_output
     local act_exit_code
 
-    local dryrun_cmd="${act_path} --dryrun ${workflow_flag} --container-architecture linux/amd64 ${runner_images[*]}"
-    log_info "Running: act --dryrun ${workflow_flag} --container-architecture linux/amd64"
-    act_output=$(eval "${dryrun_cmd}" 2>&1)
+    local dryrun_cmd=("$act_path" --dryrun "${workflow_flag[@]}" --container-architecture linux/amd64 "${runner_images[@]}")
+    log_info "Running: act --dryrun ${workflow_flag[*]} --container-architecture linux/amd64"
+    act_output=$("${dryrun_cmd[@]}" 2>&1)
     act_exit_code=$?
 
     # Display output

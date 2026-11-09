@@ -27,13 +27,13 @@ Use one of these deterministic command patterns.
 
 ```bash
 # Option A (recommended): run from this skill directory
-cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator/scripts/generate_config.py --help
+cd .
+python3 scripts/generate_config.py --help
 ```
 
 ```bash
 # Option B: run from any cwd with absolute paths
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator/scripts/generate_config.py --help
+python3 scripts/generate_config.py --help
 ```
 
 Preflight checks:
@@ -120,17 +120,17 @@ Required local template selection:
 - Parsers: `examples/parsers.conf`
 
 Fallback:
-- If no matching example exists, start from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator/scripts/generate_config.py --use-case custom` output shape and extend manually.
+- If no matching example exists, start from `scripts/generate_config.py --use-case custom` output shape and extend manually.
 
 ### Stage 5: Script Generation Commands (Deterministic Examples)
 
 Run from skill directory unless output path is absolute.
 
 ```bash
-cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator
+cd .
 
 # Kubernetes -> Elasticsearch
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator/scripts/generate_config.py \
+python3 scripts/generate_config.py \
   --use-case kubernetes-elasticsearch \
   --cluster-name prod-cluster \
   --environment production \
@@ -139,7 +139,7 @@ python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit
   --output output/fluent-bit.conf
 
 # Kubernetes -> OpenTelemetry
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator/scripts/generate_config.py \
+python3 scripts/generate_config.py \
   --use-case kubernetes-opentelemetry \
   --cluster-name prod-cluster \
   --environment production \
@@ -147,7 +147,7 @@ python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit
   --output output/fluent-bit-otlp.conf
 
 # File tail -> S3
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator/scripts/generate_config.py \
+python3 scripts/generate_config.py \
   --use-case file-tail-s3 \
   --log-path /var/log/app/*.log \
   --s3-bucket my-logs-bucket \
@@ -223,7 +223,7 @@ This skill execution is complete only when all are true:
 
 ## Local Resources
 
-- Script: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-generator/scripts/generate_config.py`
+- Script: `scripts/generate_config.py`
 - Templates: `examples/*.conf`
 - Parsers baseline: `examples/parsers.conf`
 - Sample output directory: `output/`

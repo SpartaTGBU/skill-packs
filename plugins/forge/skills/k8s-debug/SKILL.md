@@ -22,7 +22,7 @@ Use this skill when requests resemble:
 
 ## Prerequisites
 
-Run from the skill directory (`~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-debug`) so relative script paths work as written.
+Run from the skill directory (`.`) so relative script paths work as written.
 
 ### Required
 - `kubectl` installed and configured.

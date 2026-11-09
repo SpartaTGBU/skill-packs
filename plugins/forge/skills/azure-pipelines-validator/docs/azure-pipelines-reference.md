@@ -319,7 +319,7 @@ Publishes artifacts:
 References a template:
 
 ```yaml
-- template: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-validator/templates/build-steps.yml
+- template: templates/build-steps.yml
   parameters:
     param1: value1
 ```
@@ -434,7 +434,7 @@ variables:
 ### Step Template
 
 ```yaml
-# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-validator/templates/build-steps.yml
+# templates/build-steps.yml
 parameters:
 - name: buildConfiguration
   type: string
@@ -447,7 +447,7 @@ steps:
 ### Job Template
 
 ```yaml
-# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-validator/templates/test-job.yml
+# templates/test-job.yml
 parameters:
 - name: jobName
   type: string

@@ -192,18 +192,18 @@ Once the user confirms the plan, generate the actual PromQL query following best
 1. **Identify the query category** first (histogram, RED, USE, function-specific, optimization, etc.).
 
 2. **Read only the relevant reference section(s)** using the Read tool:
-   - For histogram queries → Read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/promql-generator/references/metric_types.md` (Histogram section)
-   - For error/latency patterns → Read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/promql-generator/references/promql_patterns.md` (RED method section)
-   - For resource monitoring → Read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/promql-generator/references/promql_patterns.md` (USE method section)
-   - For optimization questions → Read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/promql-generator/references/best_practices.md`
-   - For specific functions → Read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/promql-generator/references/promql_functions.md`
+   - For histogram queries → Read `references/metric_types.md` (Histogram section)
+   - For error/latency patterns → Read `references/promql_patterns.md` (RED method section)
+   - For resource monitoring → Read `references/promql_patterns.md` (USE method section)
+   - For optimization questions → Read `references/best_practices.md`
+   - For specific functions → Read `references/promql_functions.md`
    - Re-read a section only if requirements changed or you have not consulted it yet in the current thread.
 
 3. **If a needed reference cannot be read**, state the issue and continue with best-effort generation using the most applicable documented pattern you already have.
 
 4. **Cite the applicable pattern or best practice** in your response:
    ```
-   As documented in ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/promql-generator/references/promql_patterns.md (Pattern 3: Latency Percentile):
+   As documented in references/promql_patterns.md (Pattern 3: Latency Percentile):
    # 95th percentile latency
    histogram_quantile(0.95, sum by (le) (rate(...)))
    ```

@@ -46,7 +46,7 @@ case "${MBAKE_SKIP_INSTALL:-0}" in
 esac
 
 # Temporary venv directory (unique per invocation, respects TMPDIR)
-VENV_DIR="${TMPDIR:-/tmp}/makefile-validator-venv-$$"
+VENV_DIR="$(mktemp -d "${TMPDIR:-/tmp}/makefile-validator-venv.XXXXXX")"
 CLEANUP_DONE=0
 
 # Cleanup function - always runs on exit
@@ -54,7 +54,7 @@ cleanup() {
     if [ "$CLEANUP_DONE" -eq 0 ]; then
         CLEANUP_DONE=1
         # Safety check: only remove if it's our temp venv (works with custom TMPDIR)
-        if [ -d "$VENV_DIR" ] && [[ "$VENV_DIR" == */makefile-validator-venv-* ]]; then
+        if [ -d "$VENV_DIR" ] && [[ "$VENV_DIR" == */makefile-validator-venv.* ]]; then
             echo -e "${BLUE}[CLEANUP]${NC} Removing temporary venv..."
             rm -rf "$VENV_DIR"
         fi

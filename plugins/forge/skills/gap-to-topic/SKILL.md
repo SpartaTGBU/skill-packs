@@ -296,7 +296,7 @@ produce the matching Word deliverable:
 
 ```bash
 # From the dossier's output directory (e.g. .research/ or en/)
-node ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gap-to-topic/scripts/dossier_to_docx.js topic_dossier [--no-toc]
+node scripts/dossier_to_docx.js topic_dossier [--no-toc]
 ```
 
 Prerequisite: `npm install -g docx` (or `cd scripts && npm install docx` for a

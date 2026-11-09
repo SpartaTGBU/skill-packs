@@ -26,7 +26,7 @@ Run from any directory using explicit absolute paths:
 
 ```bash
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/azure-pipelines-validator
+SKILL_DIR=.
 PIPELINE_FILE="$REPO_ROOT/azure-pipelines.yml"
 ```
 

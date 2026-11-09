@@ -14,15 +14,15 @@ Comprehensive toolkit for validating, linting, and testing Terraform configurati
 
 | Step | Action | Required |
 |------|--------|----------|
-| 1 | Run `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/extract_tf_info_wrapper.sh <path>` | ✅ REQUIRED |
+| 1 | Run `bash scripts/extract_tf_info_wrapper.sh <path>` | ✅ REQUIRED |
 | 2 | Context7 lookup for **ALL** providers (explicit AND implicit); **web search fallback if not found** | ✅ REQUIRED |
-| 3 | **READ** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/security_checklist.md` | ✅ REQUIRED |
-| 4 | **READ** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/best_practices.md` | ✅ REQUIRED |
+| 3 | **READ** `references/security_checklist.md` | ✅ REQUIRED |
+| 4 | **READ** `references/best_practices.md` | ✅ REQUIRED |
 | 5 | Run `terraform fmt` | ✅ REQUIRED |
 | 6 | Run `tflint` (or note as skipped if unavailable) | Recommended |
-| 7 | Run `terraform init` (if not initialized) | ✅ REQUIRED |
-| 8 | Run `terraform validate` | ✅ REQUIRED |
-| 9 | Run `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh <path>` | ✅ REQUIRED |
+| 7 | Run `terraform init` (if not initialized) only after the user confirms the code is trusted: init downloads providers and modules the code names, and validate runs those providers | Requires user confirmation |
+| 8 | Run `terraform validate` (after step 7) | Requires user confirmation |
+| 9 | Run `bash scripts/run_checkov.sh <path>` | ✅ REQUIRED |
 | 10 | Cross-reference findings with `security_checklist.md` sections | ✅ REQUIRED |
 | 11 | Generate report citing reference files | ✅ REQUIRED |
 | 12 | Run regression tests (`bash tests/test_regression.sh`) | ✅ REQUIRED |
@@ -60,7 +60,7 @@ Comprehensive toolkit for validating, linting, and testing Terraform configurati
    ├─> Single file, directory, or multi-environment
 
 2. Extract Provider/Module Info (REQUIRED)
-   ├─> MUST run: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/extract_tf_info_wrapper.sh <path>
+   ├─> MUST run: bash scripts/extract_tf_info_wrapper.sh <path>
    ├─> Parse output for providers and modules
    └─> Use for Context7 documentation lookup
 
@@ -72,8 +72,8 @@ Comprehensive toolkit for validating, linting, and testing Terraform configurati
    └─> Note any custom/private providers for web search
 
 4. Read Reference Files (REQUIRED before validation)
-   ├─> MUST READ: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/security_checklist.md (before security scan)
-   ├─> MUST READ: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/best_practices.md (for structure validation)
+   ├─> MUST READ: references/security_checklist.md (before security scan)
+   ├─> MUST READ: references/best_practices.md (for structure validation)
    └─> Reference common_errors.md if errors occur
 
 5. Format and Lint (REQUIRED)
@@ -83,12 +83,13 @@ Comprehensive toolkit for validating, linting, and testing Terraform configurati
    └─> Report formatting issues
 
 6. Syntax Validation (REQUIRED)
-   ├─> MUST run: terraform init (if not initialized)
-   ├─> MUST run: terraform validate
+   ├─> ASK the user to confirm the code is trusted first (init downloads the providers/modules it names; validate runs them)
+   ├─> If confirmed, run: terraform init (if not initialized)
+   ├─> If confirmed, run: terraform validate
    └─> Report syntax errors (consult common_errors.md)
 
 7. Security Scanning (REQUIRED)
-   ├─> MUST run: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh <path>
+   ├─> MUST run: bash scripts/run_checkov.sh <path>
    ├─> Analyze policy violations against security_checklist.md
    └─> Suggest remediations from reference
 
@@ -105,8 +106,8 @@ Comprehensive toolkit for validating, linting, and testing Terraform configurati
    └─> Confirms checkov wrapper preserves scanner exit code
 
 10. Lightweight CI Checks (REQUIRED)
-   ├─> MUST run: bash -n ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/*.sh
-   ├─> MUST run: python3 -m py_compile ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/*.py
+   ├─> MUST run: bash -n scripts/*.sh
+   ├─> MUST run: python3 -m py_compile scripts/*.py
    ├─> MUST run: smoke check for extract wrapper on sample fixture
    └─> Record command outputs and exit codes
 
@@ -122,10 +123,10 @@ Comprehensive toolkit for validating, linting, and testing Terraform configurati
 
 | When | Reference File | Action |
 |------|----------------|--------|
-| **Before security scan** | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/security_checklist.md` | Read to understand security checks and remediation patterns |
-| **During validation** | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/best_practices.md` | Read to validate project structure, naming, and patterns |
-| **If errors occur** | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/common_errors.md` | Read to find solutions for specific error messages |
-| **If using Terraform 1.10+** | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/advanced_features.md` | Read to understand ephemeral values, actions, list resources |
+| **Before security scan** | `references/security_checklist.md` | Read to understand security checks and remediation patterns |
+| **During validation** | `references/best_practices.md` | Read to validate project structure, naming, and patterns |
+| **If errors occur** | `references/common_errors.md` | Read to find solutions for specific error messages |
+| **If using Terraform 1.10+** | `references/advanced_features.md` | Read to understand ephemeral values, actions, list resources |
 
 ## Required Script Usage
 
@@ -133,19 +134,19 @@ Comprehensive toolkit for validating, linting, and testing Terraform configurati
 
 | Task | Script | Command |
 |------|--------|---------|
-| **Extract provider/module info** | `extract_tf_info_wrapper.sh` | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/extract_tf_info_wrapper.sh <path>` |
-| **Run security scan** | `run_checkov.sh` | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh <path>` |
-| **Install checkov (if missing)** | `install_checkov.sh` | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/install_checkov.sh install` |
+| **Extract provider/module info** | `extract_tf_info_wrapper.sh` | `bash scripts/extract_tf_info_wrapper.sh <path>` |
+| **Run security scan** | `run_checkov.sh` | `bash scripts/run_checkov.sh <path>` |
+| **Install checkov (if missing)** | `install_checkov.sh` | `bash scripts/install_checkov.sh install` |
 
 > **Note:** `extract_tf_info_wrapper.sh` automatically handles the python-hcl2 dependency. If system Python lacks `python-hcl2`, it creates/reuses a cached virtual environment under `~/.cache/terraform-validator/` by default.
 
 ### Script Run Context (REQUIRED)
 
-- Default working directory: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator`
+- Default working directory: `.`
 - If running from elsewhere, use absolute script paths:
-  - `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/extract_tf_info_wrapper.sh <path>`
-  - `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh <path>`
-  - `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/install_checkov.sh install`
+  - `bash scripts/extract_tf_info_wrapper.sh <path>`
+  - `bash scripts/run_checkov.sh <path>`
+  - `bash scripts/install_checkov.sh install`
 
 ## Context7 Provider Documentation Lookup (REQUIRED)
 
@@ -280,14 +281,14 @@ terraform validate -json
 **MUST use wrapper script:**
 ```bash
 # Use the wrapper script (REQUIRED)
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh ./terraform
+bash scripts/run_checkov.sh ./terraform
 
 # With specific options
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh -f json ./terraform
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh --compact ./terraform
+bash scripts/run_checkov.sh -f json ./terraform
+bash scripts/run_checkov.sh --compact ./terraform
 ```
 
-> **Detailed Security Scanning:** You MUST read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/security_checklist.md` before running security scans to understand the checks and remediation patterns.
+> **Detailed Security Scanning:** You MUST read `references/security_checklist.md` before running security scans to understand the checks and remediation patterns.
 
 ## Security Finding Cross-Reference (REQUIRED)
 
@@ -400,7 +401,7 @@ When validation tools are not installed, follow this recovery workflow:
 **If checkov is missing:**
 ```
 1. Inform: "Checkov is not installed. It's required for security scanning."
-2. Ask: "Would you like me to install it? I'll use: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/install_checkov.sh install"
+2. Ask: "Would you like me to install it? I'll use: bash scripts/install_checkov.sh install"
 3. If yes: Run install script, then rerun security scan
 ```
 
@@ -425,10 +426,10 @@ or reusing a cached venv. No user action required.
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
-| `extract_tf_info_wrapper.sh` | Parse Terraform files for providers/modules (auto-handles dependencies) | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/extract_tf_info_wrapper.sh <path>` |
+| `extract_tf_info_wrapper.sh` | Parse Terraform files for providers/modules (auto-handles dependencies) | `bash scripts/extract_tf_info_wrapper.sh <path>` |
 | `extract_tf_info.py` | Core parser (requires python-hcl2) | Use wrapper instead |
-| `run_checkov.sh` | Wrapper for Checkov scans with enhanced output | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh <path>` |
-| `install_checkov.sh` | Install Checkov in isolated venv | `bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/install_checkov.sh install` |
+| `run_checkov.sh` | Wrapper for Checkov scans with enhanced output | `bash scripts/run_checkov.sh <path>` |
+| `install_checkov.sh` | Install Checkov in isolated venv | `bash scripts/install_checkov.sh install` |
 
 ## Reference Documentation
 
@@ -436,23 +437,23 @@ or reusing a cached venv. No user action required.
 
 | Reference | When to Read | Content |
 |-----------|--------------|---------|
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/security_checklist.md` | Before security scan | Security validation, Checkov/Trivy usage, common policies, remediation patterns |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/best_practices.md` | During validation | Project structure, naming conventions, module design, state management |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/common_errors.md` | When errors occur | Error database with causes and solutions |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/advanced_features.md` | If Terraform >= 1.10 | Ephemeral values (1.10+), Actions (1.14+), List Resources (1.14+) |
+| `references/security_checklist.md` | Before security scan | Security validation, Checkov/Trivy usage, common policies, remediation patterns |
+| `references/best_practices.md` | During validation | Project structure, naming conventions, module design, state management |
+| `references/common_errors.md` | When errors occur | Error database with causes and solutions |
+| `references/advanced_features.md` | If Terraform >= 1.10 | Ephemeral values (1.10+), Actions (1.14+), List Resources (1.14+) |
 
 ## Workflow Examples
 
 ### Example 1: Validate Single File
 
 ```
-1. MUST: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/extract_tf_info_wrapper.sh main.tf
+1. MUST: bash scripts/extract_tf_info_wrapper.sh main.tf
 2. MUST: Context7 lookup for each provider detected
-3. MUST: Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/security_checklist.md
-4. MUST: Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/best_practices.md
+3. MUST: Read references/security_checklist.md
+4. MUST: Read references/best_practices.md
 5. RUN: terraform fmt -check main.tf
 6. RUN: terraform init (if needed) && terraform validate
-7. MUST: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh -f json main.tf
+7. MUST: bash scripts/run_checkov.sh -f json main.tf
 8. Report issues with remediation from references
 9. If custom providers: web search for documentation
 ```
@@ -461,14 +462,14 @@ or reusing a cached venv. No user action required.
 
 ```
 1. Identify all .tf files in directory
-2. MUST: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/extract_tf_info_wrapper.sh ./modules/vpc/
+2. MUST: bash scripts/extract_tf_info_wrapper.sh ./modules/vpc/
 3. MUST: Context7 lookup for ALL providers
-4. MUST: Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/security_checklist.md
-5. MUST: Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/best_practices.md
+4. MUST: Read references/security_checklist.md
+5. MUST: Read references/best_practices.md
 6. RUN: terraform fmt -recursive
 7. RUN: tflint --recursive (or note as skipped if unavailable)
 8. RUN: terraform init && terraform validate
-9. MUST: bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/run_checkov.sh ./modules/vpc/
+9. MUST: bash scripts/run_checkov.sh ./modules/vpc/
 10. Analyze findings against security_checklist.md
 11. Validate structure against best_practices.md
 12. Provide comprehensive report with references
@@ -478,7 +479,7 @@ or reusing a cached venv. No user action required.
 
 ```
 1. Verify terraform initialized
-2. MUST: Read ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/security_checklist.md (production focus)
+2. MUST: Read references/security_checklist.md (production focus)
 3. RUN: terraform plan -var-file="production.tfvars"
 4. Analyze for unexpected changes
 5. Highlight create/modify/destroy operations
@@ -490,7 +491,7 @@ or reusing a cached venv. No user action required.
 
 Terraform 1.10+ introduces ephemeral values for secure secrets management. Terraform 1.14+ adds Actions for imperative operations and List Resources for querying infrastructure.
 
-**MUST READ:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/references/advanced_features.md` when:
+**MUST READ:** `references/advanced_features.md` when:
 - Terraform version >= 1.10 is detected
 - Configuration uses `ephemeral` blocks
 - Configuration uses `action` blocks
@@ -507,7 +508,7 @@ Terraform 1.10+ introduces ephemeral values for secure secrets management. Terra
 - Always run validation in order: extract info → lookup docs → read refs → format → lint → validate → security → plan
 - MUST use wrapper scripts for extract_tf_info and checkov
 - MUST run `bash tests/test_regression.sh` after script changes
-- MUST run lightweight CI checks: `bash -n ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/*.sh` and `python3 -m py_compile ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-validator/scripts/*.py`
+- MUST run lightweight CI checks: `bash -n scripts/*.sh` and `python3 -m py_compile scripts/*.py`
 - MUST read reference files before relevant validation steps
 - MUST lookup provider docs via Context7 for ALL providers
 - MUST offer recovery/rerun when tools are missing

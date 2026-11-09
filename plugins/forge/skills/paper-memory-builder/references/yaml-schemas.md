@@ -71,10 +71,14 @@ leave the original file unchanged, rather than coercing statuses or deleting
 fields. The validator checks structure, not evidence existence or scientific
 support; it does not implement the editorial transitions above.
 
-The structural rules are enforced by `scripts/check_claims_schema.py` (CI) and
-the JSON Schema at `references/claims.schema.json`. If you edit
-`.paper/claims.yml` by hand, run `python scripts/check_claims_schema.py
-<path-to-claims.yml>` before committing.
+The structural rules are defined by the JSON Schema at
+`references/claims.schema.json`. If you edit `.paper/claims.yml` by hand,
+validate it before committing (from the skill directory; needs
+`pip install jsonschema pyyaml`):
+
+```bash
+python3 -c 'import sys, json, yaml, jsonschema; jsonschema.validate(yaml.safe_load(open(sys.argv[1])), json.load(open(sys.argv[2]))); print("claims.yml OK")' <path-to-claims.yml> references/claims.schema.json
+```
 
 ## `.paper/figures.yml`
 

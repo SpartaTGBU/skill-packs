@@ -38,7 +38,7 @@ Every validation run should follow these steps in order.
 Run commands from the repository root that contains `.github/workflows/`.
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator
+SKILL_DIR=.
 bash "$SKILL_DIR/scripts/validate_workflow.sh" <workflow-file-or-directory>
 ```
 
@@ -59,19 +59,19 @@ For each issue:
 If an error does not match any mapping:
 1. Label it as `UNMAPPED`.
 2. Capture exact tool output, workflow file, and line number (if available).
-3. Check `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` general sections first.
+3. Check `references/common_errors.md` general sections first.
 4. If still unresolved, search official docs with the exact error string.
 5. Mark the fix as `provisional` until post-fix rerun passes.
 
 ### Step 5: Verify Public Action Versions
 
 For each `uses: owner/action@version`:
-1. Check `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md`.
+1. Check `references/action_versions.md`.
 2. For unknown actions, verify against official docs.
 3. Confirm required inputs and deprecations.
 
 Offline mode behavior:
-- If network/doc lookup is unavailable, rely on `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md` only.
+- If network/doc lookup is unavailable, rely on `references/action_versions.md` only.
 - Mark unknown actions as `UNVERIFIED-OFFLINE`.
 - Do not claim "latest" version without an online verification pass.
 
@@ -80,7 +80,7 @@ Offline mode behavior:
 After applying fixes, rerun validation before finalizing:
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator
+SKILL_DIR=.
 bash "$SKILL_DIR/scripts/validate_workflow.sh" <workflow-file-or-directory>
 ```
 
@@ -96,17 +96,17 @@ Final output should include:
 
 | Error Pattern in Output | Reference File to Read | Section to Quote |
 |------------------------|----------------------|------------------|
-| `runs-on:`, `runner`, `ubuntu`, `macos`, `windows` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/runners.md` | Runner labels |
-| `cron`, `schedule` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Schedule Errors |
-| `${{`, `expression`, `if:` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Expression Errors |
-| `needs:`, `job`, `dependency` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Job Configuration Errors |
-| `uses:`, `action`, `input` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Action Errors |
-| `untrusted`, `injection`, `security` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Script Injection section |
-| `syntax`, `yaml`, `unexpected` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Syntax Errors |
-| `docker`, `container` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/act_usage.md` | Troubleshooting |
-| `@v3`, `@v4`, `deprecated`, `outdated` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md` | Version table |
-| `workflow_call`, `reusable`, `oidc` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/modern_features.md` | Relevant section |
-| `glob`, `path`, `paths:`, `pattern` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Path Filter Errors |
+| `runs-on:`, `runner`, `ubuntu`, `macos`, `windows` | `references/runners.md` | Runner labels |
+| `cron`, `schedule` | `references/common_errors.md` | Schedule Errors |
+| `${{`, `expression`, `if:` | `references/common_errors.md` | Expression Errors |
+| `needs:`, `job`, `dependency` | `references/common_errors.md` | Job Configuration Errors |
+| `uses:`, `action`, `input` | `references/common_errors.md` | Action Errors |
+| `untrusted`, `injection`, `security` | `references/common_errors.md` | Script Injection section |
+| `syntax`, `yaml`, `unexpected` | `references/common_errors.md` | Syntax Errors |
+| `docker`, `container` | `references/act_usage.md` | Troubleshooting |
+| `@v3`, `@v4`, `deprecated`, `outdated` | `references/action_versions.md` | Version table |
+| `workflow_call`, `reusable`, `oidc` | `references/modern_features.md` | Relevant section |
+| `glob`, `path`, `paths:`, `pattern` | `references/common_errors.md` | Path Filter Errors |
 
 ### Example: Complete Error Handling Workflow
 
@@ -120,26 +120,26 @@ runs-on: ubuntu-lastest
 label "ubuntu-lastest" is unknown
 ```
 
-**Step 2 - Read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/runners.md` or `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md`:**
+**Step 2 - Read `references/runners.md` or `references/common_errors.md`:**
 Find the "Invalid Runner Label" section.
 
 **Step 3 - Quote the fix to user:**
 
 > **Error:** `label "ubuntu-lastest" is unknown`
 >
-> **Cause:** Typo in runner label (from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md`):
+> **Cause:** Typo in runner label (from `references/common_errors.md`):
 > ```yaml
 > # Bad
 > runs-on: ubuntu-lastest  # Typo
 > ```
 >
-> **Fix** (from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md`):
+> **Fix** (from `references/common_errors.md`):
 > ```yaml
 > # Good
 > runs-on: ubuntu-latest
 > ```
 >
-> **Valid runner labels** (from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/runners.md`):
+> **Valid runner labels** (from `references/runners.md`):
 > - `ubuntu-latest`, `ubuntu-24.04`, `ubuntu-22.04`
 > - `windows-latest`, `windows-2025`, `windows-2022`
 > - `macos-latest`, `macos-15`, `macos-14`
@@ -154,7 +154,7 @@ runs-on: ubuntu-latest
 Set once per shell session:
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator
+SKILL_DIR=.
 ```
 
 ### Initial Setup
@@ -201,7 +201,7 @@ After passing static analysis, test workflow execution:
 bash "$SKILL_DIR/scripts/validate_workflow.sh" --test-only .github/workflows/
 ```
 
-**Note:** act has limitations - see `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/act_usage.md`.
+**Note:** act has limitations - see `references/act_usage.md`.
 
 ### 3. Full Validation
 
@@ -212,7 +212,7 @@ bash "$SKILL_DIR/scripts/validate_workflow.sh" .github/workflows/ci.yml
 Default behavior if tools/runtime are unavailable:
 - If `act` is missing, full validation falls back to actionlint-only.
 - If Docker is unavailable, full validation skips act and continues with actionlint.
-- `--check-versions` works in offline/local mode using `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md`.
+- `--check-versions` works in offline/local mode using `references/action_versions.md`.
 
 ## Validating Resource Types
 
@@ -240,7 +240,7 @@ bash "$SKILL_DIR/scripts/validate_workflow.sh" .github/workflows/test-custom-act
 
 When workflows use public actions (e.g., `actions/checkout@v6`):
 
-1. Check `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md` first
+1. Check `references/action_versions.md` first
 2. Use official docs (or web search) for unknown actions
 3. Verify required inputs and version
 4. Check for deprecation warnings
@@ -258,16 +258,16 @@ If offline:
 
 | Situation | Reference File | Action |
 |-----------|---------------|--------|
-| actionlint reports any mapped error | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Find matching error and apply minimal quote policy |
-| actionlint reports unmapped error | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` + official docs | Label as `UNMAPPED`, capture exact output and verify by rerun |
-| act fails with Docker/runtime error | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/act_usage.md` | Check Troubleshooting section |
-| act fails but workflow works on GitHub | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/act_usage.md` | Read Limitations section |
-| User asks about actionlint config | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/actionlint_usage.md` | Provide examples |
-| User asks about act options | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/act_usage.md` | Read Advanced Options |
-| Security vulnerability detected | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Quote minimal safe fix snippet |
-| Validating action versions | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md` | Check version table and offline note |
-| Using modern features | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/modern_features.md` | Check syntax examples |
-| Runner questions/errors | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/runners.md` | Check labels and availability |
+| actionlint reports any mapped error | `references/common_errors.md` | Find matching error and apply minimal quote policy |
+| actionlint reports unmapped error | `references/common_errors.md` + official docs | Label as `UNMAPPED`, capture exact output and verify by rerun |
+| act fails with Docker/runtime error | `references/act_usage.md` | Check Troubleshooting section |
+| act fails but workflow works on GitHub | `references/act_usage.md` | Read Limitations section |
+| User asks about actionlint config | `references/actionlint_usage.md` | Provide examples |
+| User asks about act options | `references/act_usage.md` | Read Advanced Options |
+| Security vulnerability detected | `references/common_errors.md` | Quote minimal safe fix snippet |
+| Validating action versions | `references/action_versions.md` | Check version table and offline note |
+| Using modern features | `references/modern_features.md` | Check syntax examples |
+| Runner questions/errors | `references/runners.md` | Check labels and availability |
 
 ### Script Output to Reference Mapping
 
@@ -288,12 +288,12 @@ If offline:
 
 | File | Content |
 |------|---------|
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/act_usage.md` | Act tool usage, commands, options, limitations, troubleshooting |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/actionlint_usage.md` | Actionlint validation categories, configuration, integration |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` | Common errors catalog with fixes |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md` | Current action versions, deprecation timeline, SHA pinning |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/modern_features.md` | Reusable workflows, SBOM, OIDC, environments, containers |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/runners.md` | GitHub-hosted runners (ARM64, GPU, M2 Pro, deprecations) |
+| `references/act_usage.md` | Act tool usage, commands, options, limitations, troubleshooting |
+| `references/actionlint_usage.md` | Actionlint validation categories, configuration, integration |
+| `references/common_errors.md` | Common errors catalog with fixes |
+| `references/action_versions.md` | Current action versions, deprecation timeline, SHA pinning |
+| `references/modern_features.md` | Reusable workflows, SBOM, OIDC, environments, containers |
+| `references/runners.md` | GitHub-hosted runners (ARM64, GPU, M2 Pro, deprecations) |
 
 ## Troubleshooting
 
@@ -302,7 +302,7 @@ If offline:
 | "Tools not found" | Run `bash "$SKILL_DIR/scripts/install_tools.sh"` |
 | "Docker daemon not running" | Start Docker or use `--lint-only` |
 | "Permission denied" | Run `chmod +x "$SKILL_DIR"/scripts/*.sh` |
-| act fails but GitHub works | See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/act_usage.md` Limitations |
+| act fails but GitHub works | See `references/act_usage.md` Limitations |
 
 ### Debug Mode
 
@@ -319,7 +319,7 @@ act -n                                         # Dry-run (no execution)
 3. **Pin action versions** - Use `@v6` not `@main` for stability; SHA pinning for security
 4. **Keep tools updated** - Regularly update actionlint and act
 5. **Use official docs for unknown actions** - Verify usage and versions
-6. **Check version compatibility** - See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md`
+6. **Check version compatibility** - See `references/action_versions.md`
 7. **Enable shellcheck** - Catch shell script issues early
 8. **Review security warnings** - Address script injection issues
 
@@ -337,7 +337,7 @@ act -n                                         # Dry-run (no execution)
 ### Example 1: Pre-commit Validation
 
 ```bash
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator
+SKILL_DIR=.
 bash "$SKILL_DIR/scripts/validate_workflow.sh" .github/workflows/
 git add .github/workflows/ && git commit -m "Update workflows"
 ```
@@ -394,7 +394,7 @@ bash "$SKILL_DIR/scripts/validate_workflow.sh" --lint-only workflow.yml
 
 **Error 1: Invalid CRON Expression**
 
-*From `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` - Schedule Errors:*
+*From `references/common_errors.md` - Schedule Errors:*
 
 > **Cause:** Day of week 8 doesn't exist (valid: 0-6, where 0 = Sunday)
 >
@@ -417,7 +417,7 @@ bash "$SKILL_DIR/scripts/validate_workflow.sh" --lint-only workflow.yml
 
 **Error 2: Invalid Runner Label**
 
-*From `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` - Job Configuration Errors and `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/runners.md`:*
+*From `references/common_errors.md` - Job Configuration Errors and `references/runners.md`:*
 
 > **Cause:** Typo in runner label
 >
@@ -429,7 +429,7 @@ bash "$SKILL_DIR/scripts/validate_workflow.sh" --lint-only workflow.yml
 > runs-on: ubuntu-latest
 > ```
 >
-> **Valid labels (from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/runners.md`):**
+> **Valid labels (from `references/runners.md`):**
 > - `ubuntu-latest` (Ubuntu 24.04)
 > - `ubuntu-24.04`, `ubuntu-22.04`
 > - `macos-latest` (macOS 15)
@@ -441,7 +441,7 @@ bash "$SKILL_DIR/scripts/validate_workflow.sh" --lint-only workflow.yml
 
 **Error 3: Outdated Action Version**
 
-*From `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/action_versions.md`:*
+*From `references/action_versions.md`:*
 
 > | Action | Current Version | Minimum Supported |
 > |--------|----------------|-------------------|
@@ -459,7 +459,7 @@ bash "$SKILL_DIR/scripts/validate_workflow.sh" --lint-only workflow.yml
 
 **Error 4: Security Vulnerability (Script Injection)**
 
-*From `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` - Expression Errors:*
+*From `references/common_errors.md` - Expression Errors:*
 
 > **Warning:** Potential script injection via untrusted input
 >
@@ -481,7 +481,7 @@ bash "$SKILL_DIR/scripts/validate_workflow.sh" --lint-only workflow.yml
 
 **Error 5: Undefined Job Dependency**
 
-*From `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/references/common_errors.md` - Job Configuration Errors:*
+*From `references/common_errors.md` - Job Configuration Errors:*
 
 > **Error:** Job 'deploy' depends on job 'biuld' which does not exist
 >

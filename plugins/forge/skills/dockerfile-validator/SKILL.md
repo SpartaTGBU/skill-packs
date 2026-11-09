@@ -32,11 +32,11 @@ Do not use this skill for:
 
 ## Local Files In This Skill
 
-- Validator script: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/dockerfile-validate.sh`
+- Validator script: `scripts/dockerfile-validate.sh`
 - References:
-  - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/security_checklist.md`
-  - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/optimization_guide.md`
-  - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/docker_best_practices.md`
+  - `references/security_checklist.md`
+  - `references/optimization_guide.md`
+  - `references/docker_best_practices.md`
 - Example Dockerfiles: `examples/*.Dockerfile`
 
 ## Deterministic Execution Flow (Required)
@@ -49,7 +49,7 @@ Assume repo root as working directory:
 
 ```bash
 cd /path/to/repo
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator
+SKILL_DIR=.
 TARGET_DOCKERFILE="Dockerfile"   # replace when user provides a path
 ```
 
@@ -128,9 +128,9 @@ Issue-to-reference mapping:
 
 | Issue category | Trigger examples | Read this file |
 |---|---|---|
-| Secrets, root user, exposed sensitive ports, hardening gaps | `CKV_DOCKER_*`, hardcoded token/password, root runtime | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/security_checklist.md` |
-| Image size, layer count, multi-stage opportunities, cache efficiency, `.dockerignore` gaps | too many `RUN`, single-stage with build deps, cache misses | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/optimization_guide.md` |
-| Tag pinning, instruction usage, COPY vs ADD, WORKDIR/CMD/ENTRYPOINT conventions | `:latest`, unpinned packages, instruction-level best practices | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/docker_best_practices.md` |
+| Secrets, root user, exposed sensitive ports, hardening gaps | `CKV_DOCKER_*`, hardcoded token/password, root runtime | `references/security_checklist.md` |
+| Image size, layer count, multi-stage opportunities, cache efficiency, `.dockerignore` gaps | too many `RUN`, single-stage with build deps, cache misses | `references/optimization_guide.md` |
+| Tag pinning, instruction usage, COPY vs ADD, WORKDIR/CMD/ENTRYPOINT conventions | `:latest`, unpinned packages, instruction-level best practices | `references/docker_best_practices.md` |
 
 Explicit read commands:
 
@@ -231,35 +231,35 @@ Run only manual regex-based checks (Fallback A step 2), clearly mark as `PARTIAL
 
 ```bash
 cd /path/to/repo
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/dockerfile-validate.sh Dockerfile
+bash scripts/dockerfile-validate.sh Dockerfile
 ```
 
 ### Validate alternate file
 
 ```bash
 cd /path/to/repo
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/dockerfile-validate.sh Dockerfile.prod
+bash scripts/dockerfile-validate.sh Dockerfile.prod
 ```
 
 ### Validate skill examples
 
 ```bash
-cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/dockerfile-validate.sh examples/good-example.Dockerfile
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/dockerfile-validate.sh examples/security-issues.Dockerfile
+cd .
+bash scripts/dockerfile-validate.sh examples/good-example.Dockerfile
+bash scripts/dockerfile-validate.sh examples/security-issues.Dockerfile
 ```
 
 ### Run regression checks (CI entrypoint)
 
 ```bash
 cd /path/to/repo
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/test_validate.sh
+bash scripts/test_validate.sh
 ```
 
 Optional strict mode for CI environments that must enforce ShellCheck:
 
 ```bash
-STRICT_SHELLCHECK=true bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/test_validate.sh
+STRICT_SHELLCHECK=true bash scripts/test_validate.sh
 ```
 
 ## Progressive Disclosure Rules
@@ -283,11 +283,11 @@ Consider this skill execution complete only when all conditions below are satisf
 
 ## Resources
 
-- Script: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/dockerfile-validate.sh`
-- CI/regression entrypoint: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/scripts/test_validate.sh`
-- Security reference: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/security_checklist.md`
-- Optimization reference: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/optimization_guide.md`
-- Best-practices reference: `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/dockerfile-validator/references/docker_best_practices.md`
+- Script: `scripts/dockerfile-validate.sh`
+- CI/regression entrypoint: `scripts/test_validate.sh`
+- Security reference: `references/security_checklist.md`
+- Optimization reference: `references/optimization_guide.md`
+- Best-practices reference: `references/docker_best_practices.md`
 - Examples: `examples/good-example.Dockerfile`, `examples/bad-example.Dockerfile`, `examples/security-issues.Dockerfile`, `examples/python-optimized.Dockerfile`, `examples/golang-distroless.Dockerfile`
 
 ## Source Links

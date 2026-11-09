@@ -36,7 +36,7 @@ Reference templates for common Kubernetes resources with Helm templating.
 
 ### Deployment
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/deployment.yaml`
+**File:** `templates/deployment.yaml`
 
 ```yaml
 apiVersion: apps/v1
@@ -252,7 +252,7 @@ priorityClassName: ""
 
 ### StatefulSet
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/statefulset.yaml`
+**File:** `templates/statefulset.yaml`
 
 ```yaml
 {{- if eq .Values.workloadType "StatefulSet" }}
@@ -381,7 +381,7 @@ persistence:
 
 ### DaemonSet
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/daemonset.yaml`
+**File:** `templates/daemonset.yaml`
 
 ```yaml
 {{- if eq .Values.workloadType "DaemonSet" }}
@@ -483,7 +483,7 @@ daemonset:
 
 ### Job
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/job.yaml`
+**File:** `templates/job.yaml`
 
 ```yaml
 {{- if eq .Values.workloadType "Job" }}
@@ -586,7 +586,7 @@ args: []
 
 ### CronJob
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/cronjob.yaml`
+**File:** `templates/cronjob.yaml`
 
 ```yaml
 {{- if eq .Values.workloadType "CronJob" }}
@@ -690,7 +690,7 @@ cronjob:
 
 ### Service
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/service.yaml`
+**File:** `templates/service.yaml`
 
 ```yaml
 apiVersion: v1
@@ -746,7 +746,7 @@ spec:
 
 **Headless Service (for StatefulSets):**
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/service-headless.yaml`
+**File:** `templates/service-headless.yaml`
 
 ```yaml
 {{- if eq .Values.workloadType "StatefulSet" }}
@@ -794,7 +794,7 @@ service:
 
 ### Ingress
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/ingress.yaml`
+**File:** `templates/ingress.yaml`
 
 ```yaml
 {{- if .Values.ingress.enabled -}}
@@ -872,7 +872,7 @@ ingress:
 
 ### ConfigMap
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/configmap.yaml`
+**File:** `templates/configmap.yaml`
 
 ```yaml
 {{- if .Values.configMap.enabled }}
@@ -929,7 +929,7 @@ configMap:
 
 ### Secret
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/secret.yaml`
+**File:** `templates/secret.yaml`
 
 ```yaml
 {{- if .Values.secret.enabled }}
@@ -973,7 +973,7 @@ secret:
 
 ### PersistentVolumeClaim
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/pvc.yaml`
+**File:** `templates/pvc.yaml`
 
 ```yaml
 {{- if and .Values.persistence.enabled (not (eq .Values.workloadType "StatefulSet")) }}
@@ -1028,7 +1028,7 @@ persistence:
 
 ### ServiceAccount
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/serviceaccount.yaml`
+**File:** `templates/serviceaccount.yaml`
 
 ```yaml
 {{- if .Values.serviceAccount.create -}}
@@ -1054,7 +1054,7 @@ imagePullSecrets:
 
 ### Role
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/role.yaml`
+**File:** `templates/role.yaml`
 
 ```yaml
 {{- if .Values.rbac.create }}
@@ -1092,7 +1092,7 @@ rules:
 
 ### RoleBinding
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/rolebinding.yaml`
+**File:** `templates/rolebinding.yaml`
 
 ```yaml
 {{- if .Values.rbac.create }}
@@ -1117,7 +1117,7 @@ subjects:
 
 ### ClusterRole
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/clusterrole.yaml`
+**File:** `templates/clusterrole.yaml`
 
 ```yaml
 {{- if .Values.rbac.createClusterRole }}
@@ -1149,7 +1149,7 @@ rules:
 
 ### ClusterRoleBinding
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/clusterrolebinding.yaml`
+**File:** `templates/clusterrolebinding.yaml`
 
 ```yaml
 {{- if .Values.rbac.createClusterRole }}
@@ -1192,7 +1192,7 @@ rbac:
 
 ### NetworkPolicy
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/networkpolicy.yaml`
+**File:** `templates/networkpolicy.yaml`
 
 ```yaml
 {{- if .Values.networkPolicy.enabled }}
@@ -1251,7 +1251,7 @@ networkPolicy:
 
 ### HorizontalPodAutoscaler
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/hpa.yaml`
+**File:** `templates/hpa.yaml`
 
 ```yaml
 {{- if .Values.autoscaling.enabled }}
@@ -1326,7 +1326,7 @@ autoscaling:
 
 ### PodDisruptionBudget
 
-**File:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-generator/templates/pdb.yaml`
+**File:** `templates/pdb.yaml`
 
 ```yaml
 {{- if .Values.podDisruptionBudget.enabled }}

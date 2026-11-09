@@ -27,7 +27,7 @@ export SKILLOPT_HOME=~/src/SkillOpt
 ```
 
 Runner (no network, no cron by default):
-`~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/skillopt-sleep/scripts/sleep.sh <action> [args]`.
+`scripts/sleep.sh <action> [args]`.
 It uses `$SKILLOPT_HOME` (clone) else a `skillopt-sleep` executable on PATH, runs from the engine
 dir (so use absolute paths for `--tasks-file` etc.), defaults `--project` to the CWD, and refuses
 `schedule`/`unschedule` unless `SKILLOPT_ALLOW_SCHEDULE=1`.

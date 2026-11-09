@@ -27,7 +27,7 @@ First identify:
 
 Use **lightweight mode** for bounded text work. Use **managed-project mode** for full-manuscript integration, companion-file coordination, or release certification; reuse an existing managed context for local work in that project. Managed context does not turn a paragraph edit into a whole-paper audit. Route checks by requested action, textual scope, change impact, and source availability using [lifecycle-and-routing.md](references/lifecycle-and-routing.md).
 
-In managed-project mode, read [state-and-authority.md](references/state-and-authority.md) and reuse equivalent project records. Initialize the project-state template with `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/academic-writing-skills/scripts/init_manuscript_state.py` only when sustained coordination actually needs a record and none exists. Do not create project machinery for a one-off edit or reinitialize state merely because a new turn begins.
+In managed-project mode, read [state-and-authority.md](references/state-and-authority.md) and reuse equivalent project records. Initialize the project-state template with `scripts/init_manuscript_state.py` only when sustained coordination actually needs a record and none exists. Do not create project machinery for a one-off edit or reinitialize state merely because a new turn begins.
 
 When project terminology is supplied or sustained writing needs a shared vocabulary, use the terminology procedure in [state-and-authority.md](references/state-and-authority.md), including for local work in that project. Read the relevant confirmed entries before writing; keep new suggestions separate from confirmed choices and distinguish configured scan results from vocabulary completeness.
 
@@ -178,13 +178,13 @@ Do not make a global replacement across equations, field codes, citations, XML, 
 
 For managed projects, use the bundled scripts when relevant:
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/academic-writing-skills/scripts/audit_manuscript_state.py`: validate state completeness, source links, question alignment, dimension coverage, and release blockers
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/academic-writing-skills/scripts/audit_text_consistency.py`: extract text from supported files and scan registered locked strings, prohibited variants, and fact conflicts
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/academic-writing-skills/scripts/audit_prose_patterns.py`: report exact duplication, repeated openings and phrases, stock phrasing, and candidate nontechnical word overuse without claiming AI authorship
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/academic-writing-skills/scripts/audit_candidate_text.py`: scan the exact proposed passage against the active project terminology, forbidden variants, and prose profile and record its hash
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/academic-writing-skills/scripts/audit_handoff.py`: optionally validate scope-dependent coverage records and exact-file hashes; `COVERAGE_COMPLETE` is not editorial or scientific certification
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/academic-writing-skills/scripts/audit_docx_structure.py`: inspect Word OOXML using exact tag names for tracked changes, revision authors, comments, parent-linked replies, reply authors, fields, and placeholders
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/academic-writing-skills/scripts/run_regression_tests.py`: verify the audit tools against bundled failure cases
+- `scripts/audit_manuscript_state.py`: validate state completeness, source links, question alignment, dimension coverage, and release blockers
+- `scripts/audit_text_consistency.py`: extract text from supported files and scan registered locked strings, prohibited variants, and fact conflicts
+- `scripts/audit_prose_patterns.py`: report exact duplication, repeated openings and phrases, stock phrasing, and candidate nontechnical word overuse without claiming AI authorship
+- `scripts/audit_candidate_text.py`: scan the exact proposed passage against the active project terminology, forbidden variants, and prose profile and record its hash
+- `scripts/audit_handoff.py`: optionally validate scope-dependent coverage records and exact-file hashes; `COVERAGE_COMPLETE` is not editorial or scientific certification
+- `scripts/audit_docx_structure.py`: inspect Word OOXML using exact tag names for tracked changes, revision authors, comments, parent-linked replies, reply authors, fields, and placeholders
+- `scripts/run_regression_tests.py`: verify the audit tools against bundled failure cases
 
 Treat script findings as diagnostics. Inspect each match in context before editing. A clean script report never replaces substantive reading.
 

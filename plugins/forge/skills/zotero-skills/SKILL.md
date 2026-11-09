@@ -94,7 +94,7 @@ This skill is interactive — there is no machine-readable result file. After ev
 ## Bundled scripts
 
 Requires `pip install pyzotero` (not installed by this skill). If unavailable, give the user the planned operations as a preview instead of writing. Credentials: env vars `ZOTERO_API_KEY`, `ZOTERO_LIBRARY_ID`, `ZOTERO_LIBRARY_TYPE`, else `~/.config/zotero-skills/.env` (override path with `ZOTERO_ENV_FILE`).
-Scripts live at `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/zotero-skills/scripts/`.
+Scripts live at `scripts/`.
 
 
 - `zotero_client.py` — the shared client referenced above. Import it for any Zotero operation.

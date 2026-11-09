@@ -10,13 +10,13 @@ Use the FQCN checker script to automatically detect non-FQCN module usage:
 
 ```bash
 # Scan a playbook
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/check_fqcn.sh playbook.yml
+bash scripts/check_fqcn.sh playbook.yml
 
 # Scan a role
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/check_fqcn.sh roles/webserver/
+bash scripts/check_fqcn.sh roles/webserver/
 
 # Scan entire directory
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-validator/scripts/check_fqcn.sh .
+bash scripts/check_fqcn.sh .
 ```
 
 The script identifies modules using short names and provides specific FQCN migration recommendations.

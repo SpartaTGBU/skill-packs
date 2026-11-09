@@ -21,9 +21,9 @@ For hermes and opencode there are no cache-break, skill or per-prompt rows; `top
 
 ## Steps
 
-1. **Get data.** Default window is the last 7 days; honor a different range (`24h`, `30d`, `all` = omit `--since`). Scripts live in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/session-report/`:
+1. **Get data.** Default window is the last 7 days; honor a different range (`24h`, `30d`, `all` = omit `--since`). Scripts live in ``:
    ```sh
-   S=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/session-report
+   S=.
    node $S/analyze-sessions.mjs --json --since 7d > /tmp/session-report.json            # Claude Code
    node $S/analyze-other-harnesses.mjs --harness pi --since 7d > /tmp/session-report.json   # or hermes / opencode
    ```

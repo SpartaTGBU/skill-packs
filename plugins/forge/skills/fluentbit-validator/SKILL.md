@@ -26,7 +26,7 @@ Run steps in order. Do not skip Stage 0.
 Run from skill directory:
 
 ```bash
-cd ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator
+cd .
 ```
 
 Check required and optional binaries:
@@ -45,25 +45,25 @@ Precheck protocol:
 Default command:
 
 ```bash
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check all
+python3 scripts/validate_config.py --file <config-file> --check all
 ```
 
 Use targeted checks only when requested:
 
 ```bash
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check structure
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check sections
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check tags
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check security
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check performance
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check best-practices
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check dry-run
+python3 scripts/validate_config.py --file <config-file> --check structure
+python3 scripts/validate_config.py --file <config-file> --check sections
+python3 scripts/validate_config.py --file <config-file> --check tags
+python3 scripts/validate_config.py --file <config-file> --check security
+python3 scripts/validate_config.py --file <config-file> --check performance
+python3 scripts/validate_config.py --file <config-file> --check best-practices
+python3 scripts/validate_config.py --file <config-file> --check dry-run
 ```
 
 Strict CI gate (optional):
 
 ```bash
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check all --fail-on-warning
+python3 scripts/validate_config.py --file <config-file> --check all --fail-on-warning
 ```
 
 ### Stage 2: Dry-Run Handling (Conditional)
@@ -81,7 +81,7 @@ Skip protocol:
 - If user explicitly requires dry-run as a release gate, run:
 
 ```bash
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file <config-file> --check dry-run --require-dry-run
+python3 scripts/validate_config.py --file <config-file> --check dry-run --require-dry-run
 ```
 
 - In release-gate mode, missing `fluent-bit` must be reported as `Error`.
@@ -148,15 +148,15 @@ No-issue fast path:
 ### Full validation flow
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate.sh --precheck
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file tests/valid-basic.conf --check all
+bash scripts/validate.sh --precheck
+python3 scripts/validate_config.py --file tests/valid-basic.conf --check all
 ```
 
 ### Constrained environment flow (`fluent-bit` unavailable)
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate.sh --precheck
-python3 ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py --file tests/invalid-security-issues.conf --check all --json
+bash scripts/validate.sh --precheck
+python3 scripts/validate_config.py --file tests/invalid-security-issues.conf --check all --json
 ```
 
 Expected outcome:
@@ -175,7 +175,7 @@ Work is done only when all are true:
 
 ## Local Assets
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate_config.py`: main validator.
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/fluentbit-validator/scripts/validate.sh`: wrapper and environment precheck helper.
+- `scripts/validate_config.py`: main validator.
+- `scripts/validate.sh`: wrapper and environment precheck helper.
 - `tests/*.conf`: sample valid/invalid configs.
 - `tests/test_validate_config.py`: regression coverage for parser and severity behavior.

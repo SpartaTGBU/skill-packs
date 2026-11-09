@@ -43,7 +43,6 @@ install_act() {
         log_info "act found in PATH, creating symlink..."
         ln -sf "$(command -v act)" "${TOOLS_DIR}/act"
     else
-        log_info "Downloading act..."
         # Install act to the tools directory
         cd "${TOOLS_DIR}"
         log_error "act not found. Install it yourself (e.g. 'brew install act' or your package manager); remote install scripts are not run automatically."
@@ -74,7 +73,6 @@ install_actionlint() {
         log_info "actionlint found in PATH, creating symlink..."
         ln -sf "$(command -v actionlint)" "${TOOLS_DIR}/actionlint"
     else
-        log_info "Downloading actionlint..."
         # Download and install actionlint
         cd "${TOOLS_DIR}"
         log_error "actionlint not found. Install it yourself (e.g. 'brew install actionlint' or 'go install github.com/rhysd/actionlint/cmd/actionlint@latest'); remote install scripts are not run automatically."
@@ -96,7 +94,7 @@ main() {
     log_info "Installing tools to: ${TOOLS_DIR}"
     echo ""
 
-    install_act
+    install_act || true  # still try actionlint when act is missing
     echo ""
     install_actionlint
     echo ""

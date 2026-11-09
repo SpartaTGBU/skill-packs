@@ -9,7 +9,7 @@ Actionlint is a static checker for GitHub Actions workflow files that catches er
 bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
 
 # Or use the skill's installation script
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-validator/scripts/install_tools.sh
+bash scripts/install_tools.sh
 ```
 
 ## Core Usage

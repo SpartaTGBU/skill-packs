@@ -62,7 +62,7 @@ scan_pattern() {
     local results=""
 
     if [ "$SCAN_TYPE" = "file" ]; then
-        results=$(grep -n -i "$pattern" "$TARGET_ABS" 2>/dev/null || true)
+        results=$(grep -H -n -i "$pattern" "$TARGET_ABS" 2>/dev/null || true)
     else
         results=$(grep -r -n -i "$pattern" "$TARGET_ABS" --include="*.yml" --include="*.yaml" 2>/dev/null | grep -v ".git/" || true)
     fi
@@ -75,7 +75,8 @@ scan_pattern() {
             echo -e "${COLOR_YELLOW}[WARNING]${COLOR_RESET} $description"
             WARNINGS_FOUND=$((WARNINGS_FOUND + 1))
         fi
-        echo "$results" | while read -r line; do
+        # Print file:line only so matched secret values never reach the output.
+        echo "$results" | cut -d: -f1,2 | while read -r line; do
             echo "  $line"
         done
         echo ""
@@ -88,11 +89,11 @@ check_password_values() {
 
     if [ "$SCAN_TYPE" = "file" ]; then
         # Look for password: followed by a non-variable value (not {{ }})
-        results=$(grep -n -E "password:\s*['\"]?[^{'\"][^'\"]*['\"]?\s*$" "$TARGET_ABS" 2>/dev/null || true)
-        results+=$(grep -n -E "password:\s*['\"][^{][^'\"]+['\"]" "$TARGET_ABS" 2>/dev/null || true)
+        results=$(grep -H -n -E "password:\s*['\"]?[^{'\"][^'\"]*['\"]?\s*$" "$TARGET_ABS" 2>/dev/null || true)
+        results+=$'\n'$(grep -H -n -E "password:\s*['\"][^{][^'\"]+['\"]" "$TARGET_ABS" 2>/dev/null || true)
     else
         results=$(grep -r -n -E "password:\s*['\"]?[^{'\"][^'\"]*['\"]?\s*$" "$TARGET_ABS" --include="*.yml" --include="*.yaml" 2>/dev/null | grep -v ".git/" || true)
-        results+=$(grep -r -n -E "password:\s*['\"][^{][^'\"]+['\"]" "$TARGET_ABS" --include="*.yml" --include="*.yaml" 2>/dev/null | grep -v ".git/" | grep -v "password_hash" || true)
+        results+=$'\n'$(grep -r -n -E "password:\s*['\"][^{][^'\"]+['\"]" "$TARGET_ABS" --include="*.yml" --include="*.yaml" 2>/dev/null | grep -v ".git/" | grep -v "password_hash" || true)
     fi
 
     # Filter out false positives (empty values, variable references, vault references)
@@ -101,7 +102,7 @@ check_password_values() {
         if [ -n "$filtered" ]; then
             echo -e "${COLOR_RED}[SECRET DETECTED]${COLOR_RESET} Hardcoded password value found"
             SECRETS_FOUND=$((SECRETS_FOUND + 1))
-            echo "$filtered" | while read -r line; do
+            echo "$filtered" | cut -d: -f1,2 | while read -r line; do
                 echo "  $line"
             done
             echo ""

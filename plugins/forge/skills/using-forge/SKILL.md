@@ -19,7 +19,7 @@ small. Load one through Bash, only when the work needs it, and follow it as if i
 
 - `skl load forge:rust` (several names at once is fine) prints the skill and its directory
 - `skl search <words>` finds the right one; `skl list [pack]` lists them all
-- If `skl` is not on PATH: `~/.claude/local-plugins/forge-marketplace/plugins/forge/bin/skl`
+- If `skl` is not on PATH: run `<forge plugin root>/bin/skl`. The `forge plugin root:` line is at the end of this router.
 
 Load the one or two you need, not the whole route. After compaction, re-load any you still need.
 
@@ -92,7 +92,7 @@ rust-build-resolver, go-build-resolver.
 `forge:retro` is user-initiated: never start it on your own. When the user signals the session is
 over ("thanks, that's all", "we're done", "wrapping up", "good night", or a final sign-off after the
 work is finished), ask once, in one line: "Want a quick retro on this session before you go?"
-- Yes → read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/retro/SKILL.md` and
+- Yes → read `<forge plugin root>/skills/retro/SKILL.md` and
   follow it in session mode (they can also type `/forge:retro`).
 - No, or no answer → drop it. Don't ask again this session.
 Don't offer after trivial sessions (a single question or lookup).

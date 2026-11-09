@@ -15,7 +15,7 @@ elif [ -f "$HOME/.git-credentials" ]; then
     [ -n "$GITHUB_TOKEN" ] && GH_AUTH_METHOD="curl"
 fi
 if [ "$GH_AUTH_METHOD" = "curl" ] && [ -z "$GH_USER" ]; then
-    GH_USER=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user 2>/dev/null \
+    GH_USER=$(printf 'Authorization: token %s\n' "$GITHUB_TOKEN" | curl -s -H @- https://api.github.com/user 2>/dev/null \
         | python3 -c "import sys,json; print(json.load(sys.stdin).get('login',''))" 2>/dev/null)
 fi
 GH_OWNER=""; GH_REPO=""; GH_OWNER_REPO=""

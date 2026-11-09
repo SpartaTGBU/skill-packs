@@ -12,13 +12,13 @@ Generate production-ready GitHub Actions workflows and custom actions following 
 
 | Capability | When to Use | Reference |
 |------------|-------------|-----------|
-| Workflows | CI/CD, automation, testing | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md` |
-| Composite Actions | Reusable step combinations | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/custom-actions.md` |
-| Docker Actions | Custom environments/tools | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/custom-actions.md` |
-| JavaScript Actions | API interactions, complex logic | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/custom-actions.md` |
-| Reusable Workflows | Shared patterns across repos | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/advanced-triggers.md` |
-| Security Scanning | Dependency review, SBOM | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md` |
-| Modern Features | Summaries, environments | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/modern-features.md` |
+| Workflows | CI/CD, automation, testing | `references/best-practices.md` |
+| Composite Actions | Reusable step combinations | `references/custom-actions.md` |
+| Docker Actions | Custom environments/tools | `references/custom-actions.md` |
+| JavaScript Actions | API interactions, complex logic | `references/custom-actions.md` |
+| Reusable Workflows | Shared patterns across repos | `references/advanced-triggers.md` |
+| Security Scanning | Dependency review, SBOM | `references/best-practices.md` |
+| Modern Features | Summaries, environments | `references/modern-features.md` |
 
 ---
 
@@ -38,9 +38,9 @@ Load only what is needed for the selected route, in this order:
 
 | Route | Load First (required) | Load Next (only if needed) | Primary Template |
 |-------|------------------------|------------------------------|------------------|
-| Workflow Generation | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/common-actions.md`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/expressions-and-contexts.md`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/modern-features.md` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/workflow/basic_workflow.yml` |
-| Custom Action Generation | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/custom-actions.md` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/action/composite/action.yml`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/action/docker/`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/action/javascript/` |
-| Reusable Workflow Generation | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/advanced-triggers.md` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md`, `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/common-actions.md` | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/workflow/reusable_workflow.yml` |
+| Workflow Generation | `references/best-practices.md` | `references/common-actions.md`, `references/expressions-and-contexts.md`, `references/modern-features.md` | `assets/templates/workflow/basic_workflow.yml` |
+| Custom Action Generation | `references/custom-actions.md` | `references/best-practices.md` | `assets/templates/action/composite/action.yml`, `assets/templates/action/docker/`, `assets/templates/action/javascript/` |
+| Reusable Workflow Generation | `references/advanced-triggers.md` | `references/best-practices.md`, `references/common-actions.md` | `assets/templates/workflow/reusable_workflow.yml` |
 
 If a required reference/template is unavailable, continue with the closest available reference and report the fallback explicitly in output.
 
@@ -56,8 +56,8 @@ If a required reference/template is unavailable, continue with the closest avail
 1. Understand requirements (triggers, runners, dependencies)
 2. Define trust boundaries (internal branches vs fork PRs vs external triggers)
 3. Set default `permissions` to read-only, then elevate only per job when required
-4. Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md` for patterns
-5. Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/common-actions.md` for action versions
+4. Reference `references/best-practices.md` for patterns
+5. Reference `references/common-actions.md` for action versions
 6. Generate workflow with:
    - Semantic names, pinned actions (SHA), explicit permissions
    - Concurrency controls, caching, matrix strategies
@@ -112,12 +112,12 @@ jobs:
 - **JavaScript:** API access, complex logic → Fastest
 
 **Process:**
-1. Use templates from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/action/`
-2. Follow structure in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/custom-actions.md`
+1. Use templates from `assets/templates/action/`
+2. Follow structure in `references/custom-actions.md`
 3. Include branding, inputs/outputs, documentation
 4. **Validate** with forge:github-actions-validator skill
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/custom-actions.md` for:
+See `references/custom-actions.md` for:
 - Action metadata and branding
 - Directory structure patterns
 - Versioning and release workflows
@@ -150,7 +150,7 @@ on:
 
 When secrets are required, pass only the exact secret names needed and prefer environment protection rules for deployment stages.
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/advanced-triggers.md` for complete patterns.
+See `references/advanced-triggers.md` for complete patterns.
 
 ### 4. Generate Security Workflows
 
@@ -176,13 +176,13 @@ jobs:
       attestations: write     # For attestations
 ```
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md` section on security.
+See `references/best-practices.md` section on security.
 
 ### 5. Modern Features
 
 **Triggers:** "Add job summaries...", "Use environments...", "Run in container..."
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/modern-features.md` for:
+See `references/modern-features.md` for:
 - Job summaries (`$GITHUB_STEP_SUMMARY`)
 - Deployment environments with approvals
 - Container jobs with services
@@ -212,7 +212,7 @@ When using third-party actions (any `uses:` entry not in the same repository):
    - Selected commit SHA and human-readable version
    - Access date for the source used
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/common-actions.md` for pre-verified action versions.
+See `references/common-actions.md` for pre-verified action versions.
 
 ---
 
@@ -239,10 +239,10 @@ If required tooling or network access is unavailable, use this deterministic fal
    - `yamllint` (if installed)
    - manual YAML/schema review with a clear "not tool-validated" note
 2. If Context7 or internet access is unavailable:
-   - use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/common-actions.md` for known action versions
+   - use `references/common-actions.md` for known action versions
    - state that external version verification could not be completed
 3. If a template path is missing:
-   - generate from the closest template pattern in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/`
+   - generate from the closest template pattern in `assets/templates/`
    - document which template was substituted
 
 Fallback usage must always be reported in the final output.
@@ -260,7 +260,7 @@ All generated resources must follow:
 | **Naming** | Descriptive names, lowercase-hyphen files |
 | **Error Handling** | Timeouts, cleanup with `if: always()` |
 
-See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md` for complete guidelines.
+See `references/best-practices.md` for complete guidelines.
 
 ---
 
@@ -270,22 +270,22 @@ See `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actio
 
 | Document | Content | When to Use |
 |----------|---------|-------------|
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/best-practices.md` | Security, performance, patterns | Every workflow |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/common-actions.md` | Action versions, inputs, outputs | Public action usage |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/expressions-and-contexts.md` | `${{ }}` syntax, contexts, functions | Complex conditionals |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/advanced-triggers.md` | workflow_run, dispatch, ChatOps | Workflow orchestration |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/custom-actions.md` | Metadata, structure, versioning | Custom action creation |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/modern-features.md` | Summaries, environments, containers | Enhanced workflows |
+| `references/best-practices.md` | Security, performance, patterns | Every workflow |
+| `references/common-actions.md` | Action versions, inputs, outputs | Public action usage |
+| `references/expressions-and-contexts.md` | `${{ }}` syntax, contexts, functions | Complex conditionals |
+| `references/advanced-triggers.md` | workflow_run, dispatch, ChatOps | Workflow orchestration |
+| `references/custom-actions.md` | Metadata, structure, versioning | Custom action creation |
+| `references/modern-features.md` | Summaries, environments, containers | Enhanced workflows |
 
 ### Templates
 
 | Template | Location |
 |----------|----------|
-| Basic Workflow | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/workflow/basic_workflow.yml` |
-| Reusable Workflow | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/workflow/reusable_workflow.yml` |
-| Composite Action | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/action/composite/action.yml` |
-| Docker Action | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/action/docker/` |
-| JavaScript Action | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/assets/templates/action/javascript/` |
+| Basic Workflow | `assets/templates/workflow/basic_workflow.yml` |
+| Reusable Workflow | `assets/templates/workflow/reusable_workflow.yml` |
+| Composite Action | `assets/templates/action/composite/action.yml` |
+| Docker Action | `assets/templates/action/docker/` |
+| JavaScript Action | `assets/templates/action/javascript/` |
 
 ---
 
@@ -333,7 +333,7 @@ Third-party action citations:
 The task is complete only when all checks below pass:
 
 1. The request route was selected using the trigger decision tree.
-2. Only the minimum required ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/templates were loaded first.
+2. Only the minimum required references/templates were loaded first.
 3. Every third-party action is pinned to a commit SHA and has source/version citation.
 4. Validation was run, or a skip exception/fallback path was explicitly documented.
 5. Output includes assumptions, security-sensitive decisions (permissions/secrets), and generated file paths.
@@ -343,7 +343,7 @@ The task is complete only when all checks below pass:
 ## Workflow Summary
 
 1. **Route** the request using the trigger decision tree
-2. **Load** the minimum ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/github-actions-generator/references/templates for that route
+2. **Load** the minimum references/templates for that route
 3. **Generate** using mandatory security and naming standards
 4. **Cite** and pin third-party actions (source, version, SHA)
 5. **Validate** with `forge:github-actions-validator` (or documented fallback)

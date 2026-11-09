@@ -53,7 +53,7 @@ kubeVersion: ">=1.21.0-0"
 
 ### 1. Use Named Templates (Helpers)
 
-Define reusable templates in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/_helpers.tpl`:
+Define reusable templates in `templates/_helpers.tpl`:
 
 **Good:**
 ```yaml
@@ -471,7 +471,7 @@ data:
 
 **Good:**
 ```yaml
-# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/tests/test-connection.yaml
+# templates/tests/test-connection.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -756,7 +756,7 @@ Usage: {{ include "mychart.fullname" . }}
 
 ### 3. Provide NOTES.txt
 
-Create `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/helm-validator/templates/NOTES.txt` with post-installation instructions:
+Create `templates/NOTES.txt` with post-installation instructions:
 
 ```
 Thank you for installing {{ .Chart.Name }}.

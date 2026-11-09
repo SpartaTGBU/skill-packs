@@ -62,21 +62,21 @@ When uncertain on a complete-generation request, default to **Full** mode.
 Use an open/read action to load references based on the selected mode.
 
 **Targeted mode (review/Q&A/snippet/focused fix):**
-- Load only directly relevant ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/templates for the scoped request.
+- Load only directly relevant references/templates for the scoped request.
 - Do not enforce Full-generation Tier 1/Tier 2 checklist items.
 
 **Tier 1 (Required for complete pipeline generation in Lightweight and Full modes):**
-1. `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/best-practices.md` - baseline security, performance, naming
-2. `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/common-patterns.md` - starting pattern selection
-3. Matching template from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/`:
-   - Docker pipelines -> `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/docker-build.yml`
-   - Kubernetes deployments -> `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/kubernetes-deploy.yml`
-   - Multi-project pipelines -> `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/multi-project.yml`
-   - Basic pipelines -> `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/basic-pipeline.yml`
+1. `references/best-practices.md` - baseline security, performance, naming
+2. `references/common-patterns.md` - starting pattern selection
+3. Matching template from `assets/templates/`:
+   - Docker pipelines -> `assets/templates/docker-build.yml`
+   - Kubernetes deployments -> `assets/templates/kubernetes-deploy.yml`
+   - Multi-project pipelines -> `assets/templates/multi-project.yml`
+   - Basic pipelines -> `assets/templates/basic-pipeline.yml`
 
 **Tier 2 (Required for Full mode; optional for Lightweight mode):**
-1. `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/gitlab-ci-reference.md` - keyword/syntax edge cases
-2. `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/security-guidelines.md` - security-sensitive controls
+1. `references/gitlab-ci-reference.md` - keyword/syntax edge cases
+2. `references/security-guidelines.md` - security-sensitive controls
 
 **Tier 3 (Conditional external docs lookup):**
 - Use only when local references do not cover requested features or version-specific behavior.
@@ -108,7 +108,7 @@ Use for simple requests only.
 ## Reference Analysis Complete (Lightweight)
 
 **Pattern:** Basic Build-Test-Deploy from common-patterns.md
-**Template:** ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/basic-pipeline.yml
+**Template:** assets/templates/basic-pipeline.yml
 **Key standards to enforce:**
 - Pin runtime image versions (no `:latest`)
 - Add explicit job timeouts
@@ -155,7 +155,7 @@ Use for complex or security-sensitive requests.
 - Include container scanning with Trivy
 - Never expose secrets in logs
 
-**Template Foundation:** ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/docker-build.yml + ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/kubernetes-deploy.yml
+**Template Foundation:** assets/templates/docker-build.yml + assets/templates/kubernetes-deploy.yml
 - Combine Docker build pattern with K8s kubectl deployment
 - Add Python-specific test jobs
 ```
@@ -177,9 +177,9 @@ Create complete, production-ready `.gitlab-ci.yml` files with proper structure, 
 **Process:**
 1. Understand the user's requirements (what needs to be automated)
 2. Identify stages, jobs, dependencies, and artifacts
-3. Use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/basic-pipeline.yml` as structural foundation
-4. Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/best-practices.md` for implementation patterns
-5. Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/common-patterns.md` for standard pipeline patterns
+3. Use `assets/templates/basic-pipeline.yml` as structural foundation
+4. Reference `references/best-practices.md` for implementation patterns
+5. Reference `references/common-patterns.md` for standard pipeline patterns
 6. Generate the pipeline following these principles:
    - Use semantic stage and job names
    - Pin Docker images to specific versions (not :latest)
@@ -299,7 +299,7 @@ Create pipelines for building, testing, and pushing Docker images to container r
 
 **Process:**
 1. Understand the Docker build requirements (base images, registries, tags)
-2. Use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/docker-build.yml` as foundation
+2. Use `assets/templates/docker-build.yml` as foundation
 3. Implement Docker-in-Docker or Kaniko for builds
 4. Configure registry authentication
 5. Implement image tagging strategy
@@ -365,7 +365,7 @@ Create pipelines that deploy applications to Kubernetes clusters.
 
 **Process:**
 1. Identify the Kubernetes deployment method (kubectl, Helm, Kustomize)
-2. Use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/kubernetes-deploy.yml` as foundation
+2. Use `assets/templates/kubernetes-deploy.yml` as foundation
 3. Configure cluster authentication (service accounts, kubeconfig)
 4. Implement proper environment management
 5. Add rollback capabilities
@@ -412,7 +412,7 @@ Create pipelines that trigger other projects or use parent-child pipeline patter
 
 **Process:**
 1. Identify the pipeline orchestration needs
-2. Use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/multi-project.yml` or parent-child templates
+2. Use `assets/templates/multi-project.yml` or parent-child templates
 3. Configure proper artifact passing
 4. Implement parallel execution where appropriate
 5. **ALWAYS validate** using forge:gitlab-ci-validator skill
@@ -526,9 +526,9 @@ Use this flow only when local references do not cover requested features or vers
    - Determine if version-specific information is needed
 
 2. **Check local references first (Tier 1/Tier 2):**
-   - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/common-patterns.md`
-   - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/gitlab-ci-reference.md`
-   - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/security-guidelines.md`
+   - `references/common-patterns.md`
+   - `references/gitlab-ci-reference.md`
+   - `references/security-guidelines.md`
 
 3. **Use Context7 first when external lookup is needed:**
    - Resolve library: `Context7 resolve-library-id tool`
@@ -610,15 +610,15 @@ variables:
      ```
    ```bash
    # From repository root
-   bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/validate_gitlab_ci.sh "$PIPELINE_FILE"
+   bash ../gitlab-ci-validator/scripts/validate_gitlab_ci.sh "$PIPELINE_FILE"
    ```
    ```bash
    # From skills/gitlab-ci-generator directory
-   bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/validate_gitlab_ci.sh "$PIPELINE_FILE"
+   bash ../gitlab-ci-validator/scripts/validate_gitlab_ci.sh "$PIPELINE_FILE"
    ```
    - If the script is not executable:
      ```bash
-     chmod +x ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-validator/scripts/validate_gitlab_ci.sh
+     chmod +x ../gitlab-ci-validator/scripts/validate_gitlab_ci.sh
      ```
    - Optional API lint fallback when GitLab project context is available:
      ```bash
@@ -772,7 +772,7 @@ After validation results, include a concise freshness note for templates and doc
 ```markdown
 ## Template and Version Notes
 
-- **Template base:** [~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/<file>.yml]
+- **Template base:** [assets/templates/<file>.yml]
 - **Template customization scope:** [what changed from template]
 - **Version/doc basis:** [Context7, docs.gitlab.com, or local references only]
 - **Freshness note:** [exact date checked, or "external lookup unavailable"]
@@ -783,7 +783,7 @@ After validation results, include a concise freshness note for templates and doc
 ```markdown
 ## Template and Version Notes
 
-- **Template base:** ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/docker-build.yml
+- **Template base:** assets/templates/docker-build.yml
 - **Template customization scope:** Added unit-test stage and environment-specific deploy rules
 - **Version/doc basis:** docs.gitlab.com include-template docs + local references
 - **Freshness note:** Verified template syntax on 2026-02-28
@@ -866,7 +866,7 @@ Configure these variables in **Settings → CI/CD → Variables**:
 
 ## Best Practices to Enforce
 
-Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/best-practices.md` for comprehensive guidelines. Key principles:
+Reference `references/best-practices.md` for comprehensive guidelines. Key principles:
 
 ### Mandatory Standards
 
@@ -919,27 +919,27 @@ Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab
 
 ### References (Tiered Loading)
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/best-practices.md` (**Tier 1: required for all**) - Comprehensive GitLab CI/CD best practices
+- `references/best-practices.md` (**Tier 1: required for all**) - Comprehensive GitLab CI/CD best practices
   - Security patterns, performance optimization
   - Pipeline design, configuration organization
   - Common patterns and anti-patterns
   - **Use this:** When implementing any GitLab CI/CD resource
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/common-patterns.md` (**Tier 1: required for all**) - Frequently used pipeline patterns
+- `references/common-patterns.md` (**Tier 1: required for all**) - Frequently used pipeline patterns
   - Basic CI pipeline patterns
   - Docker build and push patterns
   - Deployment patterns (K8s, cloud platforms)
   - Multi-project and parent-child patterns
   - **Use this:** When selecting which pattern to use
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/gitlab-ci-reference.md` (**Tier 2: required for Full mode**) - GitLab CI/CD YAML syntax reference
+- `references/gitlab-ci-reference.md` (**Tier 2: required for Full mode**) - GitLab CI/CD YAML syntax reference
   - Complete keyword reference
   - Job configuration options
   - Rules and conditional execution
   - Variables and environments
   - **Use this:** For syntax and keyword details
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/security-guidelines.md` (**Tier 2: required for Full mode**) - Security best practices
+- `references/security-guidelines.md` (**Tier 2: required for Full mode**) - Security best practices
   - Secrets management
   - Image security
   - Script security
@@ -948,10 +948,10 @@ Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab
 
 ### Assets (Templates to Customize)
 
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/basic-pipeline.yml` - Complete basic pipeline template
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/docker-build.yml` - Docker build pipeline template
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/kubernetes-deploy.yml` - Kubernetes deployment template
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/multi-project.yml` - Multi-project orchestration template
+- `assets/templates/basic-pipeline.yml` - Complete basic pipeline template
+- `assets/templates/docker-build.yml` - Docker build pipeline template
+- `assets/templates/kubernetes-deploy.yml` - Kubernetes deployment template
+- `assets/templates/multi-project.yml` - Multi-project orchestration template
 
 **How to use templates:**
 1. Copy the relevant template structure
@@ -973,9 +973,9 @@ Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab
    - Trigger on push and merge requests
 
 2. ✅ Reference resources:
-   - Check `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/best-practices.md` for pipeline structure
-   - Check `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/common-patterns.md` for Node.js + Docker pattern
-   - Use `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/docker-build.yml` as base
+   - Check `references/best-practices.md` for pipeline structure
+   - Check `references/common-patterns.md` for Node.js + Docker pattern
+   - Use `assets/templates/docker-build.yml` as base
 
 3. ✅ Generate pipeline:
    - Define stages (build, test, dockerize, deploy)
@@ -1107,11 +1107,11 @@ test:
 ### Mode and References
 - [ ] Complexity mode selected (`Targeted`, `Lightweight`, or `Full`)
 - [ ] For **Targeted** mode: only directly relevant files/references loaded
-- [ ] For **Lightweight/Full** modes: read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/best-practices.md` before generating
-- [ ] For **Lightweight/Full** modes: read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/common-patterns.md` before generating
-- [ ] For **Lightweight/Full** modes: read appropriate template from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/` for the pipeline type
-- [ ] For **Full** mode: read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/gitlab-ci-reference.md`
-- [ ] For **Full** mode: read `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/security-guidelines.md`
+- [ ] For **Lightweight/Full** modes: read `references/best-practices.md` before generating
+- [ ] For **Lightweight/Full** modes: read `references/common-patterns.md` before generating
+- [ ] For **Lightweight/Full** modes: read appropriate template from `assets/templates/` for the pipeline type
+- [ ] For **Full** mode: read `references/gitlab-ci-reference.md`
+- [ ] For **Full** mode: read `references/security-guidelines.md`
 - [ ] **Output explicit confirmation statement** for Lightweight/Full modes
 
 ### Generation Standards Applied
@@ -1193,12 +1193,12 @@ Always follow this sequence when generating GitLab CI/CD pipelines:
 2. **Load References** - use tiered loading:
    - For `Targeted` mode, load only directly relevant files.
    - For `Lightweight/Full` modes, load:
-     - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/best-practices.md`
-     - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/common-patterns.md`
-     - Plus the appropriate template from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/assets/templates/`
+     - `references/best-practices.md`
+     - `references/common-patterns.md`
+     - Plus the appropriate template from `assets/templates/`
    - For `Full` mode, also load:
-     - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/gitlab-ci-reference.md`
-     - `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/security-guidelines.md`
+     - `references/gitlab-ci-reference.md`
+     - `references/security-guidelines.md`
 3. **Confirm** - Output targeted response or Lightweight/Full reference analysis as required by mode.
 4. **Generate** - Use templates and follow standards (security, caching, naming, explicit timeout on ALL jobs).
 5. **Lookup Docs When Needed** - Context7 first, then `web.search_query`/`web.open`, with offline fallback notes when constrained.

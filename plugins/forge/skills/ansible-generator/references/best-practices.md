@@ -227,7 +227,7 @@ Each role should have:
 ```
 
 ```jinja2
-# Template file: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/templates/app_config.j2
+# Template file: templates/app_config.j2
 server:
   port: {{ app_port }}
   host: {{ ansible_default_ipv4.address }}
@@ -479,7 +479,7 @@ ssl:
 
 #### Loops in Templates
 ```jinja2
-{# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/templates/config.j2 #}
+{# templates/config.j2 #}
 # User list
 {% for user in users %}
 user {{ user.name }}:
@@ -500,7 +500,7 @@ server_{{ loop.index }}: {{ server.hostname }}
 
 #### Conditionals in Templates
 ```jinja2
-{# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/ansible-generator/templates/app_config.j2 #}
+{# templates/app_config.j2 #}
 {% if environment == 'production' %}
 log_level: warning
 max_connections: 1000

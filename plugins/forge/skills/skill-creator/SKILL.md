@@ -32,7 +32,7 @@ Cool? Cool.
 
 ## Setup
 
-Scripts live in `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/skill-creator/scripts/`. Run them as modules from the skill-creator directory (`cd` there first; `python -m scripts.<name>`), and the viewer as `python eval-viewer/generate_review.py`. Python 3 stdlib only.
+Scripts live in `scripts/`. Run them as modules from the skill-creator directory (`cd` there first; `python -m scripts.<name>`), and the viewer as `python eval-viewer/generate_review.py`. Python 3 stdlib only, except `quick_validate.py` (and `package_skill.py`, which imports it) need PyYAML (`pip install pyyaml`).
 
 **Runner (description optimization only).** `run_eval.py`, `run_loop.py` and `improve_description.py` call an LLM through a command set in `SKILL_EVAL_CMD` (prompt on stdin or as the last argument, answer on stdout). If unset, the first of `claude -p`, `opencode run`, `pi -p`, `hermes chat -q` found on PATH is used. Trigger evaluation is a routing simulation: the runner sees an available-skills list (the candidate description plus sibling skills as distractors) and says which skill it would load. It approximates real triggering; confirm in the real harness when it matters.
 

@@ -184,8 +184,8 @@ Contingency A: validator skill unavailable
 Run direct commands:
 
 ```bash
-bash ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/scripts/setup_tools.sh
-yamllint -c ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/k8s-yaml-validator/assets/.yamllint <file.yaml>
+bash ../k8s-yaml-validator/scripts/setup_tools.sh
+yamllint -c ../k8s-yaml-validator/assets/.yamllint <file.yaml>
 kubeconform -schema-location default -strict -ignore-missing-schemas -summary <file.yaml>
 server_out="$(mktemp)"
 client_out="$(mktemp)"

@@ -721,7 +721,7 @@ stages:
 generate-child-pipeline:
   stage: generate
   script:
-    - python ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/scripts/generate-pipeline.py > generated-pipeline.yml
+    - python scripts/generate-pipeline.py > generated-pipeline.yml
   artifacts:
     paths:
       - generated-pipeline.yml
@@ -874,7 +874,7 @@ trigger-service-c:
 **Use case:** Reusable templates across multiple projects.
 
 ```yaml
-# ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/templates/build-templates.yml
+# templates/build-templates.yml
 .node-build-template:
   image: node:20-alpine
   cache:
@@ -969,7 +969,7 @@ These patterns provide a solid foundation for common GitLab CI/CD scenarios. Whe
 
 1. **Customize** them for your specific needs
 2. **Validate** using gitlab-ci-validator skill
-3. **Follow** best practices from ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/gitlab-ci-generator/references/best-practices.md
+3. **Follow** best practices from references/best-practices.md
 4. **Test** locally when possible
 5. **Document** any modifications
 

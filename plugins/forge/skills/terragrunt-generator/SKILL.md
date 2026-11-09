@@ -210,11 +210,11 @@ Create root-level `root.hcl` or `terragrunt.hcl` with remote state, provider con
 
 > **MANDATORY:** Before generating, READ the template file:
 > ```
-> Read: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/root/terragrunt.hcl
+> Read: assets/templates/root/terragrunt.hcl
 > ```
 
-**Template:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/root/terragrunt.hcl`
-**Patterns:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` → Root Configuration Patterns
+**Template:** `assets/templates/root/terragrunt.hcl`
+**Patterns:** `references/common-patterns.md` → Root Configuration Patterns
 
 **Key placeholders to replace:**
 - `[BUCKET_NAME]`, `[AWS_REGION]`, `[DYNAMODB_TABLE]`
@@ -232,11 +232,11 @@ Create child modules with dependencies, mock outputs, and proper includes.
 
 > **MANDATORY:** Before generating, READ the template file:
 > ```
-> Read: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/child/terragrunt.hcl
+> Read: assets/templates/child/terragrunt.hcl
 > ```
 
-**Template:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/child/terragrunt.hcl`
-**Patterns:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` → Child Module Patterns
+**Template:** `assets/templates/child/terragrunt.hcl`
+**Patterns:** `references/common-patterns.md` → Child Module Patterns
 
 **Module source options:**
 - Local: `"../../modules/vpc"`
@@ -248,10 +248,10 @@ Self-contained modules without root dependency.
 
 > **MANDATORY:** Before generating, READ the template file:
 > ```
-> Read: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/module/terragrunt.hcl
+> Read: assets/templates/module/terragrunt.hcl
 > ```
 
-**Template:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/module/terragrunt.hcl`
+**Template:** `assets/templates/module/terragrunt.hcl`
 
 ### Canonical Placeholder Replacement Map
 
@@ -277,10 +277,10 @@ Complete directory structures for dev/staging/prod.
 > 2. Read relevant templates for root, env, and child modules
 > 3. Verify env.hcl placement and access patterns:
 >    ```
->    Read: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/env/env.hcl
+>    Read: assets/templates/env/env.hcl
 >    ```
 
-**Patterns:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` → Environment-Specific Patterns
+**Patterns:** `references/common-patterns.md` → Environment-Specific Patterns
 
 **Typical structure (Pattern A - Environment-Agnostic Root):**
 ```
@@ -299,14 +299,14 @@ Infrastructure blueprints using `terragrunt.stack.hcl`.
 
 > **MANDATORY:** Before generating, READ the template files:
 > ```
-> Read: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/stack/terragrunt.stack.hcl
-> Read: ~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/catalog/terragrunt.hcl
+> Read: assets/templates/stack/terragrunt.stack.hcl
+> Read: assets/templates/catalog/terragrunt.hcl
 > ```
 
 **Docs:** [Stacks Documentation](https://terragrunt.gruntwork.io/docs/features/stacks/)
-**Template:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/stack/terragrunt.stack.hcl`
-**Catalog Template:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/catalog/terragrunt.hcl`
-**Patterns:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` → Stacks Patterns
+**Template:** `assets/templates/stack/terragrunt.stack.hcl`
+**Catalog Template:** `assets/templates/catalog/terragrunt.hcl`
+**Patterns:** `references/common-patterns.md` → Stacks Patterns
 
 **Stack path rule:** Keep `no_dot_terragrunt_stack` mode consistent across dependent units. Do not mix direct-path and `.terragrunt-stack` generation in the same dependency chain.
 
@@ -323,7 +323,7 @@ terragrunt stack clean       # Clean generated directories
 Runtime control without code changes.
 
 **Docs:** [Feature Flags Documentation](https://terragrunt.gruntwork.io/docs/features/feature-flags/)
-**Patterns:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` → Feature Flags Patterns
+**Patterns:** `references/common-patterns.md` → Feature Flags Patterns
 
 > **CRITICAL:** Feature flag `default` values MUST be static (boolean, string, number).
 > They CANNOT reference `local.*` values. Use static defaults and override via CLI/env vars.
@@ -355,7 +355,7 @@ export TG_FEATURE="enable_monitoring=true"
 Fine-grained execution control (replaces deprecated `skip`).
 
 **Docs:** [Exclude Block Reference](https://terragrunt.gruntwork.io/docs/reference/config-blocks-and-attributes/#exclude)
-**Patterns:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` → Exclude Block Patterns
+**Patterns:** `references/common-patterns.md` → Exclude Block Patterns
 
 **Actions:** `"plan"`, `"apply"`, `"destroy"`, `"all"`, `"all_except_output"`
 
@@ -376,13 +376,13 @@ prevent_destroy = true
 Advanced error handling (replaces deprecated `retryable_errors`).
 
 **Docs:** [Errors Block Reference](https://terragrunt.gruntwork.io/docs/reference/config-blocks-and-attributes/#errors)
-**Patterns:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` → Errors Block Patterns
+**Patterns:** `references/common-patterns.md` → Errors Block Patterns
 
 ### 9. Generate OpenTofu Engine Configuration (2025)
 Use OpenTofu as the IaC engine.
 
 **Docs:** [Engine Documentation](https://terragrunt.gruntwork.io/docs/features/engine/)
-**Patterns:** `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` → OpenTofu Engine Patterns
+**Patterns:** `references/common-patterns.md` → OpenTofu Engine Patterns
 
 ### 10. Handling Custom Providers/Modules
 When generating configs with custom providers:
@@ -419,15 +419,15 @@ Complete the **Architecture Pattern Selection Checklist (Canonical)** above and 
 
 | Configuration Type | Template to Read | Purpose |
 |-------------------|------------------|---------|
-| Root configuration | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/root/terragrunt.hcl` | Shared state backend, providers, and common inputs |
-| Environment variables | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/env/env.hcl` | Per-environment locals read by child modules (Pattern A) |
-| Child module | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/child/terragrunt.hcl` | Environment module wired to root include |
-| Standalone module | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/module/terragrunt.hcl` | Independent Terragrunt module without root include |
-| Stack file | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/stack/terragrunt.stack.hcl` | Blueprint that generates multiple units |
-| Catalog unit | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/catalog/terragrunt.hcl` | Reusable unit template consumed by stacks |
+| Root configuration | `assets/templates/root/terragrunt.hcl` | Shared state backend, providers, and common inputs |
+| Environment variables | `assets/templates/env/env.hcl` | Per-environment locals read by child modules (Pattern A) |
+| Child module | `assets/templates/child/terragrunt.hcl` | Environment module wired to root include |
+| Standalone module | `assets/templates/module/terragrunt.hcl` | Independent Terragrunt module without root include |
+| Stack file | `assets/templates/stack/terragrunt.stack.hcl` | Blueprint that generates multiple units |
+| Catalog unit | `assets/templates/catalog/terragrunt.hcl` | Reusable unit template consumed by stacks |
 
 **Also read:**
-- `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` - Primary source for generation patterns
+- `references/common-patterns.md` - Primary source for generation patterns
 
 ### Step 4: Generate with Validation
 
@@ -645,7 +645,7 @@ Suggest what the user might want to do next (add more modules, customize configu
 
 ## Best Practices
 
-Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md` for comprehensive guidelines.
+Reference `../terragrunt-validator/references/best_practices.md` for comprehensive guidelines.
 
 **Key principles:**
 - Use `include` blocks to inherit root configuration (DRY)
@@ -682,19 +682,19 @@ Reference `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terrag
 
 | Configuration Type | Template File | Purpose | When to Read |
 |-------------------|---------------|---------|--------------|
-| Root configuration | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/root/terragrunt.hcl` | Shared backend, provider, and common inputs | Before generating any root.hcl |
-| Environment variables | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/env/env.hcl` | Per-environment locals (environment, region, sizing, feature toggles) | Before generating any env.hcl (Pattern A) |
-| Child module | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/child/terragrunt.hcl` | Module include, source, and optional dependency scaffolding | Before generating any child module |
-| Standalone module | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/module/terragrunt.hcl` | Module config without root inheritance | Before generating standalone modules |
-| Stack file | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/stack/terragrunt.stack.hcl` | Stack blueprint and unit generation | Before generating stacks |
-| Catalog unit | `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/catalog/terragrunt.hcl` | Reusable unit consumed by stack definitions | Before generating catalog units |
+| Root configuration | `assets/templates/root/terragrunt.hcl` | Shared backend, provider, and common inputs | Before generating any root.hcl |
+| Environment variables | `assets/templates/env/env.hcl` | Per-environment locals (environment, region, sizing, feature toggles) | Before generating any env.hcl (Pattern A) |
+| Child module | `assets/templates/child/terragrunt.hcl` | Module include, source, and optional dependency scaffolding | Before generating any child module |
+| Standalone module | `assets/templates/module/terragrunt.hcl` | Module config without root inheritance | Before generating standalone modules |
+| Stack file | `assets/templates/stack/terragrunt.stack.hcl` | Stack blueprint and unit generation | Before generating stacks |
+| Catalog unit | `assets/templates/catalog/terragrunt.hcl` | Reusable unit consumed by stack definitions | Before generating catalog units |
 
 ### References
 
 | Reference | Content | Purpose | When to Read |
 |-----------|---------|---------|--------------|
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` | All generation patterns with examples | Pick a compatible pattern before writing files | Always, before generating |
-| `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md` | Comprehensive best practices | Final quality and safety checks | Always, before generating |
+| `references/common-patterns.md` | All generation patterns with examples | Pick a compatible pattern before writing files | Always, before generating |
+| `../terragrunt-validator/references/best_practices.md` | Comprehensive best practices | Final quality and safety checks | Always, before generating |
 
 ### Official Documentation
 - [Terragrunt Docs](https://terragrunt.gruntwork.io/docs/)
@@ -804,9 +804,9 @@ dev/
 
 Before generating, READ these files in order:
 
-1. [ ] `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/references/common-patterns.md` - Understand available patterns
-2. [ ] `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-validator/references/best_practices.md` - Know the rules
-3. [ ] Relevant template(s) from `~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terragrunt-generator/assets/templates/` - Structural reference
+1. [ ] `references/common-patterns.md` - Understand available patterns
+2. [ ] `../terragrunt-validator/references/best_practices.md` - Know the rules
+3. [ ] Relevant template(s) from `assets/templates/` - Structural reference
 
 ### Architecture Decision Tree
 

@@ -20,7 +20,7 @@ To use a template, copy its directory to your project location:
 
 ```bash
 # Run from repository root
-SKILL_DIR=~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/terraform-generator
+SKILL_DIR=.
 cp -r "${SKILL_DIR}/assets/minimal-project/" ./my-terraform-project/
 cd my-terraform-project
 cp terraform.tfvars.example terraform.tfvars

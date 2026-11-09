@@ -2,17 +2,12 @@
 disable-model-invocation: true  # skl: on-demand pack skill
 name: html-design-artifacts
 description: >
-  Producing polished UI mockups, interactive prototypes, wireframes, one-page decks and design
-  boards as single self-contained HTML files that a person can open, review and hand on. Covers
-  the brief, real design context, one-file packaging, artboard and slide structure, honest
-  placeholder content, revision rounds and a browser-only verification pass. Use when asked for
-  "a mockup", "a clickable prototype", "wireframes", "a deck in HTML" or "a design board of
-  options": a design shown, not code shipped. Routes: atelier:prototype (flow proof),
-  atelier:frontend-design and atelier:ui-engineering-polish (shipped code), atelier:visual-design
-  and atelier:design-systems (look and tokens), atelier:ui-review and atelier:visual-qa (audits).
-  Also: atelier:ui-ux-intelligence (direction before the file), atelier:unslop-ui (repairs an
-  existing screen, no new file), atelier:motion-design (animation craft). Split rule: if the output is an mp4 or a rendered animation, use atelier:video-composition or
-  atelier:product-demo-video; the full sibling list is in Neighbours.
+  Producing polished UI mockups, interactive prototypes, wireframes, one-page decks and design boards
+  as single self-contained HTML files that a person can open, review and hand on. Covers the brief,
+  real design context, one-file packaging, artboard and slide structure, honest placeholder content,
+  revision rounds and a browser-only verification pass. Use when asked for "a mockup", "a clickable
+  prototype", "wireframes", "a deck in HTML" or "a design board of options": a design shown, not code
+  shipped. Not for shipped code or rendered video (mp4); sibling routing is in Neighbours.
 ---
 
 # HTML Design Artifacts

@@ -83,11 +83,11 @@ Compare efforts on one model (or swap the two `--effort` flags for two `--model 
 mkdir -p /tmp/codex-ab-test/{a,b}
 PROMPT="<your task>"
 
-bash "~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/codex-delegate/scripts/run_codex.sh" \
+bash "scripts/run_codex.sh" \
   --prompt "$PROMPT" --repo /tmp/codex-ab-test/a \
   --log-file /tmp/codex-ab-test/a/log.txt --effort medium
 
-bash "~/.claude/local-plugins/forge-marketplace/plugins/forge/skills/codex-delegate/scripts/run_codex.sh" \
+bash "scripts/run_codex.sh" \
   --prompt "$PROMPT" --repo /tmp/codex-ab-test/b \
   --log-file /tmp/codex-ab-test/b/log.txt --effort xhigh
 
