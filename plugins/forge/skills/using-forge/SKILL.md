@@ -61,7 +61,10 @@ When unsure between two sizes, pick the larger for *planning* and the smaller fo
 
 **Review (comprehensive)**
 - Before merge, or when asked to review → `forge:code-review`
+- Quick plain-English review of a change, "is this over-engineered?" → `forge:lean-review`
 - Responding to review feedback → `forge:receiving-code-review`
+- Audit a whole repo or folder (bugs, risk, scale, tests, bloat) → `forge:audit`
+- Ledger of `shortcut:` markers and deferred work → `forge:debt`
 - Auth, secrets, input handling, dependencies, agents/MCP → `forge:security-review`
 - Before saying "done", "fixed" or "passing" → `forge:verification`
 - Wrapping up a branch or opening a PR → `forge:finishing-branch`

@@ -24,3 +24,5 @@ Design merge (ideas, rules and short tables synthesized, rewritten; no scripts o
 - https://github.com/heygen-com/hyperframes @ 443ded4 (Apache-2.0)
 
 - forge:hill-climb draws on Theo Browne (t3.gg) videos on hill climbing with agents (youtube.com/watch?v=xq0eB8vxeqk, NBCM_ZoWZo8, uLGxb4F3SyI); forge:goal paraphrases Claude Code's /goal and ProposeGoal behavior.
+
+- forge:audit, forge:debt and forge:lean-review are adapted from dietrichgebert/ponytail @ 96608e0 (ponytail-audit, ponytail-debt, ponytail-review; MIT).

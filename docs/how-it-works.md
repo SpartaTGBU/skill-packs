@@ -18,7 +18,7 @@ Pick the size before anything else, because it decides how much process to run. 
 
 ## On-demand loading with `skl`
 
-Claude Code lists every available skill in each turn's context. With 183 skills that would be wasteful, so pack skills are marked `disable-model-invocation: true` and stay out of that list. There are two exceptions besides the routers. The clarify-and-goal skills (`forge:brainstorming`, `forge:brainstorm-technical-design`, `forge:goal` and `forge:hill-climb`) carry `# skl: model-visible` instead. That keeps them in the list, so the model invokes them on its own whenever a goal or requirement is unclear. `skl` fills the gap for everything else:
+Claude Code lists every available skill in each turn's context. With 186 skills that would be wasteful, so pack skills are marked `disable-model-invocation: true` and stay out of that list. There are two exceptions besides the routers. The clarify-and-goal skills (`forge:brainstorming`, `forge:brainstorm-technical-design`, `forge:goal` and `forge:hill-climb`) carry `# skl: model-visible` instead. That keeps them in the list, so the model invokes them on its own whenever a goal or requirement is unclear. `skl` fills the gap for everything else:
 
 | Command | Does |
 |---------|------|
