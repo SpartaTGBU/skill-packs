@@ -4,7 +4,8 @@ name: visual-design
 description: >
   Art direction and visual systems for UI with concrete numbers: type scales and leading,
   OKLCH color roles and contrast, spacing scale, grids and breakpoints, radius and elevation,
-  imagery, brand-reference tokens from real sites, and a redesign audit for existing UIs.
+  imagery, brand-reference tokens from real sites, anti-slop taste rules for landing pages and
+  portfolios (design dials, full tasteskill text), and a redesign audit for existing UIs.
   Use when choosing or fixing typography, color, spacing or layout, when asked to "make it look
   like Stripe/Linear/Vercel", when a UI looks generic or AI-made, or when upgrading an
   existing design without breaking it.
@@ -18,13 +19,19 @@ owns direction, anti-slop and build quality; `atelier:motion-design` owns moveme
 
 References (read only the one the task needs):
 - Anti-slop rules, dials, hard limits, pre-flight:
-  [references/taste-rules.md](references/taste-rules.md)
-- Process, surface archetypes, slop diagnostic, deck/prototype rules: [references/design-doctrine.md](references/design-doctrine.md)
+  [references/taste-rules.md](references/taste-rules.md). Full tasteskill text (dial definitions,
+  production-test tells, dark-mode protocol, pattern vocabulary, GSAP skeletons, full pre-flight,
+  design-system install commands and canonical docs, Liquid Glass notes):
+  [references/taste-skill.md](references/taste-skill.md), read by section
+- Process, surface archetypes, slop diagnostic, deck/prototype rules, roles, source-code fidelity,
+  final reply: [references/design-doctrine.md](references/design-doctrine.md)
 - Existing-site audit and upgrade order: [references/redesign-audit.md](references/redesign-audit.md)
 - Official systems vs aesthetic, default stack: [references/design-system-picks.md](references/design-system-picks.md)
 - Pattern vocabulary, glass, grain, perf: [references/materials-and-patterns.md](references/materials-and-patterns.md)
 - Brand catalog + font substitutes: [references/brand-catalog.md](references/brand-catalog.md), per brand
-  `references/brands/<site>.md`
+  `references/brands/<site>.md` (54 brands). 20 more (Binance, Ferrari, Nike, Tesla, Slack,
+  Shopify, Starbucks and others) exist only in token form: `atelier:design-systems`
+  `references/brands/<brand>/DESIGN.md` (74 total, listed in its `references/brand-sources.md`)
 
 ## Invoke
 1. **Classify the job:** greenfield, redesign-preserve (keep brand, modernize),

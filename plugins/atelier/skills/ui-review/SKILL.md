@@ -7,7 +7,7 @@ description: >
   rules; a heuristic critique with anti-slop detection; and a polish pass. Output is a
   severity-ranked P0-P3 report. Use when asked to review, critique, audit or polish UI, check
   accessibility or UX, judge whether a design looks generic or AI-made, or before shipping a
-  front-end change.
+  front-end change, or to check code against the Vercel Web Interface Guidelines.
 ---
 
 # UI Review
@@ -21,6 +21,8 @@ in a running app to `forge:dogfood-qa`.
 Rule catalog: [references/checklist.md](references/checklist.md) covers a11y, keyboard, forms,
 states, animation, layout, typography, performance, hydration/locale/theming, UX rules (including
 style fit by product type), premium polish, flag-on-sight anti-patterns, and AI-generated tells.
+It includes every rule of the Vercel Web Interface Guidelines, so a "check against the Web
+Interface Guidelines" request is an Audit run on this checklist; no fetch needed.
 
 ## Pick the mode
 

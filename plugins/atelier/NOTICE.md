@@ -9,6 +9,26 @@ awesome-design-md, claude-design, motion-web-design, architecture-diagram (Cocoo
 Apache-2.0), taste-skill, redesign-skill, web-design-guidelines, html-summary, baoyu-infographic,
 manim-video, p5js, ascii-video, motion-broll, 3d-print-part-optimization).
 
+Design-skill port (2026-11-09): full content of the loose design skills, copied or merged so atelier
+no longer depends on the Hermes copies. All permit redistribution; license texts sit next to the files:
+
+- https://github.com/leonxlnx/taste-skill @ 85fc47e (MIT, Copyright (c) 2026 Leonxlnx): tasteskill v1
+  text vendored verbatim (frontmatter removed) as visual-design/references/taste-skill.md; the
+  redesign skill from the same repo is visual-design/references/redesign-audit.md.
+  License: visual-design/references/LICENSE-taste-skill.txt.
+- https://github.com/vercel-labs/web-interface-guidelines @ 434b7f9 (MIT, Copyright (c) 2025 Vercel Labs):
+  every rule of command.md merged into ui-review/references/checklist.md.
+  License: ui-review/references/LICENSE-web-interface-guidelines.txt.
+- https://github.com/NousResearch/hermes-agent @ dedca66 (MIT, Copyright (c) 2025 Nous Research):
+  claude-design (author BadTechBandit) design doctrine, merged into
+  visual-design/references/design-doctrine.md; popular-web-designs brand files in
+  visual-design/references/brands/ (themselves from VoltAgent/awesome-design-md, MIT).
+  License: visual-design/references/LICENSE-hermes-agent.txt.
+- https://github.com/VoltAgent/awesome-design-md (MIT): 74 brand DESIGN.md files in
+  design-systems/references/brands/ (license: design-systems/references/LICENSE-awesome-design-md.txt).
+- design-md (Hermes Agent, MIT; Google DESIGN.md spec Apache-2.0) and motion-web-design (owner-authored
+  with Hermes Agent, MIT) are merged into design-systems and motion-design.
+
 Design merge (ideas, rules and short tables synthesized and rewritten; no scripts or CLIs bundled):
 
 - https://github.com/emilkowalski/skills @ a81dbca (MIT)

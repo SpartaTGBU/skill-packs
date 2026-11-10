@@ -13,11 +13,12 @@ Plan thoroughly. Build lean. Review hard.
 
 | Pack | Skills | Use it for |
 |------|:------:|------------|
-| [**forge**](docs/forge.md) | 103 | Planning, lean implementation, code review, language stacks (Rust, Go, Python), DevOps generators and validators, research, agent and MCP work |
+| [**forge**](docs/forge.md) | 87 | Planning, lean implementation, code review, language stacks (Rust, Go, Python), DevOps generators and validators, agent and MCP work |
 | [**atrium**](docs/atrium.md) | 42 | Business work: Word/Excel/PowerPoint/PDF, brand and copy, SEO, growth, sales, CRM, finance, strategy, contracts |
 | [**atelier**](docs/atelier.md) | 56 | Visual work: web UI, design systems, motion, launch and demo films, images, AI video, logos, Blender and 3D, CAD, diagrams |
+| **scholar** | 17 | Academic research: topic gaps, literature triage, Zotero and NotebookLM, paper review and summaries, research design, academic writing ([skill list](docs/forge.md#research-and-academic-moved-to-the-scholar-pack)) |
 
-Each pack has a router skill (`forge:using-forge`, `atrium:using-atrium`, `atelier:using-atelier`) that says which skill to load for the job at hand.
+Each pack has a router skill (`forge:using-forge`, `atrium:using-atrium`, `atelier:using-atelier`, `scholar:using-scholar`) that says which skill to load for the job at hand.
 
 ## Install
 
@@ -26,9 +27,10 @@ Each pack has a router skill (`forge:using-forge`, `atrium:using-atrium`, `ateli
 /plugin install forge@skill-packs
 /plugin install atrium@skill-packs
 /plugin install atelier@skill-packs
+/plugin install scholar@skill-packs
 ```
 
-Install only the packs you want. atrium and atelier work alone, but the `skl` loader ships with forge, so install forge if you want on-demand loading for all three.
+Install only the packs you want. atrium, atelier and scholar work alone, but the `skl` loader ships with forge, so install forge if you want on-demand loading for all of them.
 
 ## How it works in 60 seconds
 
@@ -83,6 +85,7 @@ plugins/
   forge/    skills/  agents/  hooks/  bin/skl  NOTICE.md
   atrium/   skills/  NOTICE.md
   atelier/  skills/  NOTICE.md
+  scholar/  skills/  NOTICE.md
 docs/       guides, assets
 ```
 

@@ -16,7 +16,7 @@ import json, os, re, sys
 from pathlib import Path
 
 PLUGINS = Path(os.environ.get("SKL_PLUGINS", Path(__file__).resolve().parents[2]))
-PACKS = ("forge", "atrium", "atelier")
+PACKS = ("forge", "atrium", "atelier", "scholar")
 MARK = "disable-model-invocation: true  # skl: on-demand pack skill"
 VISIBLE = "# skl: model-visible"  # opt-out: skill stays in the Skill tool listing
 STATE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state")) / "skl"

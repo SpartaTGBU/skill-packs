@@ -1,5 +1,7 @@
 # UI review checklist
 
+<!-- Merges the Vercel Web Interface Guidelines (github.com/vercel-labs/web-interface-guidelines @ 434b7f9, MIT; license in LICENSE-web-interface-guidelines.txt) with atelier rules. -->
+
 Mechanical rules for the code audit. Apply each section that has a surface in the target; skip the
 rest. Each item is a candidate finding: confirm it in the code before reporting.
 
@@ -13,12 +15,15 @@ rest. Each item is a candidate finding: confirm it in the code before reporting.
 - Contrast: body text 4.5:1, large text (18px+ or 14px+ bold) and UI components 3:1. Check placeholders, disabled states, ghost buttons, text over images, focus rings, both themes.
 - Dialogs and popovers trap and return focus, close on Escape, and label themselves; menus, tabs, comboboxes follow the ARIA keyboard pattern.
 - Page works at 200% zoom and 400% reflow (320 CSS px) without loss of content.
+- Meaningful media has captions, transcripts or descriptions as applicable; media controls work by keyboard; decorative media is hidden from assistive tech.
+- Brand names, code tokens and identifiers carry `translate="no"` so auto-translation does not garble them.
 
 ## Focus and keyboard
 
 - Every interactive element is reachable and operable by keyboard with a visible `:focus-visible` ring. Never `outline: none` without a replacement; `:focus-within` for compound controls.
 - Focus order matches visual order; no positive `tabindex`; no keyboard traps; custom widgets implement arrow keys.
 - Autofocus sparingly (desktop, single primary input); never steal focus on load on mobile.
+- Sticky headers, footers and overlays never cover the focused element (`scroll-padding-top` / `scroll-margin`).
 
 ## Forms
 
@@ -27,6 +32,7 @@ rest. Each item is a candidate finding: confirm it in the code before reporting.
 - Submit stays enabled until the request starts, then shows progress and disables; Enter submits single-input forms; checkbox/radio and label share one hit target.
 - Errors inline beside the field, specific, with a fix; focus moves to the first error on submit; warn before leaving with unsaved changes. Required state is marked. Placeholders show an example ending in `…`.
 - Labels above inputs; helper text in markup; correct `type` (`email`, `tel`, `url`, `number`) and specific `autocomplete` tokens (`email`, `username`, `current-password`, `one-time-code`).
+- `autocomplete="off"` on non-auth fields that would otherwise trigger password managers.
 
 ## Interaction states and feedback
 
@@ -35,19 +41,25 @@ rest. Each item is a candidate finding: confirm it in the code before reporting.
 - Destructive actions confirm or offer undo. Optimistic updates reconcile on failure. Mutations are idempotent or de-duplicated.
 - Touch: `touch-action: manipulation`; deliberate `-webkit-tap-highlight-color`; hit targets 44x44px (24px absolute minimum with spacing); `overscroll-behavior: contain` in modals, drawers, sheets.
 - Hover-only affordances have a touch and keyboard equivalent.
+- Drag, swipe, pinch and path gestures have a tap/click and keyboard alternative unless the gesture is essential. During drag, disable text selection and mark dragged elements `inert`.
+- Page rubber-band suppression only on fine pointers: `overscroll-behavior: none` on `<html>` inside `@media (pointer: fine)`; keep coarse-pointer defaults for pull-to-refresh, and test hybrid touch devices (`none` also disables scroll chaining and swipe navigation).
 - URL reflects state (filters, tabs, pagination, expanded panels) so it can be shared and survives refresh.
+  Deep-link stateful UI: if it lives in component state, consider URL sync (for example `nuqs`).
 
 ## Animation
 
 - `prefers-reduced-motion` honored per component. Animate only `transform` and `opacity` (plus meaningful `filter`/`clip-path`); list properties, never `transition: all`; correct `transform-origin`.
 - Interruptible, never blocks interaction; nothing enters from `scale(0)`; no bounce/elastic easing on product UI; content visible if the script fails.
 - SVG transforms on a `<g>` wrapper with `transform-box: fill-box`. Timing and easing: `atelier:motion-design`.
+- Autoplaying motion longer than 5s alongside other content has pause, stop or hide controls; muted decorative loops stop under `prefers-reduced-motion`.
 
 ## Layout and responsive
 
 - No horizontal scroll; verify at 320, 768, 1280. `min-h-[100dvh]` not `100vh`; `env(safe-area-inset-*)` with `viewport-fit=cover` for full-bleed.
 - Flex/grid over JS measurement; long content truncates (`truncate`, `line-clamp-*`), wraps, or gets `min-w-0`; handle empty, 1-item and very-long-string cases.
 - Images have `width`/`height` or `aspect-ratio`; below-fold `loading="lazy"`; the LCP image preloaded with `fetchpriority="high"`.
+- `<video autoplay muted loop playsinline>` instead of animated GIF, with a still alternative; for short non-essential loops add a Safari H.264 MP4 source and a `prefers-reduced-motion` media condition with a still fallback.
+- No unwanted scrollbars: fix the overflowing content first, `overflow-x: hidden` on the container only as the last step.
 - A documented z-index scale; spacing from the scale, not arbitrary values; optical alignment of icons and play buttons (1-2px nudges).
 - Adapted, not shrunk: mobile reorders and simplifies; no hidden-but-essential features.
 
@@ -56,17 +68,18 @@ rest. Each item is a candidate finding: confirm it in the code before reporting.
 - `…` not `...`; typographic quotes; non-breaking spaces between number and unit (`10&nbsp;MB`, `⌘&nbsp;K`); `tabular-nums` in number columns; `text-wrap: balance` or `pretty` on headings.
 - Body line length 45-75ch; body 16px+; clear hierarchy from size and weight steps, not color alone.
 - Sentence case; active voice; specific button labels ("Save API key", not "Continue"); errors say what happened and how to fix it; numerals for counts.
+- Second person, not first; `&` over "and" only where space is tight. Vercel's guidelines prefer Title Case for headings and buttons; follow the product's existing convention, default sentence case.
 - Content survives real data: long names, URLs, zero items, 10,000 items.
 
 ## Performance
 
-- Virtualize or paginate lists over ~50 items; no layout reads (`getBoundingClientRect`, `offsetHeight`) interleaved with writes in render or scroll paths; throttle controlled inputs on heavy forms; no context re-render storms.
+- Virtualize or paginate lists over ~50 items (`virtua`, `content-visibility: auto`); no layout reads (`getBoundingClientRect`, `offsetHeight`) interleaved with writes in render or scroll paths; throttle controlled inputs on heavy forms; no context re-render storms.
 - `preconnect` for critical third-party origins; critical fonts preloaded with `font-display: swap`; heavy libraries lazy-loaded; no render-blocking scripts.
 - Core Web Vitals: LCP < 2.5s, INP < 200ms, CLS < 0.1.
 
 ## Hydration, locale, theming, meta
 
-- Controlled `value` has `onChange`; date/time/random output guarded against server-client mismatch; no `localStorage` reads in first render.
+- Controlled `value` has `onChange`; otherwise use `defaultValue` (prefer uncontrolled inputs; controlled ones must be cheap per keystroke); date/time/random output guarded against server-client mismatch; no `localStorage` reads in first render. `suppressHydrationWarning` only where truly needed.
 - Dates, numbers, currency, lists via `Intl.*`; language from `Accept-Language`/`navigator.languages`, not IP.
 - Colors from tokens, not hard-coded hex; dark mode is designed (not inverted): `color-scheme` on `<html>`, matching `<meta name="theme-color">`, explicit colors on native `<select>`, contrast checked in both modes.
 - `<title>` and meta description per route; `lang` on `<html>`; `rel="noopener"` on `target="_blank"`.
@@ -103,6 +116,8 @@ icon buttons without a name; placeholder-as-label; blocked paste; disabled zoom;
 hard-coded date/number formats; hover-only affordances; `autoFocus` everywhere; large lists rendered
 whole; inline `<style>` per render; dead `#` links; color-only error states; hard-coded colors that
 bypass tokens; one-off components duplicating a design-system component.
+Also: inline `onClick` navigation without `<a>`; `.map()` over large arrays without virtualization;
+animated GIF where compressed video fits; gesture-only actions with no tap/keyboard path.
 
 ## AI-generated tells (anti-slop)
 

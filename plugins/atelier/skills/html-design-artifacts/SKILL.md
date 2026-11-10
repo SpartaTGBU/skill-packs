@@ -22,6 +22,8 @@ Neighbours (split rule, one line each):
 - `atelier:prototype` proves a flow works; this skill packages what gets shown and reviewed.
 - `atelier:frontend-design` ships real components in the project stack; here nothing ships, it is viewed.
 - `atelier:visual-design` decides look and dials; this skill decides format, structure and verification.
+  Its `references/design-doctrine.md` holds the surface-first process, slop diagnostic and
+  deck/prototype/variation rules for one-off artifacts; read it for anything high-fidelity.
 - `atelier:design-systems` builds token libraries; here you only consume or sketch tokens.
 - `atelier:ui-review` / `atelier:visual-qa` audit finished UI; this skill's Verify section is a self-check only.
 - `atelier:diagrams` for technical diagrams; `atelier:motion-design` for animation craft inside the page.

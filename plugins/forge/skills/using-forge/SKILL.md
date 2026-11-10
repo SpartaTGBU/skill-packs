@@ -14,7 +14,7 @@ Exception: the clarify-and-goal skills (`forge:brainstorming`, `forge:brainstorm
 `forge:goal`, `forge:hill-climb`) are in the Skill tool listing. Invoke them yourself whenever you
 need clarification or a clearer goal; don't wait for the user to ask.
 
-Pack skills (`forge:*`, `atrium:*`, `atelier:*`) are **not** in the Skill tool, to keep context
+Pack skills (`forge:*`, `atrium:*`, `atelier:*`, `scholar:*`) are **not** in the Skill tool, to keep context
 small. Load one through Bash, only when the work needs it, and follow it as if it were invoked:
 
 - `skl load forge:rust` (several names at once is fine) prints the skill and its directory
@@ -74,6 +74,8 @@ video editing, CAD) → `atelier:using-atelier`. Prose de-AI pass → `forge:hum
 
 **Business**: docs (Word/Excel/PowerPoint/PDF), brand, SEO, growth, sales, CRM, finance, legal →
 `atrium:using-atrium`.
+
+**Academic research** (thesis topics, literature, Zotero, papers, academic writing) → `scholar:using-scholar`.
 
 **Ops**: `forge:writing-skills`, `forge:codebase-onboarding`. User-initiated only (never load these
 yourself; the user types them): `forge:handoff` (pass work to a fresh session), `forge:triage` (issues),

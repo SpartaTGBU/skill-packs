@@ -170,28 +170,28 @@ Generators scaffold from best-practice templates; validators lint, scan and expl
 | `forge:triage` | Moves issues and external PRs through a triage state machine: categorise, dedupe, verify, clarify, brief or close | A backlog of issues or an inbound PR needs a decision | "Triage the open issues and tell me what needs attention." |
 | `forge:retro` | Session retro proposing environment changes from what went wrong, or codebase retro producing an evidence-backed gap register | End of a session (the agent offers once), or auditing a module | "Retro: what went wrong this session and what should we change?" |
 
-### Research and academic
+### Research and academic (moved to the scholar pack)
 
-These form a research workflow built around `.research/`, `.paper/` and `.coord/` files; most pair with Zotero, Obsidian or NotebookLM.
+These skills now ship in the **scholar** pack (`/plugin install scholar@skill-packs`; router `scholar:using-scholar`). They form a research workflow built around `.research/`, `.paper/` and `.coord/` files; most pair with Zotero, Obsidian or NotebookLM.
 
 | Skill | What it does | When it earns its place | Example prompt |
 |-------|--------------|-------------------------|----------------|
-| `forge:research-lifecycle` | Router for the 8-stage research lifecycle (discover through submit) | Unsure which research skill fits the stage you are in | "Where am I in the research lifecycle and what skill is next?" |
-| `forge:research-workflow-orchestrator` | Resumable end-to-end research workflow, automates low-risk steps, pauses at human decision gates, records provenance | Driving a whole project with checkpoints | "Run the research workflow for this project and stop at decision gates." |
-| `forge:research-hub` | Literature discovery and source organization via the optional `research-hub` CLI (Zotero, Obsidian, NotebookLM) | Starting a literature search | "Find and organize the key papers on retrieval-augmented generation." |
-| `forge:research-hub-multi-ai` | Writes `.coord/multi_ai_plan.md` when one round needs two or more bounded delegates | Splitting a research round across codex/agy delegates | "Plan how to split this literature round across delegates." |
-| `forge:research-project-orienter` | Reads `.research/` manifests and writes one orientation memo: question, datasets, stage, entrypoints, evidence | Returning to a project cold | "Orient me on this research project." |
-| `forge:research-context-compressor` | Inspects a research repo and writes compact manifests (project_manifest, experiment_matrix, data_dictionary) | Future sessions waste time rediscovering the repo | "Compress this repo into .research manifests." |
-| `forge:research-design-helper` | Five Socratic segments (question, mechanism, identifiability, validation plan, risk register) producing a design doc | Turning an idea into a testable study design | "Help me design the study for this hypothesis." |
-| `forge:gap-to-topic` | Turns a research area into a go/no-go dossier for candidate topics with a three-gate verdict | Choosing a thesis or proposal topic | "Is this gap a viable thesis topic? Give me a go/no-go dossier." |
-| `forge:literature-triage-matrix` | Turns a known paper list into a comparison matrix at `.research/literature_matrix.md` | You have 30 papers and need to compare them | "Build a comparison matrix from my Zotero collection." |
-| `forge:paper-summarize` | Fills per-paper Key Findings, Methodology and Relevance from abstracts in Obsidian and Zotero notes | Ingested papers have empty summary sections | "Summarize the newly ingested papers in my vault." |
-| `forge:zotero-library-curator` | Read-only audit of a Zotero library: duplicate DOIs, missing tags, collection and tag hygiene | Library is messy and you want a report before changing anything | "Audit my Zotero library for duplicates and untagged items." |
-| `forge:zotero-skills` | Full CRUD on a Zotero library (needs pyzotero and API key): search, add, tag, trash, merge, attach | Making actual changes to Zotero | "Merge the duplicate items in my Zotero and tag them by topic." |
-| `forge:notebooklm-brief-verifier` | Compares a NotebookLM brief to the uploaded source bundle: missed sources, unsupported claims, contradictions | Before trusting a NotebookLM summary | "Verify this NotebookLM brief against my source bundle." |
-| `forge:academic-writing-skills` | Frames and outlines papers, plans and revises paragraphs, aligns claims with evidence across sections | Drafting or revising a manuscript | "Outline the paper and check the abstract claims against the results." |
-| `forge:paper-memory-builder` | Converts a draft, figures and bibliography into `.paper/claims.yml` and `.paper/figures.yml` | Writing, revision or audit passes need a claims index | "Build the paper memory files from my draft." |
-| `forge:paper-review` | Reviewer-style, evidence-safe review of manuscripts with method, domain and round overlays | Pre-submission or reviewing someone else's paper | "Review this manuscript like reviewer 2." |
+| `scholar:research-lifecycle` | Router for the 8-stage research lifecycle (discover through submit) | Unsure which research skill fits the stage you are in | "Where am I in the research lifecycle and what skill is next?" |
+| `scholar:research-workflow-orchestrator` | Resumable end-to-end research workflow, automates low-risk steps, pauses at human decision gates, records provenance | Driving a whole project with checkpoints | "Run the research workflow for this project and stop at decision gates." |
+| `scholar:research-hub` | Literature discovery and source organization via the optional `research-hub` CLI (Zotero, Obsidian, NotebookLM) | Starting a literature search | "Find and organize the key papers on retrieval-augmented generation." |
+| `scholar:research-hub-multi-ai` | Writes `.coord/multi_ai_plan.md` when one round needs two or more bounded delegates | Splitting a research round across codex/agy delegates | "Plan how to split this literature round across delegates." |
+| `scholar:research-project-orienter` | Reads `.research/` manifests and writes one orientation memo: question, datasets, stage, entrypoints, evidence | Returning to a project cold | "Orient me on this research project." |
+| `scholar:research-context-compressor` | Inspects a research repo and writes compact manifests (project_manifest, experiment_matrix, data_dictionary) | Future sessions waste time rediscovering the repo | "Compress this repo into .research manifests." |
+| `scholar:research-design-helper` | Five Socratic segments (question, mechanism, identifiability, validation plan, risk register) producing a design doc | Turning an idea into a testable study design | "Help me design the study for this hypothesis." |
+| `scholar:gap-to-topic` | Turns a research area into a go/no-go dossier for candidate topics with a three-gate verdict | Choosing a thesis or proposal topic | "Is this gap a viable thesis topic? Give me a go/no-go dossier." |
+| `scholar:literature-triage-matrix` | Turns a known paper list into a comparison matrix at `.research/literature_matrix.md` | You have 30 papers and need to compare them | "Build a comparison matrix from my Zotero collection." |
+| `scholar:paper-summarize` | Fills per-paper Key Findings, Methodology and Relevance from abstracts in Obsidian and Zotero notes | Ingested papers have empty summary sections | "Summarize the newly ingested papers in my vault." |
+| `scholar:zotero-library-curator` | Read-only audit of a Zotero library: duplicate DOIs, missing tags, collection and tag hygiene | Library is messy and you want a report before changing anything | "Audit my Zotero library for duplicates and untagged items." |
+| `scholar:zotero-skills` | Full CRUD on a Zotero library (needs pyzotero and API key): search, add, tag, trash, merge, attach | Making actual changes to Zotero | "Merge the duplicate items in my Zotero and tag them by topic." |
+| `scholar:notebooklm-brief-verifier` | Compares a NotebookLM brief to the uploaded source bundle: missed sources, unsupported claims, contradictions | Before trusting a NotebookLM summary | "Verify this NotebookLM brief against my source bundle." |
+| `scholar:academic-writing-skills` | Frames and outlines papers, plans and revises paragraphs, aligns claims with evidence across sections | Drafting or revising a manuscript | "Outline the paper and check the abstract claims against the results." |
+| `scholar:paper-memory-builder` | Converts a draft, figures and bibliography into `.paper/claims.yml` and `.paper/figures.yml` | Writing, revision or audit passes need a claims index | "Build the paper memory files from my draft." |
+| `scholar:paper-review` | Reviewer-style, evidence-safe review of manuscripts with method, domain and round overlays | Pre-submission or reviewing someone else's paper | "Review this manuscript like reviewer 2." |
 
 ## Agents
 

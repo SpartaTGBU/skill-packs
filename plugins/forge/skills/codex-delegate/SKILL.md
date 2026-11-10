@@ -43,11 +43,11 @@ Optional routing rule you may add to your own project instructions: tasks that a
 
 ## When to delegate
 
-Mechanical -> Codex. Reasoning, long-context synthesis, judgment, review -> the primary agent. Full routing table and good/bad examples: `references/delegation-targets.md`. If one round needs two or more delegates (Codex plus `forge:antigravity-delegate`, or parallel sessions), plan first with `forge:research-hub-multi-ai`.
+Mechanical -> Codex. Reasoning, long-context synthesis, judgment, review -> the primary agent. Full routing table and good/bad examples: `references/delegation-targets.md`. If one round needs two or more delegates (Codex plus `forge:antigravity-delegate`, or parallel sessions), plan first with `scholar:research-hub-multi-ai`.
 
 ## Workflow
 
-1. **Brief**: write `.ai/codex_task_<name>.md` with Context / Goal / Constraints / Acceptance (template `references/task-template.md`). For judgment-sensitive work (debugging, write-capable change, review, research) also add the XML blocks from `references/codex-prompt-blocks.md`. If a task splitter or `forge:research-hub-multi-ai` already wrote the brief, read its plan (`.coord/plan.yml` or `.coord/multi_ai_plan.md`) for round context first.
+1. **Brief**: write `.ai/codex_task_<name>.md` with Context / Goal / Constraints / Acceptance (template `references/task-template.md`). For judgment-sensitive work (debugging, write-capable change, review, research) also add the XML blocks from `references/codex-prompt-blocks.md`. If a task splitter or `scholar:research-hub-multi-ai` already wrote the brief, read its plan (`.coord/plan.yml` or `.coord/multi_ai_plan.md`) for round context first.
 2. **Run** the wrapper from the repo:
    ```bash
    bash scripts/run_codex.sh \

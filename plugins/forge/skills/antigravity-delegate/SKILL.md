@@ -49,4 +49,4 @@ Raw equivalent: `timeout 300 agy --print "Read <brief> ... execute it verbatim" 
 
 ## See also
 
-`forge:codex-delegate` (the contract this brief shape ports from), `forge:research-hub-multi-ai` (router when a round needs two or more delegates), `forge:verification` (acceptance evidence).
+`forge:codex-delegate` (the contract this brief shape ports from), `scholar:research-hub-multi-ai` (router when a round needs two or more delegates), `forge:verification` (acceptance evidence).

@@ -57,12 +57,15 @@ before building. Reuse the project's tokens, components and pipelines.
 **Web and UI**
 - Build or restyle a page, screen or component → `atelier:frontend-design`
 - Type, color, spacing, layout, hierarchy numbers → `atelier:visual-design`
+- Anti-slop landing page, portfolio or marketing site (taste dials, full tasteskill rules) → `atelier:visual-design`
+- Upgrade an existing site without breaking it (redesign audit) → `atelier:visual-design`
+- Page styled like a known brand (Stripe, Linear, Vercel; 74 brand systems) → `atelier:visual-design`, token file via `atelier:design-systems`
 - Tokens, DESIGN.md, brand look as a reusable spec → `atelier:design-systems`
-- Audit an existing UI (a11y, polish, anti-slop) → `atelier:ui-review`
+- Audit an existing UI (a11y, polish, anti-slop, Vercel Web Interface Guidelines) → `atelier:ui-review`
 - Open direction: which style, palette, fonts fit this product (before building) → `atelier:ui-ux-intelligence`
 - UI looks AI-generated or vibecoded; repair it → `atelier:unslop-ui`
 - Fix UI code by symptom (focus, screen reader, jank, viewport) → `atelier:ui-engineering-polish`
-- Mockup, clickable prototype, wireframes or HTML deck as one file → `atelier:html-design-artifacts`
+- Mockup, clickable prototype, wireframes or HTML deck as one file (one-off designed artifact) → `atelier:html-design-artifacts`
 - Throwaway build to answer a design question → `atelier:prototype`
 - Interactive single-file explorer or tweakable demo → `atelier:playground`
 - iOS / Android / React Native / Flutter UI → `atelier:mobile-native`

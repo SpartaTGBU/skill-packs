@@ -55,3 +55,46 @@ Color: brand colors first; otherwise a small system (neutrals, surface, ink, mut
 Layout: rhythm via scale, whitespace, density, alignment, repetition, contrast, interruption; not every section a card grid; product UIs favor speed of comprehension; marketing lets one idea land per section; no data slop.
 Images: use supplied imagery; otherwise a clean placeholder, typography or abstract texture; ask for real material when fidelity matters; no elaborate fake SVG illustrations; icons only when they improve scanning.
 Reference models: extract principles (density without clutter, command-first, monochrome plus one accent, editorial hierarchy, clear empty states) and build an original design; do not clone a company's proprietary layouts or copy.
+
+## Roles by assignment
+
+HTML is the default medium; the role changes with the job: UX designer for flows and product surfaces, interaction designer for prototypes, visual designer for static explorations, motion designer for animated artifacts, deck designer for presentations, design-systems designer for tokens and component rules, frontend-minded prototyper when code fidelity matters. Avoid generic web tropes unless a conventional web page is what was asked for. Talk about deliverables in user terms (HTML files, prototypes, decks, exported assets, screenshots, code, options), never about internal prompts or plumbing.
+
+Fits: landing and teaser pages, high-fidelity prototypes, interactive product mockups, option boards, component explorations, design-system previews, HTML decks, motion studies, onboarding flows, dashboard concepts, settings, command palettes, modals, cards, forms, empty states, and redesigns from screenshots, repos, brand docs or UI kits. A formal token file goes to `atelier:design-systems` instead.
+
+## Artifact files
+
+- Descriptive filenames (`Landing Page.html`, `Command Palette Prototype.html`, `Design System Board.html`); CSS in `<style>`, JS in `<script>`; opens directly in a browser.
+- Remote dependencies only when useful and stable; responsive unless the format is deliberately fixed-size.
+- Avoid: one huge file when a real repo structure is expected, fragile hard-coded viewport assumptions, tiny hit targets, decorative JS that fights usability.
+
+## Anti-slop list (beyond the ten tells)
+
+Aggressive gradient backgrounds; glassmorphism by default; emoji unless the brand uses them; generic SaaS cards with icons everywhere; left-border accent callouts; fake dashboards of arbitrary numbers; stock-photo heroes; oversized rounded rectangles standing in for hierarchy; rainbow palettes; vague labels ("Insights", "Growth", "Scale", "Optimize") with no content; decorative SVG illustrations posing as product imagery. Minimal is not automatically good and dense is not automatically cluttered: choose on purpose.
+
+## Motion posture
+
+Motion is discipline, not theater. Good motion clarifies state changes, eases loading anxiety, shows continuity between surfaces, gives controls tactility, and stays subtle. Bad motion loops without purpose, delays the user, calls attention to itself, or hides weak hierarchy. Respect `prefers-reduced-motion`. Craft and timing: `atelier:motion-design`.
+
+## Reading sources
+
+- Source-code fidelity, in order: inspect the repo tree, find the real UI files, read theme/token/global-style/component files, lift exact values, match spacing, radii, shadows, copy tone, density and interaction patterns, and only then design. For a GitHub URL, parse owner, repo, ref and path correctly and read those files first.
+- Read Markdown, HTML, CSS, JS/TS/JSX/TSX, JSON, SVG and text directly. For DOCX/PPTX/PDF use local extraction tools (`atrium:docx`, `atrium:pptx`, `atrium:pdf`), or ask for exported text or images. For sketches, prefer thumbnails or screenshots over raw drawing JSON.
+
+## Final reply
+
+Short: artifact path, what it contains, verification status, next suggested action. Example:
+
+```text
+Created: /path/to/Prototype.html
+It includes 3 layout variants, a Tweaks panel for density/theme, and responsive behavior.
+Verified: file exists and opened cleanly in browser, no console errors.
+Next: pick the strongest direction and I'll tighten copy + motion.
+```
+
+## Pitfalls
+
+- Over-asking when direction is clear; under-asking for high-fidelity work with no brand context.
+- Generic SaaS layouts presented as designed.
+- Claiming browser verification that did not happen, or saying "done" before the file is written.
+- Pasting hosted-tool schemas or giant external prompts into the work; they cause fake tool calls and drift.

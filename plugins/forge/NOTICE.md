@@ -9,7 +9,7 @@ forge is a derivative work merging the following MIT-licensed projects:
 Ported third-party skills (harness-native versions):
 
 - https://github.com/akin-ozer/cc-devops-skills @ 276af75 (Apache-2.0) - 31 devops generator/validator skills
-- https://github.com/WenyuChiou/ai-research-skills catalog -> research-hub @ 9cbf601, academic-writing-skills @ 404eb2a, zotero-skills @ e390313, codex-delegate @ 5592763, antigravity-delegate @ 49d9569 (MIT) - 17 research skills + research-lifecycle router
+- https://github.com/WenyuChiou/ai-research-skills catalog -> codex-delegate @ 5592763, antigravity-delegate @ 49d9569 (MIT); the 16 research skills from this catalog moved to the scholar pack (see plugins/scholar/NOTICE.md)
 - https://github.com/anthropics/claude-plugins-official @ f8c5e7a (Apache-2.0 / MIT per plugin): pr-review-toolkit, skill-creator, session-report, claude-md-management, frontend-design, playground, rust-analyzer-lsp, gopls-lsp, mcp-tunnels, mcp-server-dev
 - https://github.com/microsoft/SkillOpt @ bc0a392 (MIT) - skillopt-sleep
 - https://github.com/headroomlabs-ai/headroom @ 1fe8549 (Apache-2.0) - headroom usage skill (runtime not bundled)
